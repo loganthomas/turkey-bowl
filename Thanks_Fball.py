@@ -2,23 +2,23 @@
 """
 Created on Wed Nov 16 17:10:41 2016
 
-@author: thomlo02
+@author: loganthomas
 """
 from urllib.request import urlopen
 from bs4 import BeautifulSoup
 import pandas as pd
 
-dad = pd.DataFrame(columns=['QB','RB_1','RB_2','WR_1', 'WR_2', 'TE', 'Flex', 'K', 'Defense'],index=None).T
-yeager = pd.DataFrame(columns=['QB','RB_1','RB_2','WR_1', 'WR_2', 'TE', 'Flex', 'K', 'Defense'],index=None).T
-logan = pd.DataFrame(columns=['QB','RB_1','RB_2','WR_1', 'WR_2', 'TE', 'Flex', 'K', 'Defense'],index=None).T
-becca = pd.DataFrame(columns=['QB','RB_1','RB_2','WR_1', 'WR_2', 'TE', 'Flex', 'K', 'Defense'],index=None).T
-mom = pd.DataFrame(columns=['QB','RB_1','RB_2','WR_1', 'WR_2', 'TE', 'Flex', 'K', 'Defense'],index=None).T
+p1 = pd.DataFrame(columns=['QB','RB_1','RB_2','WR_1', 'WR_2', 'TE', 'Flex', 'K', 'Defense'],index=None).T
+p2 = pd.DataFrame(columns=['QB','RB_1','RB_2','WR_1', 'WR_2', 'TE', 'Flex', 'K', 'Defense'],index=None).T
+p3 = pd.DataFrame(columns=['QB','RB_1','RB_2','WR_1', 'WR_2', 'TE', 'Flex', 'K', 'Defense'],index=None).T
+p4 = pd.DataFrame(columns=['QB','RB_1','RB_2','WR_1', 'WR_2', 'TE', 'Flex', 'K', 'Defense'],index=None).T
+p5 = pd.DataFrame(columns=['QB','RB_1','RB_2','WR_1', 'WR_2', 'TE', 'Flex', 'K', 'Defense'],index=None).T
 
 def draft_player(df, pos, player):
     df.set_value(pos, 'Player', player)
 
 # Draft PLayer or Defense
-draft_player(becca, 'Flex', 'Jarius Wright')
+draft_player(p1, 'QB', 'Ben Roethlisberger')
 
 
 ##### Pseduo Draft #########################################################################################
@@ -38,7 +38,7 @@ Ks = ['Steven Hauschka','Dustin Hopkins','Josh Scobee','Zach Hocker','Adam Vinat
 
 Defenses = ['Buccaneers','Dolphins','Ravens','Titans','Packers']
 
-family_dic = {'dad': dad, 'logan': logan, 'yeager': yeager, 'mom': mom, 'becca': becca}
+family_dic = {'p1': p1, 'p2': p2, 'p3': p3, 'p4': p4, 'p5': p5}
 i=0
 for member in sorted(family_dic.keys()):
     draft_player(family_dic[member], 'QB', QBs[i])
@@ -73,7 +73,7 @@ for i in range(901):
             all_stats = all_stats.append(df, ignore_index=True)
     
             
-family_dic = {'dad': dad, 'logan': logan, 'yeager': yeager, 'mom': mom, 'becca': becca}
+family_dic = {'p1': p1, 'p2': p2, 'p3': p3, 'p4': p4, 'p5': p5}
 for member in sorted(family_dic.keys()):
     family_dic[member] = pd.merge(family_dic.get(member), all_stats, on='Player', how='left')
 leader()
