@@ -1,8 +1,7 @@
-# -*- coding: utf-8 -*-
 """
-Created on Wed Nov 16 17:10:41 2016
+Thanksgiving Football module
 
-@author: thomlo02
+@author: Logan Thomas
 """
 
 # Standard Libraries
@@ -93,7 +92,7 @@ def merge_scores(participant_teams, player_scores):
                                                   on='Player',
                                                   how='left')
     return participant_teams
-            
+
 
 def create_leader_board(participant_teams):
     leader_board = []
