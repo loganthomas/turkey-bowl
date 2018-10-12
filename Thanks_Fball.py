@@ -63,7 +63,7 @@ def gather_player_scores(week, year):
 
         # Relevant table rows start at line 3 and on
         data_rows = html.findAll('tr')[3:]
-        player_data = [[td.getText() for td in data_rows[i].findAll('td')] for i in range(len(data_rows))]
+        player_data = [row.getText('|').split('|') for row in data_rows]
         df = pd.DataFrame(player_data)
 
         # Drop Irrelevant columns (opponent, status, spacing cols, etc.)
