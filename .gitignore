@@ -1,2 +1,5 @@
-# Ignore .xlsx files
+# Ignore excel (.xlsx) files
 *.xlsx
+
+# Ignore caches from ipython
+__pycache__/
