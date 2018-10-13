@@ -3,128 +3,192 @@ Thanksgiving Football module
 
 @author: Logan Thomas
 """
-
 # Standard Libraries
-from collections import OrderedDict
+import os
+from urllib.parse import urlencode
 
-# Custom Libraries
-import requests
-from bs4 import BeautifulSoup as soup
+# Third-party libraries
 import pandas as pd
-import numpy as np
+import datetime as dt
+
+# Set option for nice DataFrame display
+pd.options.display.width = None
 
 
-def gather_participants(xls):
-    # Collect participant names (grabs sheet names)
+def _check_default(value_name, value):
+    use = input('Use default {}: {}? [y/n]: '.format(value_name, value))
+
+    if use not in ('y', 'n'):
+        raise ValueError('Did not recognize {}. Must be y or n'.format(use))
+    if use == 'n':
+        value = int(input('Enter {} as integer (Example: {}): '.format(value_name, value)))
+
+    return value
+
+
+def get_week_year():
+    week = 12
+    year = dt.datetime.today().year
+
+    week = _check_default('week', week)
+    year = _check_default('year', year)
+
+    return week, year
+
+
+def get_draft_data(xls):
+    # Collect participant names
     participants = xls.sheet_names
 
-    # Create teams dictionary where key is participant name and
-    # value is position/player dataframe
+    # Get each participant's drafted players
     participant_teams = {}
     for participant in participants:
         participant_teams[participant] = xls.parse(participant)
 
-    return participants, participant_teams
-
-
-def gather_player_scores(week, year):
-    url_base = 'http://games.espn.com/ffl/leaders'
-
-    # loop from 0 to 900 for all html pages (50 players per page in order or scoring)
-    for i in np.arange(0, 950, 50):
-        params = OrderedDict([
-            ('scoringPeriodId', week),
-            ('seasonId', year),
-            ('startIndex', i)
-        ])
-        response = requests.get(url_base, params=params)
-        successful = response.status_code == requests.codes.ok
-        print('Succussful connection for index{i}: {successful}'.format(**locals()))
-
-        html = soup(response.text, 'html.parser')
-        column_subheaders = [
-            'Player',
-            'Comp/Atts',
-            'Pass_Yds',
-            'Pass_TD',
-            'Int_Thrown',
-            'Rush_Att',
-            'Rush_Yds',
-            'Rush_TD',
-            'Receps',
-            'Rec_Yds',
-            'Rec_TD',
-            'Rec_Targets',
-            '2PC',
-            'Fumb_Lost',
-            'Return_TD',
-            'Total_Pts'
-        ]
-
-        # Relevant table rows start at line 3 and on
-        data_rows = html.findAll('tr')[3:]
-        player_data = [[td.getText() for td in data_rows[i].findAll('td')] for i in range(len(data_rows))]
-        df = pd.DataFrame(player_data)
-
-        # Drop Irrelevant columns (opponent, status, spacing cols, etc.)
-        df.drop([1, 2, 3, 4, 9, 13, 18, 22], inplace=True, axis=1)
-
-        # Name columns
-        df.columns = column_subheaders
-
-        # Collect Player name only (strip defense names to team name only)
-        df['Player'] = [x.split(',')[0] for x in df['Player']]
-        df['Player'] = df['Player'].str.replace(' D/ST D/ST', '')
-
-        # Aggregate all player scores together
-        if i == 0:
-            player_scores = df
-        else:
-            player_scores = player_scores.append(df, ignore_index=True)
-    print('Player scores successfully collected and aggregated')
-    return player_scores
-
-
-def merge_scores(participant_teams, player_scores):
-    for participant in participant_teams.keys():
-        participant_teams[participant] = pd.merge(participant_teams.get(participant),
-                                                  player_scores,
-                                                  on='Player',
-                                                  how='left')
     return participant_teams
 
 
-def create_leader_board(participant_teams):
-    leader_board = []
-    for participant in participant_teams.keys():
-        leader_board.append([participant, pd.to_numeric(participant_teams.get(participant)['Total_Pts'], errors='coerce').sum()])
-    leader_board = pd.DataFrame(leader_board, columns=['member', 'score'])
-    leader_board = leader_board.sort_values('score', ascending=False).reset_index(drop=True)
-    print('Leader: ', leader_board.loc[0, 'member'])
-    print('Beating', leader_board.loc[1, 'member'], 'by', leader_board.loc[0, 'score'] - leader_board.loc[1, 'score'])
+def _create_query_url(week, year):
+    url_base = 'http://games.espn.com/ffl/leaders?&'
+    params = {'scoringPeriodId': week, 'seasonId': year}
+    enc_params = urlencode(params)
+    url = url_base + enc_params
+
+    return url
+
+
+def _make_df(list_of_dfs, player_split_char):
+    df = pd.concat(list_of_dfs).reset_index(drop=True)
+    df = df.replace('--', 0).fillna(0)
+    df = df[[col for col in df.columns if 'Unnamed' not in col]]
+    df['Player'], _ = df['PLAYER, TEAM POS'].str.split(player_split_char, 1).str
+    df = df.drop('PLAYER, TEAM POS', axis=1)
+    df = df[['Player'] + [col for col in df.columns if col != 'Player']]
+    return df
+
+
+def _convert_cols_num(df):
+    # Membership testing faster for sets
+    non_num_cols = set(['Player', 'OPP', 'STATUS ET', 'C/A', '1-39', '40-49', '50+', 'TOT', 'XP'])
+    df_non_num_cols = [col for col in df.columns if col in non_num_cols]
+
+    df = df.set_index(df_non_num_cols)
+    df = df.apply(pd.to_numeric)
+    df = df.reset_index()
+
+    return df
+
+
+def gather_points(week, year):
+    # Specify url to query from
+    url = _create_query_url(week, year)
+
+    # Instantiate lists for gathering info from url
+    players  = []
+    kickers  = []
+    defenses = []
+
+    # Each page has 50 players; loop until 900
+    for i in range(0, 950, 50):
+        page_url = url + '&startIndex={}'.format(i)
+
+        # Use pandas to search for all <table> elements and only grab <td> elements therein
+        tables = pd.read_html(page_url, header=1)
+
+        # Order matters; each page has players at a minimum, then kickers, then teams
+        try:
+            players.append(tables[1])
+            kickers.append(tables[2])
+            defenses.append(tables[3])
+
+        except IndexError as e:
+            continue
+
+    players_df  = _make_df(players , player_split_char=',')
+    kickers_df  = _make_df(kickers , player_split_char=',')
+    defenses_df = _make_df(defenses, player_split_char=' D/ST')  # make sure space in front
+
+    players_df  = _convert_cols_num(players_df)
+    kickers_df  = _convert_cols_num(kickers_df)
+    defenses_df = _convert_cols_num(defenses_df)
+
+    return players_df, kickers_df, defenses_df
+
+
+def merge_points(participant_teams, players_df, kickers_df, defenses_df):
+
+    # Instantiate output
+    detailed_points = {}
+    point_totals = []
+
+    # Loop over participants and their drafted players, joining point stats
+    for participant, participant_team in participant_teams.items():
+        player_stats  = participant_team.merge( players_df , on='Player')
+        kicker_stats  = participant_team.merge( kickers_df , on='Player')
+        defense_stats = participant_team.merge( defenses_df, on='Player')
+        stats         = [player_stats, kicker_stats, defense_stats]
+
+        # Collect participants players, kicker, defense stats
+        detailed_points[participant] = stats
+
+        # Collect participants point total (sum of players, kicker, defense PTs)
+        point_total = sum([stat['PTS'].sum() for stat in stats])
+        point_totals.append((participant, point_total))
+
+    return detailed_points, point_totals
+
+
+def _print_detailed_points(participant, detailed_points):
+        print('### {} stats ###\n'.format(participant.upper()))
+        print(*detailed_points[participant], sep='\n\n')
+
+
+def create_leader_board(detailed_points, point_totals):
+    leader_board = pd.DataFrame(point_totals, columns=['participant', 'PTS'])
+    leader_board = leader_board.sort_values('PTS', ascending=False).reset_index(drop=True)
+    leader_board['margin'] = leader_board['PTS'].diff(-1)
+    leader_board['pts_back'] = leader_board.iloc[0,1] - leader_board['PTS'].values
+
+    print('\n{} winning with {} pts\n'.format(leader_board.iloc[0,0], leader_board.iloc[0,1]))
+    print(leader_board)
+    print('\n')
+
+    for person in leader_board['participant']:
+        _print_detailed_points(person, detailed_points)
+        print('\n\n\n')
+
     return leader_board
 
 
 def main():
-    # Gather year and week for player scores
-    year = input('Enter year as integer (Example: 2016): ')
-    week = input('Enter week as integer (Example: 12): ')
+    # Get specific week and year for NFL season
+    week, year = get_week_year()
 
     # Read in draft workbook (should have players drafted by position)
-    xls = pd.ExcelFile('Draft_Workbook_Test.xlsx')
+    print('\nLoading draft data...')
+    f_path = os.path.join(os.getcwd(), str(year), 'draft_sheet_{}.xlsx'.format(year))
+    xls = pd.ExcelFile(f_path)
+    print('Loaded {}'.format(f_path))
 
-    # Determine participants and participant's drafted team
-    participants, participant_teams = gather_participants(xls)
+    # Determine each participant's drafted team
+    print('\nGathering participant drafted teams')
+    participant_teams = get_draft_data(xls)
+    print('Successfully gathered drafted teams')
 
     # Collect player scores for given week and year
-    player_scores = gather_player_scores(week, year)
+    print('\nGathering points for week {} year {} by scraping the web...'.format(week, year))
+    players_df, kickers_df, defenses_df = gather_points(week, year)
+    print('Successfully gathered players, kickers, and defenses points')
 
     # Determine participant's draft player scores
-    participant_teams = merge_scores(participant_teams, player_scores)
+    print('\nMerging points to drafted teams...')
+    detailed_points, point_totals = merge_points(participant_teams, players_df, kickers_df, defenses_df)
+    print('Successfully merged points to participants drafted teams')
 
     # Create and print leader board
-    leader_board = create_leader_board(participant_teams)
+    leader_board = create_leader_board(detailed_points, point_totals)
     print(leader_board)
+
 
 if __name__ == '__main__':
     main()
