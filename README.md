@@ -6,6 +6,6 @@
 > a nice distraction from the amount of calories I consume at the dinner table.  
 
 > A few things to note:
-> - The code is written in python (3.5) and uses the urlib.request and bs4 libraries.
-> - There is a pseudo-draft section that I used to personally check the code. The player scores are grabbed from ESPN and columns are manipulated in order to return desired plater stats.  
+> - The code is written in python (3.5) and uses `pandas.read_html` for web scrapping
+> - There is a pseudo-draft section that I used to personally check the code. The player scores are grabbed from ESPN and columns are manipulated in order to return desired player stats.  
 
