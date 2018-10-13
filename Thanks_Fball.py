@@ -5,11 +5,11 @@ Thanksgiving Football module
 """
 # Standard Libraries
 import os
+import datetime as dt
 from urllib.parse import urlencode
 
 # Third-party libraries
 import pandas as pd
-import datetime as dt
 
 # Set option for nice DataFrame display
 pd.options.display.width = None
