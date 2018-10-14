@@ -189,6 +189,10 @@ def main():
     leader_board = create_leader_board(detailed_points, point_totals)
     print(leader_board)
 
+    # TODO:
+    # Consider returning some of these things (leader_board, detailed_scores, etc.)
+    # so that entire main doesn't need to be run each time
+
 
 if __name__ == '__main__':
     main()
