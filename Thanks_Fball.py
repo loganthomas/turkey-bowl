@@ -10,6 +10,7 @@ from urllib.parse import urlencode
 
 # Third-party libraries
 import pandas as pd
+import numpy as np
 
 # Set option for nice DataFrame display
 pd.options.display.width = None
@@ -132,7 +133,10 @@ def merge_points(participant_teams, players_df, kickers_df, defenses_df):
         detailed_points[participant] = stats
 
         # Collect participants point total (sum of players, kicker, defense PTs)
-        point_total = sum([stat['PTS'].sum() for stat in stats])
+        # Assumes Bench player is last player listed and should not be included
+        # (i.e., take only first 7 players to sum in player_stats)
+        points = [stat['PTS'].values[:7] for stat in stats]
+        point_total = sum(np.hstack(points))
         point_totals.append((participant, point_total))
 
     return detailed_points, point_totals
@@ -187,6 +191,7 @@ def main():
 
     # Create and print leader board
     leader_board = create_leader_board(detailed_points, point_totals)
+    print('\n{} winning with {} pts\n'.format(leader_board.iloc[0,0], leader_board.iloc[0,1]))
     print(leader_board)
 
     # TODO:
