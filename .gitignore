@@ -1,3 +1,6 @@
+# Ignore macOS
+*.DS_Store
+
 # Ignore excel (.xlsx) files
 *.xlsx
 
