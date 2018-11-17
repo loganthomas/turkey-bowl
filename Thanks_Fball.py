@@ -17,6 +17,25 @@ pd.options.display.width = None
 
 
 def _check_default(value_name, value):
+    """
+    Determines whether to use or overwrite a default value.
+
+    The default week is 12 (as this is a Thanksgiving tradition)
+    and the default year is the current year. This helper function
+    asks the user if they'd like to use the default value for week
+    and/or year; if not, a prompt is used to collect the desired
+    value.
+
+    Args:
+        value_name (str): The value name to check (i.e., 'week' or 'year').
+        value (int): The integer default value to check (i.e., 12 or 2018).
+
+    Returns:
+        value (int): The integer value to use for the given value name.
+
+    Raises:
+        ValueError: If 'y' or 'n' not used to answer prompt.
+    """
     use = input('Use default {}: {}? [y/n]: '.format(value_name, value))
 
     if use not in ('y', 'n'):
@@ -28,6 +47,19 @@ def _check_default(value_name, value):
 
 
 def get_week_year():
+    """
+    Collects the week and year to run.
+
+    There are specific weeks within the NFL season. This function gathers
+    to correct week and year to use.
+
+    Args:
+        None
+
+    Returns:
+        week (int): Specific week to run. Defaults to 12.
+        year (int): Specific year to run. Defaults to current year.
+    """
     week = 12
     year = dt.datetime.today().year
 
@@ -37,14 +69,37 @@ def get_week_year():
     return week, year
 
 
-def get_draft_data(xls):
+def get_draft_data(xlsx):
+    """
+    Parses an excel spreadsheet into participant teams.
+
+    The drafted teams should be collected within one excel spreadsheet
+    in which each participant is a separate sheet. The sheet names
+    correspond to the names of the participants and each sheet should have
+    a 'Position' column and a 'Player' column. For the time being, the
+    draft-able positions are as follows:
+        'QB', 'RB_1', 'RB_2', 'WR_1', 'WR_2', 'TE',
+        'Flex (RB/WR)', 'K', 'Defense (Team Name)', 'Bench (RB/WR)'.
+
+    Args:
+        xlsx (str): Path to excel spreadsheet. Ideally, each year will have
+            its own directory and the excel spreadsheet would be named
+            draft_sheet_{year}.xlsx. For example, in the year 2018,
+            xlsx = '/2018/draft_sheet_2018.xlsx'.
+
+    Returns:
+        participant_teams (dict):
+
+    # TODO: Update this to read the sheet rather than use the return of pd
+    ########################################################################
+    """
     # Collect participant names
-    participants = xls.sheet_names
+    participants = xlsx.sheet_names
 
     # Get each participant's drafted players
     participant_teams = {}
     for participant in participants:
-        participant_teams[participant] = xls.parse(participant)
+        participant_teams[participant] = xlsx.parse(participant)
 
     return participant_teams
 
@@ -102,7 +157,7 @@ def gather_points(week, year):
             kickers.append(tables[2])
             defenses.append(tables[3])
 
-        except IndexError as e:
+        except IndexError:
             continue
 
     players_df  = _make_df(players , player_split_char=',')
@@ -171,12 +226,12 @@ def main():
     # Read in draft workbook (should have players drafted by position)
     print('\nLoading draft data...')
     f_path = os.path.join(os.getcwd(), str(year), 'draft_sheet_{}.xlsx'.format(year))
-    xls = pd.ExcelFile(f_path)
+    xlsx = pd.ExcelFile(f_path)
     print('Loaded {}'.format(f_path))
 
     # Determine each participant's drafted team
     print('\nGathering participant drafted teams')
-    participant_teams = get_draft_data(xls)
+    participant_teams = get_draft_data(xlsx)
     print('Successfully gathered drafted teams')
 
     # Collect player scores for given week and year
@@ -186,11 +241,11 @@ def main():
 
     # Determine participant's draft player scores
     print('\nMerging points to drafted teams...')
-    detailed_points, point_totals = merge_points(participant_teams, players_df, kickers_df, defenses_df)
+    detailed_pnts, pnt_totals = merge_points(participant_teams, players_df, kickers_df, defenses_df)
     print('Successfully merged points to participants drafted teams')
 
     # Create and print leader board
-    leader_board = create_leader_board(detailed_points, point_totals)
+    leader_board = create_leader_board(detailed_pnts, pnt_totals)
     print('\n{} winning with {} pts\n'.format(leader_board.iloc[0,0], leader_board.iloc[0,1]))
     print(leader_board)
 
@@ -201,3 +256,4 @@ def main():
 
 if __name__ == '__main__':
     main()
+
