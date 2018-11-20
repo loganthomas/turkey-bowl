@@ -430,7 +430,7 @@ def main():
     # Determine each participant's drafted team
     print('\nGathering participant drafted teams...')
     participant_teams = get_draft_data(draft_path)
-    print('Successfully gathered drafted teams')
+    print('Successfully gathered drafted teams\n')
 
     # Create a random draft order
     create_draft_order = 'y'
