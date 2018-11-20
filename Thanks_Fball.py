@@ -5,6 +5,8 @@ Thanksgiving Football module
 """
 # Standard Libraries
 import os
+import sys
+import random
 import datetime as dt
 from urllib.parse import urlencode
 
@@ -21,10 +23,11 @@ def _check_default(value_name, value):
     Determines whether to use or overwrite a default value.
 
     The default week is 12 (as this is a Thanksgiving tradition),
-    the default year is the current year, and the default path to
-    load the draft data is '{year}/draft_sheet_{year}.xlsx'.
-    This helper function asks the user if they'd like to use these default
-    values; if not, a prompt is used to collect the desired values.
+    the default year is the current year, the default path to
+    load the draft data is '{year}/draft_sheet_{year}.xlsx', and
+    the default create_draft_order is 'y'. This helper function asks
+    the user if they'd like to use these default values; if not,
+    a prompt is used to collect the desired values.
 
     Args:
         value_name (str): The value name to check.
@@ -109,6 +112,30 @@ def get_draft_data(xlsx_path):
     participant_teams = {p:xlsx.parse(p) for p in xlsx.sheet_names}
 
     return participant_teams
+
+
+def make_draft_order(participant_teams):
+    """
+    Creates a random draft order by shuffling participants.
+
+    Given a dictionary of participants and their corresponding teams,
+    this function returns a list of randomly shuffled participants
+    that can be used for a random draft order.
+
+    Args:
+        participant_teams (dict): A dictionary of participant (str),
+            team (pandas DataFrame) key, value pairs.
+
+    Returns:
+        draft_order (list of str): A random draft order of participants.
+    """
+    # Gather list of participants
+    draft_order = list(participant_teams.keys())
+
+    # Create random list of participants
+    random.shuffle(draft_order)
+
+    return draft_order
 
 
 def _create_query_url(week, year):
@@ -386,6 +413,12 @@ def create_leader_board(detailed_points, point_totals):
 
 
 def main():
+    """
+    TODO:
+    Consider returning some of these things
+    (leader_board, detailed_scores, etc.) so that entire main
+    doesn't need to be run each time
+    """
     # Get specific week and year for NFL season
     week, year = get_week_year()
 
@@ -398,6 +431,16 @@ def main():
     print('\nGathering participant drafted teams...')
     participant_teams = get_draft_data(draft_path)
     print('Successfully gathered drafted teams')
+
+    # Create a random draft order
+    create_draft_order = 'y'
+    create_draft_order = _check_default('create_draft_order', create_draft_order)
+
+    if create_draft_order == 'y':
+        draft_order = make_draft_order(participant_teams)
+        print('The draft order is: ')
+        print(*draft_order, sep='\n')
+        sys.exit()
 
     # Collect player scores for given week and year
     print('\nGathering points for week {} year {} by scraping the web...'.format(week, year))
@@ -413,10 +456,6 @@ def main():
     leader_board = create_leader_board(detailed_pnts, pnt_totals)
     print('\n{} winning with {} pts\n'.format(leader_board.iloc[0,0], leader_board.iloc[0,1]))
     print(leader_board)
-
-    # TODO:
-    # Consider returning some of these things (leader_board, detailed_scores, etc.)
-    # so that entire main doesn't need to be run each time
 
 
 if __name__ == '__main__':
