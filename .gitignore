@@ -6,3 +6,6 @@
 
 # Ignore caches from ipython
 __pycache__/
+
+# Ignore vim stuff
+*.swp
