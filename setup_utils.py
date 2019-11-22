@@ -82,4 +82,54 @@ def create_output_dir(curr_year):
 
     return output_dir
 
+# Stopped here create function to cp draft_sheet.xlsx to output_dir and add year
+# http://fantasy.espn.com/apis/v3/games/ffl/seasons/2019/segments/0/leagues/1241838?view=mDraftDetail&view=mLiveScoring&view=mMatchupScore&scoringPeriodId=11
+# http://fantasy.espn.com/apis/v3/games/ffl/seasons/2019/segments/0/leagues/1241838?view=mLiveScoring&view=mMatchupScore&scoringPeriodId=11
+
+# Use urlencode for week and season
+# https://api.fantasy.nfl.com/v2/players/weekstats?&week=12&season=2019
+
+# API docs
+# https://api.fantasy.nfl.com/v2/docs/service?serviceName=playersWeekStats
+# https://api.fantasy.nfl.com/v2/docs/service?serviceName=playerNgsContent
+
+url_base = 'https://api.fantasy.nfl.com/v2/players/weekstats?'
+params = {'season': 2019, 'week':12}
+
+from urllib.parse import urlencode
+enc_params = urlencode(params)
+url = url_base + enc_params
+
+import requests
+
+response = requests.get(url)
+response_json = response.json()
+
+players_list = []
+for game in response_json['games']:
+    g = response_json['games'].get(game)
+    players = g.get('players')
+    players_list.extend(players)
+
+players_names = []
+players_pos   = []
+players_teams = []
+for player in players_list:
+    player_url = f'https://api.fantasy.nfl.com/v2/player/ngs-content?playerId={player}'
+    p_response = requests.get(player_url)
+    p_response_json = p_response.json()
+
+    for game in p_response_json['games']:
+        g = p_response_json['games'].get(game)
+        players = g.get('players')
+        name = players[player]['name']
+        pos  = players[player]['position']
+        team = players[player]['nflTeamAbbr']
+        players_names.append(name)
+        players_pos.append(pos)
+        players_teams.append(team)
+
+for i,n,p,t in zip(players_list, players_names, players_pos, players_teams):
+    print(f'{i} <---> {n} {p} {t}')
+
 
