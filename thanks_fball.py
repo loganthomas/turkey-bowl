@@ -166,6 +166,9 @@ def main(d=1, i=1, u=1):
             thanksgiving_cal_week_num,
         )
 
+        # TODO: add check to see if the prior_players_df exists, load if it does
+        # TODO: add a try except so data isn't lost if a time out occurs during the API pull
+
         # Pull week prior to gather all players (with injury reports/projections)
         #     Need to pull prior week as current week only has player ids
         #     (this helps identify players by name) One time costly, but easy to
