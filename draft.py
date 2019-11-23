@@ -4,6 +4,7 @@ Draft functions
 # Standard libraries
 import random
 import shutil
+from pathlib import Path
 
 # Third-party libraries
 import pandas as pd
@@ -53,7 +54,7 @@ def get_draft_data(draft_file_path):
     return participant_teams
 
 
-def make_draft_order(participant_teams):
+def make_draft_order(year, output_dir, participant_teams):
     """
     Creates a random draft order by shuffling participants.
 
@@ -68,12 +69,33 @@ def make_draft_order(participant_teams):
     Returns:
         draft_order (list of str): A random draft order of participants.
     """
-    # Gather list of participants
-    draft_order = list(participant_teams.keys())
+    draft_order_path = output_dir.joinpath(f'{year}_draft_order.csv')
 
-    # Create random list of participants
-    random.shuffle(draft_order)
+    if draft_order_path.is_file():
+        print(f'\nDraft order already exists at {draft_order_path}')
+        print(f'\nLoading pre-existing draft order...')
 
-    return draft_order
+        draft_df = pd.read_csv(draft_order_path)
+        draft_order = draft_df['Participant'].tolist()
 
+        print('\nDraft Oder:\n')
+        print(f'\t{draft_order}\n')
+
+    else:
+        # Gather list of participants
+        draft_order = list(participant_teams.keys())
+
+        # Create random list of participants
+        random.shuffle(draft_order)
+
+        # Convert to dataframe and save
+        draft_df = pd.DataFrame([(p,i) for i,p in enumerate(draft_order,1)])
+        draft_df.columns = ['Participant', 'Slot']
+
+        draft_df.to_csv(draft_order_path, index=False)
+        print('\nDraft Oder:\n')
+        print(f'\t{draft_order}\n')
+        print(f'\tSaved draft order to {draft_order_path}')
+
+    return draft_order_path, draft_order
 
