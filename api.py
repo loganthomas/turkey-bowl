@@ -92,6 +92,14 @@ def collect_player_ids_pts(response):
     return player_ids_pts
 
 
+def run_query_and_collection(year, week, stats_type):
+    url            = create_query_url(year, week, stats_type)
+    response       = create_api_response(url)
+    player_ids_pts = collect_player_ids_pts(response)
+
+    return player_ids_pts
+
+
 def get_player_metadata(player_id):
     """
     Pulls a player's name, position, team, and injury status from API.
