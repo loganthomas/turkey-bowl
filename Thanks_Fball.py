@@ -61,7 +61,7 @@ def update_pts(year, week, participant_teams, stats_type):
         for pid in participant_team['id']:
             try:
                 pid = round(pid)
-            except ValueError:
+            except (ValueError, TypeError):
                 pid = pid
 
             # Look up points (not an API call)
@@ -129,12 +129,16 @@ def update_act_pts_and_show_leader(year, week, participant_teams):
     return participant_teams, leader_board
 
 
-def main():
+def main(d=1, i=1, u=1):
     """
+    d (bool 0 or 1): whether to run draft stuff
+    i (bool 0 or 1): whether to run instantiation stuff
+    u (bool 0 or 1): whether to run update stuff
+
     TODO:
-    Consider returning some of these things
-    (leader_board, detailed_scores, etc.) so that entire main
-    doesn't need to be run each time
+        - Consider better main function without d,i,u (hacky for now)
+        - Consider making a draft class so isn't call each time?
+        - Consider making a leader board class with an updated method?
     """
     year = utils.get_current_year()
 
@@ -147,41 +151,55 @@ def main():
 
     participant_teams = draft.get_draft_data(draft_file_path)
 
-    # Create a random draft order
-    draft_order = draft.make_draft_order(participant_teams)
-    print(draft_order)
+    # Only run draft stuff
+    if d:
+        # Create a random draft order
+        draft_order_path, draft_order = draft.make_draft_order(year, output_dir, participant_teams)
 
-    nfl_start_cal_week_num = utils.get_nfl_start_week(year)
-    thanksgiving_cal_week_num = utils.get_thanksgiving_week(year)
+    # Only run instantiation stuff
+    if i:
+        nfl_start_cal_week_num = utils.get_nfl_start_week(year)
+        thanksgiving_cal_week_num = utils.get_thanksgiving_week(year)
 
-    week = utils.calculate_nfl_thanksgiving_week(nfl_start_cal_week_num, thanksgiving_cal_week_num)
+        week = utils.calculate_nfl_thanksgiving_week(
+            nfl_start_cal_week_num,
+            thanksgiving_cal_week_num,
+        )
 
-    # Pull week prior to gather all players (with injury reports/projections)
-    #     Need to pull prior week as current week only has player ids
-    #     (this helps identify players by name) One time costly, but easy to
-    #     join for updating scores later on.
-    prior_act_ids_pts  = api.run_query_and_collection(year, week - 1, stats_type='actual')
-    prior_proj_ids_pts = api.run_query_and_collection(year, week - 1, stats_type='projected')
+        # Pull week prior to gather all players (with injury reports/projections)
+        #     Need to pull prior week as current week only has player ids
+        #     (this helps identify players by name) One time costly, but easy to
+        #     join for updating scores later on.
+        prior_act_ids_pts  = api.run_query_and_collection(year, week - 1, stats_type='actual')
+        prior_proj_ids_pts = api.run_query_and_collection(year, week - 1, stats_type='projected')
 
-    prior_players = api.instantiate_players(year, week - 1, prior_act_ids_pts, prior_proj_ids_pts)
-    prior_players_df = utils.create_players_df(prior_players)
-    prior_players_df_path = utils.save_players_df(year, week - 1, output_dir, prior_players_df)
-    print(f'Saved prior week ({week-1}) player data to {prior_players_df_path}')
+        prior_players = api.instantiate_players(year, week-1, prior_act_ids_pts, prior_proj_ids_pts)
+        prior_players_df = utils.create_players_df(prior_players)
+        prior_players_df_path = utils.save_players_df(year, week - 1, output_dir, prior_players_df)
+        print(f'Saved prior week ({week-1}) player data to {prior_players_df_path}')
 
-    participant_teams = merge_points(participant_teams, prior_players_df)
+        participant_teams = merge_points(participant_teams, prior_players_df)
 
-    # Update projected points to current week (currently week prior projections)
-    participant_teams = update_pts(
-        year              = year,
-        week              = week,
-        participant_teams = participant_teams,
-        stats_type        = 'projected'
-    )
+        # Update projected points to current week (currently week prior projections)
+        participant_teams = update_pts(
+            year              = year,
+            week              = week,
+            participant_teams = participant_teams,
+            stats_type        = 'projected'
+        )
 
-    # Can call this multiple times when launched from IPython console
-    participant_teams, leader_board = update_act_pts_and_show_leader(year, week, participant_teams)
+        return participant_teams
 
+    # Only run update stuff
+    if u:
+        # Can call this multiple times when launched from IPython console
+        participant_teams, leader_board = update_act_pts_and_show_leader(
+            year,
+            week,
+            participant_teams
+        )
 
-if __name__ == '__main__':
-    main()
+        leader_board.to_csv(output_dir.joinpath(f'{year}_leader_board.csv'))
+
+        return participant_teams, leader_board
 
