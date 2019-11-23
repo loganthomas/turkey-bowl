@@ -8,6 +8,7 @@ from datetime import datetime
 
 # Third party libraries
 import numpy as np
+import pandas as pd
 
 
 def get_current_year():
@@ -81,4 +82,24 @@ def create_output_dir(curr_year):
         output_dir.mkdir()
 
     return output_dir
+
+
+def create_players_df(players):
+    """
+    Converts players (list of namedtuples) into pd.DataFrame
+    """
+    return pd.DataFrame(players)
+
+
+def save_players_df(year, week, output_dir, players_df):
+    players_df_path = output_dir.joinpath(f'yr{year}_wk{week}_player_data.csv')
+
+    # Sort by actual points and then projected points
+    players_df = players_df.sort_values(['act_pts', 'proj_pts'], ascending=False)
+    players_df = players_df.reset_index(drop=True)
+
+    # Write to csv
+    players_df.to_csv(players_df_path)
+
+    return players_df_path
 
