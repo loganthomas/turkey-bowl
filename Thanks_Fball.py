@@ -29,11 +29,47 @@ def merge_points(participant_teams, players_df):
             participant_team,
             players_df,
             left_on=['Player', 'Team'],
-            right_on=['name', 'team']
+            right_on=['name', 'team'],
+            how='left',
         )
 
         merged = merged.drop(['name', 'team',], axis=1)
         participant_teams[participant] = merged
+
+        # Defensive programming (ignore bench player in case written in as NONE in .xlsx)
+        if sum(pd.isna(merged[:-1]['id'])) > 0:
+            print(f"WARNING!! {participant}'s merge has missing player ids")
+
+    return participant_teams
+
+
+def update_pts(year, week, participant_teams, stats_type):
+    # Pull ids and points from API
+    player_ids_pts = api.run_query_and_collection(year, week, stats_type)
+
+    # Make correct labels
+    if stats_type == 'actual':
+        stats_label = 'stats'
+        col_label   = 'act_pts'
+    else:
+        stats_label = 'projectedStats'
+        col_label   = 'proj_pts'
+
+    for participant, participant_team in participant_teams.items():
+
+        updated_pts = []
+        for pid in participant_team['id']:
+            try:
+                pid = round(pid)
+            except ValueError:
+                pid = pid
+
+            # Look up points (not an API call)
+            pts = api.get_player_pts(year, week, player_ids_pts, str(pid), stats_label)
+
+            updated_pts.append(pts)
+
+        participant_team[col_label] = updated_pts
 
     return participant_teams
 
@@ -47,7 +83,7 @@ def create_leader_board(participant_teams):
     leader_board_data = {}
 
     for participant, participant_team in participant_teams.items():
-        print(f'### {participant.upper()} stats ###\n')
+        print(f'\n### {participant.upper()} stats ###\n')
         print(participant_team)
         print('\n\n\n')
 
@@ -76,6 +112,23 @@ def create_leader_board(participant_teams):
     return leader_board
 
 
+def update_act_pts_and_show_leader(year, week, participant_teams):
+    # Update actual points to current week
+    #    Currently week prior actual points or last time called actual points.
+    #    First time this is called should result in all act_pts being 0.0.
+    participant_teams = update_pts(
+        year              = year,
+        week              = week,
+        participant_teams = participant_teams,
+        stats_type         ='actual'
+    )
+
+    # Create and print leader board
+    leader_board = create_leader_board(participant_teams)
+
+    return participant_teams, leader_board
+
+
 def main():
     """
     TODO:
@@ -83,10 +136,6 @@ def main():
     (leader_board, detailed_scores, etc.) so that entire main
     doesn't need to be run each time
     """
-    # 2019 start
-    # Stopped here create function to cp draft_sheet.xlsx to output_dir and add year
-    # Save players (with name, id, team, pos, etc.) and points from previous week... one time cost.
-
     year = utils.get_current_year()
 
     output_dir = utils.create_output_dir(str(year))
@@ -111,40 +160,26 @@ def main():
     #     Need to pull prior week as current week only has player ids
     #     (this helps identify players by name) One time costly, but easy to
     #     join for updating scores later on.
-    prior_act_ids_pts  = api.run_query_and_collection(year, week-1, stats_type='actual')
-    prior_proj_ids_pts = api.run_query_and_collection(year, week-1, stats_type='projected')
+    prior_act_ids_pts  = api.run_query_and_collection(year, week - 1, stats_type='actual')
+    prior_proj_ids_pts = api.run_query_and_collection(year, week - 1, stats_type='projected')
 
-    prior_players = api.instantiate_players(year, week-1, prior_act_ids_pts, prior_proj_ids_pts)
+    prior_players = api.instantiate_players(year, week - 1, prior_act_ids_pts, prior_proj_ids_pts)
     prior_players_df = utils.create_players_df(prior_players)
-    prior_players_df_path = utils.save_players_df(year, week-1, output_dir, prior_players_df)
+    prior_players_df_path = utils.save_players_df(year, week - 1, output_dir, prior_players_df)
+    print(f'Saved prior week ({week-1}) player data to {prior_players_df_path}')
 
-    actual_url = api.create_query_url(year, week, stats_type='actual')
-    actual_response = api.create_api_response(actual_url)
-    actual_player_ids_pts = api.collect_player_ids_pts(actual_response)
+    participant_teams = merge_points(participant_teams, prior_players_df)
 
-    projected_url = api.create_query_url(year, week, stats_type='projected')
-    projected_response = api.create_api_response(projected_url)
-    projected_player_ids_pts = api.collect_player_ids_pts(projected_response)
+    # Update projected points to current week (currently week prior projections)
+    participant_teams = update_pts(
+        year              = year,
+        week              = week,
+        participant_teams = participant_teams,
+        stats_type        = 'projected'
+    )
 
-    players = api.instantiate_players(year, week, actual_player_ids_pts, projected_player_ids_pts)
-
-
-    # CREATE update function!!!
-
-    # Collect player scores for given week and year
-    print('\nGathering points for week {} year {} by scraping the web...'.format(week, year))
-    players_df, kickers_df, defenses_df = gather_points(week, year)
-    print('Successfully gathered players, kickers, and defenses points')
-
-    # Determine participant's draft player scores
-    print('\nMerging points to drafted teams...')
-    detailed_pnts, pnt_totals = merge_points(participant_teams, players_df, kickers_df, defenses_df)
-    print('Successfully merged points to participants drafted teams')
-
-    # Create and print leader board
-    leader_board = create_leader_board(detailed_pnts, pnt_totals)
-    print('\n{} winning with {} pts\n'.format(leader_board.iloc[0,0], leader_board.iloc[0,1]))
-    print(leader_board)
+    # Can call this multiple times when launched from IPython console
+    participant_teams, leader_board = update_act_pts_and_show_leader(year, week, participant_teams)
 
 
 if __name__ == '__main__':
