@@ -1,14 +1,11 @@
 """
 Thanksgiving Football module
-
-@author: Logan Thomas
 """
 # Standard Libraries
 import os
 import sys
 import random
 import datetime as dt
-from urllib.parse import urlencode
 
 # Third-party libraries
 import pandas as pd
@@ -136,33 +133,6 @@ def make_draft_order(participant_teams):
     random.shuffle(draft_order)
 
     return draft_order
-
-
-def _create_query_url(week, year):
-    """
-    Creates a url for web scrapping player fantasy points.
-
-    The base url used will always remain the same. However, this function
-    creates a query url for the desired week and year to scrape data from.
-
-    Args:
-        week (int): The specific NFL week to query.
-        year (int): The specific NFL year to query.
-
-    Returns:
-        url (str): The query url used to scrape fantasy player points from.
-    """
-    # Base url
-    url_base = 'http://games.espn.com/ffl/leaders?&'
-
-    # Encode week and year
-    params = {'scoringPeriodId': week, 'seasonId': year}
-    enc_params = urlencode(params)
-
-    # Query url
-    url = url_base + enc_params
-
-    return url
 
 
 def _make_df(list_of_dfs, player_split_char):
