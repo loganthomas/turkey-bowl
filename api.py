@@ -169,7 +169,3 @@ def instantiate_players(year, week, actual_player_ids_pts, projected_player_ids_
 
     return players
 
-
-
-# Stopped here create function to cp draft_sheet.xlsx to output_dir and add year
-# Save players (with name, id, team, pos, etc.) and points from previous week... one time cost.
