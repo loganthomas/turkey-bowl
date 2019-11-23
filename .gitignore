@@ -6,6 +6,7 @@
 
 # Ignore excel (.xlsx) files
 *.xlsx
+*.csv
 
 # Ignore caches from ipython
 __pycache__/
