@@ -127,7 +127,7 @@ def get_player_pts(year, week, player_ids_pts, player_id, stats_type):
     # Not all players will exist in both actual and projected
     try:
         pts = player_ids_pts[player_id][stats_type]['week'][str(year)][str(week)].get('pts')
-    except KeyError:
+    except (KeyError, TypeError):
         pts = 0.0
 
     # Convert to float, change None to 0.0
