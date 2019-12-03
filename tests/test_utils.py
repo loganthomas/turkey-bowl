@@ -1,3 +1,7 @@
+"""
+Unit Tests
+pytest --cov-report term-missing --cov=.
+"""
 # Standard libraries
 import datetime
 import calendar
@@ -7,7 +11,7 @@ import pytest
 import numpy as np
 
 # Local libraries
-import setup_utils
+import utils
 
 # NFL starts week of first Monday of September on Thursday
 nfl_start_dates = [
@@ -36,7 +40,7 @@ def test_get_nfl_start_week(year, expected):
     expected = expected
 
     # Exercise
-    nfl_start_cal_week_num = setup_utils.get_nfl_start_week(year)
+    nfl_start_cal_week_num = utils.get_nfl_start_week(year)
     week_delta = nfl_start_cal_week_num - 1  # 1-indexed not 0-indexed
     result = first_thur_in_jan_date + datetime.timedelta(weeks=week_delta)
 
@@ -76,7 +80,7 @@ def test_get_thanksgiving_week(year, expected):
     expected = expected
 
     # Exercise
-    thanksgiving_cal_week_num = setup_utils.get_thanksgiving_week(year)
+    thanksgiving_cal_week_num = utils.get_thanksgiving_week(year)
     week_delta = thanksgiving_cal_week_num - 1  # 1-indexed not 0-indexed
     result = first_thur_in_jan_date + datetime.timedelta(weeks=week_delta)
 
