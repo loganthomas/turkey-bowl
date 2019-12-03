@@ -20,6 +20,7 @@ from collections  import namedtuple
 
 # Third-party libraries
 import requests
+import pandas as pd
 
 
 def create_query_url(year, week, stats_type):
@@ -176,4 +177,91 @@ def instantiate_players(year, week, actual_player_ids_pts, projected_player_ids_
         players.append(player)
 
     return players
+
+
+def create_players_df(players):
+    """
+    Converts players (list of namedtuples) into pd.DataFrame
+    """
+    return pd.DataFrame(players)
+
+
+def save_players_df(prior_players_df_path, players_df):
+    # Sort by actual points and then projected points
+    players_df = players_df.sort_values(['act_pts', 'proj_pts'], ascending=False)
+    players_df = players_df.reset_index(drop=True)
+
+    # Write to csv
+    players_df.to_csv(prior_players_df_path)
+
+
+def create_prior_players_file_path(year, week, output_dir):
+    """
+    Creates a path to the file where prior player dataframe should be saved.
+    """
+    prior_players_df_path = output_dir.joinpath(f'yr{year}_wk{week}_player_data.csv')
+
+    return prior_players_df_path
+
+
+def check_prior_players_file_exists(year, week, prior_players_df_path):
+    """
+    Checks whether the file located at prior_players_df_path exists.
+    If not, pull the necessary data and save to the path.
+
+    Notes:
+        Need to pull week prior to gather all players (with injury reports/projections).
+        Current week only has player ids and pulling prior week helps identify players by name.
+        One time costly, but easy to join for updating scores later on.
+
+    TODO: update to include handling of Connection Error?
+    """
+    # If the file doesn't exist, pull data and create the file
+    if not prior_players_df_path.is_file():
+
+        prior_act_ids_pts  = run_query_and_collection(year, week, stats_type='actual')
+        prior_proj_ids_pts = run_query_and_collection(year, week, stats_type='projected')
+
+        prior_players = instantiate_players(year, week, prior_act_ids_pts, prior_proj_ids_pts)
+        prior_players_df = create_players_df(prior_players)
+
+        prior_players_df_path = save_players_df(prior_players_df_path, prior_players_df)
+        print(f'Saved prior week ({week}) players data to {prior_players_df_path}')
+
+    else:
+        print(f'Prior week ({week}) players data already exists at {prior_players_df_path}')
+        prior_players_df = pd.read_csv(prior_players_df_path, index_col=0)
+
+    return prior_players_df
+
+
+def update_pts(year, week, participant_teams, stats_type):
+    # Pull ids and points from API
+    player_ids_pts = run_query_and_collection(year, week, stats_type)
+
+    # Make correct labels
+    if stats_type == 'actual':
+        stats_label = 'stats'
+        col_label   = 'act_pts'
+    else:
+        stats_label = 'projectedStats'
+        col_label   = 'proj_pts'
+
+    for participant, participant_team in participant_teams.items():
+
+        updated_pts = []
+        for pid in participant_team['id']:
+            try:
+                pid = round(pid)
+            except (ValueError, TypeError):
+                pid = pid
+
+            # Look up points (not an API call)
+            pts = get_player_pts(year, week, player_ids_pts, str(pid), stats_label)
+
+            updated_pts.append(pts)
+
+        participant_team[col_label] = updated_pts
+
+    return participant_teams
 
