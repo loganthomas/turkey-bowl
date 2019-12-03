@@ -78,3 +78,7 @@ def main():
         participant_teams
     )
 
+
+if __name__ == '__main__':
+    main()
+
