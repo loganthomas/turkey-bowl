@@ -4,22 +4,32 @@ Draft functions
 # Standard libraries
 import random
 import shutil
-from pathlib import Path
 
 # Third-party libraries
 import pandas as pd
 
 
-def copy_draft_sheet(year, output_dir):
+def create_draft_file_path(year, output_dir):
     """
-    Creates a new blank draft sheet within output_dir
+    Creates a path to the draft excel workbook.
     """
-    draft_file_name = f'draft_sheet_{year}.xlsx'
+    draft_file_name = f'{year}_draft_sheet.xlsx'
     draft_file_path = output_dir.joinpath(draft_file_name)
 
-    shutil.copyfile('draft_sheet.xlsx', draft_file_path)
-
     return draft_file_path
+
+
+def check_draft_file_exists(draft_file_path):
+    """
+    Checks whether the file located at draft_file_path exists.
+    If not, create a copy of the blank draft_sheet.xlsx file
+    located at root directory (to be filled in).
+    """
+    if not draft_file_path.is_file():
+        shutil.copyfile('draft_sheet.xlsx', draft_file_path)
+        print(f'Creating blank draft sheet at {draft_file_path}')
+    else:
+        print(f'Draft file already exists at {draft_file_path}')
 
 
 def get_draft_data(draft_file_path):
