@@ -1,5 +1,8 @@
 # Thanksgiving Football Repo
 
+
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/65ef5d3a1807415b9f6287475822e2b4)](https://www.codacy.com/manual/loganthomas/Thanksgiving_Football?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=loganthomas/Thanksgiving_Football&amp;utm_campaign=Badge_Grade)
+
 > Thanksgiving fantasy football draft and scoring code.  
 > Every year during Thanksgiving, my family has a fantasy football draft.  
 > We only include the teams that are playing on Thanksgiving and limit the positions of the draft in order to keep it simple. This has become a holiday tradition and been 
