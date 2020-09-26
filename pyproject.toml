@@ -1,0 +1,24 @@
+[tool.black]
+line-length = 88
+include = '\.pyi?$'
+exclude = '''
+/(
+    \.git
+  | \.hg
+  | \.mypy_cache
+  | \.tox
+  | \.venv
+  | _build
+  | buck-out
+  | build
+  | dist
+  | env
+  | venv
+)/
+'''
+
+[tool.isort]
+multi_line_output=3
+import_heading_stdlib='Standard libraries'
+import_heading_thirdparty='Third-party libraries'
+import_heading_firstparty='Local libraries'
