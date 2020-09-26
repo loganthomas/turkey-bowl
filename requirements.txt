@@ -5,4 +5,4 @@ XlsxWriter
 codecov
 pytest
 pytest-cov
-
+pre-commit
