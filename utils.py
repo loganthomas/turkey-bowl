@@ -3,10 +3,10 @@ Utility functions
 """
 # Standard libraries
 import calendar
-from pathlib import Path
 from datetime import datetime
+from pathlib import Path
 
-# Third party libraries
+# Third-party libraries
 import numpy as np
 import pandas as pd
 
@@ -20,17 +20,17 @@ def get_nfl_start_week(curr_year):
     calendar.setfirstweekday(calendar.SUNDAY)
 
     # Gather sept days
-    sept = calendar.monthcalendar(curr_year,9)
+    sept = calendar.monthcalendar(curr_year, 9)
     sept = np.array(sept)
 
     # Get all sept mondays
-    sept_mondays = sept[:,1]
+    sept_mondays = sept[:, 1]
 
     # Find first mondays date
     sept_first_monday = min([mon for mon in sept_mondays if mon != 0])
 
     # Convert to first monday in sept to datetime object
-    sept_first_monday_date = datetime(curr_year,9, sept_first_monday)
+    sept_first_monday_date = datetime(curr_year, 9, sept_first_monday)
 
     # Find calendar week for start of NFL season
     nfl_start_cal_week_num = sept_first_monday_date.isocalendar()[1]
@@ -43,15 +43,15 @@ def get_thanksgiving_week(curr_year):
     calendar.setfirstweekday(calendar.SUNDAY)
 
     # Gather nov days
-    nov = calendar.monthcalendar(curr_year,11)
+    nov = calendar.monthcalendar(curr_year, 11)
     nov = np.array(nov)
 
     # Find 4th thursday in nov
-    nov_thursdays = nov[:,4]
+    nov_thursdays = nov[:, 4]
     thanksgiving_day = [thur for thur in nov_thursdays if thur != 0][3]
 
     # Convert thanksgiving day to datetime object
-    thanksgiving_day_date = datetime(curr_year,11,thanksgiving_day)
+    thanksgiving_day_date = datetime(curr_year, 11, thanksgiving_day)
 
     # Find calendar week for thanksgiving day
     thanksgiving_cal_week_num = thanksgiving_day_date.isocalendar()[1]
@@ -96,16 +96,22 @@ def merge_points(participant_teams, players_df):
         merged = pd.merge(
             participant_team,
             players_df,
-            left_on=['Player', 'Team'],
-            right_on=['name', 'team'],
-            how='left',
+            left_on=["Player", "Team"],
+            right_on=["name", "team"],
+            how="left",
         )
 
-        merged = merged.drop(['name', 'team',], axis=1)
+        merged = merged.drop(
+            [
+                "name",
+                "team",
+            ],
+            axis=1,
+        )
         participant_teams[participant] = merged
 
         # Defensive programming (ignore bench player in case written in as NONE in .xlsx)
-        if sum(pd.isna(merged[:-1]['id'])) > 0:
+        if sum(pd.isna(merged[:-1]["id"])) > 0:
             print(f"WARNING!! {participant}'s merge has missing player ids")
 
     return participant_teams
@@ -117,18 +123,20 @@ def create_leader_board(year, output_dir, participant_teams):
     Left out of calculation but still shown.
     """
     # Instantiate writer to save leader board and data
-    writer = pd.ExcelWriter(output_dir.joinpath(f'{year}_leader_board.xlsx'), engine='xlsxwriter')
+    writer = pd.ExcelWriter(
+        output_dir.joinpath(f"{year}_leader_board.xlsx"), engine="xlsxwriter"
+    )
 
     # Instantiate leader board data
     leader_board_data = {}
 
     for participant, participant_team in participant_teams.items():
-        print(f'\n### {participant.upper()} stats ###\n')
+        print(f"\n### {participant.upper()} stats ###\n")
         print(participant_team)
-        print('\n\n\n')
+        print("\n\n\n")
 
         # Assumes bench is last row (shown but not included in sum)
-        team_pts = participant_team[:-1]['act_pts'].sum()
+        team_pts = participant_team[:-1]["act_pts"].sum()
 
         leader_board_data[participant] = team_pts
 
@@ -136,23 +144,26 @@ def create_leader_board(year, output_dir, participant_teams):
         participant_team.to_excel(writer, sheet_name=participant)
 
     # Create a DataFrame from point_totals
-    leader_board = pd.DataFrame.from_dict(leader_board_data, orient='index', columns=['PTS'])
+    leader_board = pd.DataFrame.from_dict(
+        leader_board_data, orient="index", columns=["PTS"]
+    )
 
     # Sort the leader board on highest pts to lowest pts
-    leader_board = leader_board.sort_values('PTS', ascending=False)
+    leader_board = leader_board.sort_values("PTS", ascending=False)
 
     # Create column to show how far ahead each participant is compared to next
-    leader_board['margin'] = leader_board['PTS'].diff(-1)
+    leader_board["margin"] = leader_board["PTS"].diff(-1)
 
     # Create column to show how far out of lead they are
-    leader_board['pts_back'] = leader_board.iloc[0,0] - leader_board['PTS'].values
+    leader_board["pts_back"] = leader_board.iloc[0, 0] - leader_board["PTS"].values
 
     # Print details on points
-    print(f'\n{leader_board.index[0]} winning with {round(leader_board.iloc[0,0],2)} pts\n')
+    print(
+        f"\n{leader_board.index[0]} winning with {round(leader_board.iloc[0,0],2)} pts\n"
+    )
     print(leader_board)
-    print('\n')
+    print("\n")
 
     # Save leader board as sheet in excel
-    leader_board.to_excel(writer, sheet_name='leader_board')
+    leader_board.to_excel(writer, sheet_name="leader_board")
     writer.save()
-
