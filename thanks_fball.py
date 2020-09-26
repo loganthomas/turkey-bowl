@@ -23,7 +23,7 @@ def main():
     year = utils.get_current_year()
 
     # Create output directory as current year
-    output_dir = utils.create_output_dir(str(year))
+    output_dir = utils.create_output_dir(path=f"archive/{str(year)}")
 
     # Create a path to the draft file
     draft_file_path = draft.create_draft_file_path(year, output_dir)
