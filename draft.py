@@ -13,7 +13,7 @@ def create_draft_file_path(year, output_dir):
     """
     Creates a path to the draft excel workbook.
     """
-    draft_file_name = f'{year}_draft_sheet.xlsx'
+    draft_file_name = f"{year}_draft_sheet.xlsx"
     draft_file_path = output_dir.joinpath(draft_file_name)
 
     return draft_file_path
@@ -26,10 +26,10 @@ def check_draft_file_exists(draft_file_path):
     located at root directory (to be filled in).
     """
     if not draft_file_path.is_file():
-        shutil.copyfile('draft_sheet.xlsx', draft_file_path)
-        print(f'Creating blank draft sheet at {draft_file_path}')
+        shutil.copyfile("draft_sheet.xlsx", draft_file_path)
+        print(f"Creating blank draft sheet at {draft_file_path}")
     else:
-        print(f'Draft file already exists at {draft_file_path}')
+        print(f"Draft file already exists at {draft_file_path}")
 
 
 def get_draft_data(draft_file_path):
@@ -59,7 +59,7 @@ def get_draft_data(draft_file_path):
     xlsx = pd.ExcelFile(draft_file_path)
 
     # Get each participant's drafted players
-    participant_teams = {p:xlsx.parse(p) for p in xlsx.sheet_names}
+    participant_teams = {p: xlsx.parse(p) for p in xlsx.sheet_names}
 
     return participant_teams
 
@@ -79,17 +79,17 @@ def make_draft_order(year, output_dir, participant_teams):
     Returns:
         draft_order (list of str): A random draft order of participants.
     """
-    draft_order_path = output_dir.joinpath(f'{year}_draft_order.csv')
+    draft_order_path = output_dir.joinpath(f"{year}_draft_order.csv")
 
     if draft_order_path.is_file():
-        print(f'\nDraft order already exists at {draft_order_path}')
-        print(f'\nLoading pre-existing draft order...')
+        print(f"\nDraft order already exists at {draft_order_path}")
+        print(f"\nLoading pre-existing draft order...")
 
         draft_df = pd.read_csv(draft_order_path)
-        draft_order = draft_df['Participant'].tolist()
+        draft_order = draft_df["Participant"].tolist()
 
-        print('\nDraft Oder:\n')
-        print(f'\t{draft_order}\n')
+        print("\nDraft Oder:\n")
+        print(f"\t{draft_order}\n")
 
     else:
         # Gather list of participants
@@ -99,13 +99,12 @@ def make_draft_order(year, output_dir, participant_teams):
         random.shuffle(draft_order)
 
         # Convert to dataframe and save
-        draft_df = pd.DataFrame([(p,i) for i,p in enumerate(draft_order,1)])
-        draft_df.columns = ['Participant', 'Slot']
+        draft_df = pd.DataFrame([(p, i) for i, p in enumerate(draft_order, 1)])
+        draft_df.columns = ["Participant", "Slot"]
 
         draft_df.to_csv(draft_order_path, index=False)
-        print('\nDraft Oder:\n')
-        print(f'\t{draft_order}\n')
-        print(f'\tSaved draft order to {draft_order_path}')
+        print("\nDraft Oder:\n")
+        print(f"\t{draft_order}\n")
+        print(f"\tSaved draft order to {draft_order_path}")
 
     return draft_order_path, draft_order
-
