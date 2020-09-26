@@ -1,8 +1,9 @@
+codecov
 numpy
 pandas
-requests
-XlsxWriter
-codecov
+pre-commit
 pytest
 pytest-cov
-pre-commit
+pytest-freezegun
+requests
+XlsxWriter
