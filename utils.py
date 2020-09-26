@@ -5,6 +5,7 @@ Utility functions
 import calendar
 from datetime import datetime
 from pathlib import Path
+from typing import Dict
 
 # Third-party libraries
 import numpy as np
@@ -84,7 +85,9 @@ def create_output_dir(path: str) -> Path:
     return output_dir
 
 
-def merge_points(participant_teams, players_df):
+def merge_points(
+    participant_teams: Dict[str, pd.DataFrame], players_df: pd.DataFrame
+) -> Dict[str, pd.DataFrame]:
     """
     Notes:
         Although the 'Bench (RB/WR)' player is reported in the
