@@ -15,12 +15,12 @@ Notes:
     https://api.fantasy.nfl.com/v2/docs/service?serviceName=playerNgsContent
 """
 # Standard libraries
+from collections import namedtuple
 from urllib.parse import urlencode
-from collections  import namedtuple
 
 # Third-party libraries
-import requests
 import pandas as pd
+import requests
 
 
 def create_query_url(year, week, stats_type):
@@ -39,18 +39,19 @@ def create_query_url(year, week, stats_type):
         url (str): The query url used to scrape fantasy player points from.
     """
     # Defensive programming
-    assert stats_type in ('actual', 'projected'), (
-        f"Invalid stats_type. Must be 'actual' or 'projected'. Did not recognize '{stats_type}'."
-    )
+    assert stats_type in (
+        "actual",
+        "projected",
+    ), f"Invalid stats_type. Must be 'actual' or 'projected'. Did not recognize '{stats_type}'."
 
     # Base url
-    if stats_type == 'actual':
-        url_base = 'https://api.fantasy.nfl.com/v2/players/weekstats?'
+    if stats_type == "actual":
+        url_base = "https://api.fantasy.nfl.com/v2/players/weekstats?"
     else:
-        url_base = 'https://api.fantasy.nfl.com/v2/players/weekprojectedstats?'
+        url_base = "https://api.fantasy.nfl.com/v2/players/weekprojectedstats?"
 
     # Encode week and year
-    params = {'season': year, 'week': week}
+    params = {"season": year, "week": week}
     enc_params = urlencode(params)
 
     # Query url
@@ -66,9 +67,9 @@ def create_api_response(url):
     response = requests.get(url)
 
     if response.status_code == requests.codes.ok:
-        print(f'Successful API response obtained for: {url}')
+        print(f"Successful API response obtained for: {url}")
     else:
-        print(f'WARNING API response unsuccessful for: {url}')
+        print(f"WARNING API response unsuccessful for: {url}")
 
     return response
 
@@ -85,17 +86,17 @@ def collect_player_ids_pts(response):
     response_json = response.json()
 
     # Get the game id (this isn't an actual game, just an identifier)
-    game_id = response_json['systemConfig'].get('currentGameId')
+    game_id = response_json["systemConfig"].get("currentGameId")
 
     # Get players metadata (keyed by id)
-    player_ids_pts = response_json['games'][game_id].get('players')
+    player_ids_pts = response_json["games"][game_id].get("players")
 
     return player_ids_pts
 
 
 def run_query_and_collection(year, week, stats_type):
-    url            = create_query_url(year, week, stats_type)
-    response       = create_api_response(url)
+    url = create_query_url(year, week, stats_type)
+    response = create_api_response(url)
     player_ids_pts = collect_player_ids_pts(response)
 
     return player_ids_pts
@@ -105,29 +106,32 @@ def get_player_metadata(player_id):
     """
     Pulls a player's name, position, team, and injury status from API.
     """
-    url           = f'https://api.fantasy.nfl.com/v2/player/ngs-content?playerId={player_id}'
-    response      = create_api_response(url)
+    url = f"https://api.fantasy.nfl.com/v2/player/ngs-content?playerId={player_id}"
+    response = create_api_response(url)
     response_json = response.json()
-    game_id       = list(response_json['games'].keys())[0]  # Identifier not really game id
+    game_id = list(response_json["games"].keys())[0]  # Identifier not really game id
 
-    metadata = response_json['games'][game_id]['players'][player_id]
-    name     = metadata.get('name')
-    pos      = metadata.get('position')
-    team     = metadata.get('nflTeamAbbr')
-    injury   = metadata.get('injuryGameStatus')
+    metadata = response_json["games"][game_id]["players"][player_id]
+    name = metadata.get("name")
+    pos = metadata.get("position")
+    team = metadata.get("nflTeamAbbr")
+    injury = metadata.get("injuryGameStatus")
 
     return name, pos, team, injury
 
 
 def get_player_pts(year, week, player_ids_pts, player_id, stats_type):
     # Defensive programming
-    assert stats_type in ('stats', 'projectedStats'), (
-        f"Invalid stats_type. Must be 'stats' or 'projectedStats'. Didn't recognize '{stats_type}'."
-    )
+    assert stats_type in (
+        "stats",
+        "projectedStats",
+    ), f"Invalid stats_type. Must be 'stats' or 'projectedStats'. Didn't recognize '{stats_type}'."
 
     # Not all players will exist in both actual and projected
     try:
-        pts = player_ids_pts[player_id][stats_type]['week'][str(year)][str(week)].get('pts')
+        pts = player_ids_pts[player_id][stats_type]["week"][str(year)][str(week)].get(
+            "pts"
+        )
     except (KeyError, TypeError):
         pts = 0.0
 
@@ -146,15 +150,15 @@ def instantiate_players(year, week, actual_player_ids_pts, projected_player_ids_
     """
     # Create namedtuple to house player date (think Player obj)
     Player = namedtuple(
-        typename    = 'Player',
-        field_names = ['name', 'id', 'team', 'pos', 'injury','proj_pts', 'act_pts'],
-        defaults    = [    '',  0.0,     '',    '',       '',       0.0,       0.0],
+        typename="Player",
+        field_names=["name", "id", "team", "pos", "injury", "proj_pts", "act_pts"],
+        defaults=["", 0.0, "", "", "", 0.0, 0.0],
     )
 
     # Gather all unique players within projected and actual
-    act_player_ids  = list(actual_player_ids_pts.keys())
+    act_player_ids = list(actual_player_ids_pts.keys())
     proj_player_ids = list(projected_player_ids_pts.keys())
-    player_ids      = list(set(act_player_ids + proj_player_ids))
+    player_ids = list(set(act_player_ids + proj_player_ids))
 
     # Instantiate output
     players = []
@@ -162,17 +166,19 @@ def instantiate_players(year, week, actual_player_ids_pts, projected_player_ids_
     for pid in player_ids:
         name, pos, team, injury = get_player_metadata(pid)
 
-        act_pts  = get_player_pts(year, week, actual_player_ids_pts, pid, 'stats')
-        proj_pts = get_player_pts(year, week, projected_player_ids_pts, pid, 'projectedStats')
+        act_pts = get_player_pts(year, week, actual_player_ids_pts, pid, "stats")
+        proj_pts = get_player_pts(
+            year, week, projected_player_ids_pts, pid, "projectedStats"
+        )
 
         player = Player(
-            name     = name,
-            id       = pid,
-            team     = team,
-            pos      = pos,
-            injury   = injury,
-            act_pts  = act_pts,
-            proj_pts = proj_pts
+            name=name,
+            id=pid,
+            team=team,
+            pos=pos,
+            injury=injury,
+            act_pts=act_pts,
+            proj_pts=proj_pts,
         )
         players.append(player)
 
@@ -188,7 +194,7 @@ def create_players_df(players):
 
 def save_players_df(prior_players_df_path, players_df):
     # Sort by actual points and then projected points
-    players_df = players_df.sort_values(['act_pts', 'proj_pts'], ascending=False)
+    players_df = players_df.sort_values(["act_pts", "proj_pts"], ascending=False)
     players_df = players_df.reset_index(drop=True)
 
     # Write to csv
@@ -199,7 +205,7 @@ def create_prior_players_file_path(year, week, output_dir):
     """
     Creates a path to the file where prior player dataframe should be saved.
     """
-    prior_players_df_path = output_dir.joinpath(f'yr{year}_wk{week}_player_data.csv')
+    prior_players_df_path = output_dir.joinpath(f"yr{year}_wk{week}_player_data.csv")
 
     return prior_players_df_path
 
@@ -219,17 +225,23 @@ def check_prior_players_file_exists(year, week, prior_players_df_path):
     # If the file doesn't exist, pull data and create the file
     if not prior_players_df_path.is_file():
 
-        prior_act_ids_pts  = run_query_and_collection(year, week, stats_type='actual')
-        prior_proj_ids_pts = run_query_and_collection(year, week, stats_type='projected')
+        prior_act_ids_pts = run_query_and_collection(year, week, stats_type="actual")
+        prior_proj_ids_pts = run_query_and_collection(
+            year, week, stats_type="projected"
+        )
 
-        prior_players = instantiate_players(year, week, prior_act_ids_pts, prior_proj_ids_pts)
+        prior_players = instantiate_players(
+            year, week, prior_act_ids_pts, prior_proj_ids_pts
+        )
         prior_players_df = create_players_df(prior_players)
 
         prior_players_df_path = save_players_df(prior_players_df_path, prior_players_df)
-        print(f'Saved prior week ({week}) players data to {prior_players_df_path}')
+        print(f"Saved prior week ({week}) players data to {prior_players_df_path}")
 
     else:
-        print(f'Prior week ({week}) players data already exists at {prior_players_df_path}')
+        print(
+            f"Prior week ({week}) players data already exists at {prior_players_df_path}"
+        )
         prior_players_df = pd.read_csv(prior_players_df_path, index_col=0)
 
     return prior_players_df
@@ -240,17 +252,17 @@ def update_pts(year, week, participant_teams, stats_type):
     player_ids_pts = run_query_and_collection(year, week, stats_type)
 
     # Make correct labels
-    if stats_type == 'actual':
-        stats_label = 'stats'
-        col_label   = 'act_pts'
+    if stats_type == "actual":
+        stats_label = "stats"
+        col_label = "act_pts"
     else:
-        stats_label = 'projectedStats'
-        col_label   = 'proj_pts'
+        stats_label = "projectedStats"
+        col_label = "proj_pts"
 
     for participant, participant_team in participant_teams.items():
 
         updated_pts = []
-        for pid in participant_team['id']:
+        for pid in participant_team["id"]:
             try:
                 pid = round(pid)
             except (ValueError, TypeError):
@@ -264,4 +276,3 @@ def update_pts(year, week, participant_teams, stats_type):
         participant_team[col_label] = updated_pts
 
     return participant_teams
-

@@ -3,12 +3,12 @@ Unit Tests
 pytest --cov-report term-missing --cov=.
 """
 # Standard libraries
-import datetime
 import calendar
+import datetime
 
-# Third party libraries
-import pytest
+# Third-party libraries
 import numpy as np
+import pytest
 
 # Local libraries
 import utils
@@ -28,14 +28,14 @@ nfl_start_dates = [
 ]
 
 
-@pytest.mark.parametrize('year,expected', nfl_start_dates)
+@pytest.mark.parametrize("year,expected", nfl_start_dates)
 def test_get_nfl_start_week(year, expected):
     # Setup
     calendar.setfirstweekday(calendar.SUNDAY)
-    jan = np.array(calendar.monthcalendar(year,1))
-    jan_thursdays = jan[:,4]
+    jan = np.array(calendar.monthcalendar(year, 1))
+    jan_thursdays = jan[:, 4]
     first_thur_in_jan = [thur for thur in jan_thursdays if thur != 0][0]
-    first_thur_in_jan_date = datetime.datetime(year,1,first_thur_in_jan)
+    first_thur_in_jan_date = datetime.datetime(year, 1, first_thur_in_jan)
 
     expected = expected
 
@@ -68,14 +68,14 @@ thanksgiving_dates = [
 ]
 
 
-@pytest.mark.parametrize('year,expected', thanksgiving_dates)
+@pytest.mark.parametrize("year,expected", thanksgiving_dates)
 def test_get_thanksgiving_week(year, expected):
     # Setup
     calendar.setfirstweekday(calendar.SUNDAY)
-    jan = np.array(calendar.monthcalendar(year,1))
-    jan_thursdays = jan[:,4]
+    jan = np.array(calendar.monthcalendar(year, 1))
+    jan_thursdays = jan[:, 4]
     first_thur_in_jan = [thur for thur in jan_thursdays if thur != 0][0]
-    first_thur_in_jan_date = datetime.datetime(year,1,first_thur_in_jan)
+    first_thur_in_jan_date = datetime.datetime(year, 1, first_thur_in_jan)
 
     expected = expected
 
@@ -88,4 +88,3 @@ def test_get_thanksgiving_week(year, expected):
     assert result == expected
 
     # Cleanup - none necessary
-
