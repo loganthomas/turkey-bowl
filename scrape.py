@@ -13,15 +13,18 @@ Notes:
     https://api.fantasy.nfl.com/v2/docs/service?serviceName=playersWeekStats
     https://api.fantasy.nfl.com/v2/docs/service?serviceName=playersWeekProjectedStats
     https://api.fantasy.nfl.com/v2/docs/service?serviceName=playerNgsContent
+    https://api.fantasy.nfl.com/v2/docs/service?serviceName=gameStats
 """
 
 # Standard libraries
 import calendar
 from datetime import datetime
+from typing import Any, Dict
 from urllib.parse import urlencode
 
 # Third-party libraries
 import numpy as np
+import requests
 
 
 class Scraper:
@@ -148,3 +151,37 @@ class Scraper:
         query_url = f"{url}{params_encoded}"
 
         return query_url
+
+    @staticmethod
+    def scrape_url(query_url: str) -> Dict[str, Any]:
+        """
+        Send a GET request for the query url provided.
+        Return the json dictionary received from the request.
+        """
+        response = requests.get(query_url)
+
+        if response.status_code == requests.codes.ok:
+            print(f"Successful API response obtained for: {query_url}")
+        else:
+            print(f"WARNING: API response unsuccessful for: {query_url}")
+
+        return response.json()
+
+    @staticmethod
+    def collect_player_ids_pts(
+        player_pts_response_json: Dict[str, Any]
+    ) -> Dict[str, Any]:
+        """
+        Collect only the players and their corresponding points for a
+        provided GET request (sub-select from the json returned from
+        the json dictionary returned from the request).
+
+        Note: this assumes that ``player_pts_reponse_json`` is a result
+        of sending a GET request for a the fantasy points (not for the
+        player metadata).
+        """
+        # This is a unique identifier NOT truly a GAME identifier
+        system_config = player_pts_response_json.get("systemConfig").get("currentGameId")  # type: ignore[union-attr]
+        player_ids_pts = player_pts_response_json.get("games").get(system_config).get("players")  # type: ignore[union-attr]
+
+        return player_ids_pts
