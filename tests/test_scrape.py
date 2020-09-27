@@ -1,12 +1,13 @@
+"""
+Unit tests for scrape.py
+"""
+
 # Standard libraries
 import calendar
-import json
-import random
 from datetime import datetime, timedelta
 
 # Third-party libraries
 import numpy as np
-import pandas as pd
 import pytest
 
 # Local libraries

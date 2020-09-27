@@ -2,87 +2,15 @@
 Utility functions
 """
 # Standard libraries
-import calendar
 from datetime import datetime
-from pathlib import Path
 from typing import Dict
 
 # Third-party libraries
-import numpy as np
 import pandas as pd
 
 
 def get_current_year() -> int:
     return datetime.now().year
-
-
-def get_nfl_start_week(curr_year: int) -> int:
-    # Set Sunday as first day of week
-    calendar.setfirstweekday(calendar.SUNDAY)
-
-    # Gather sept days
-    sept = np.array(calendar.monthcalendar(curr_year, 9))
-
-    # Get all sept Mondays
-    sept_mondays = sept[:, 1]
-
-    # Find first Mondays date
-    sept_first_monday = min([mon for mon in sept_mondays if mon != 0])
-
-    # Convert to first Monday in Sept to datetime object
-    sept_first_monday_date = datetime(curr_year, 9, sept_first_monday)
-
-    # Find calendar week for start of NFL season
-    nfl_start_cal_week_num = sept_first_monday_date.isocalendar()[1]
-
-    return nfl_start_cal_week_num
-
-
-def get_thanksgiving_week(curr_year: int) -> int:
-    # Set Sunday as first day of week
-    calendar.setfirstweekday(calendar.SUNDAY)
-
-    # Gather November days
-    nov = np.array(calendar.monthcalendar(curr_year, 11))
-
-    # Find 4th Thursday in November
-    nov_thursdays = nov[:, 4]
-    thanksgiving_day = [thur for thur in nov_thursdays if thur != 0][3]
-
-    # Convert Thanksgiving day to datetime object
-    thanksgiving_day_date = datetime(curr_year, 11, thanksgiving_day)
-
-    # Find calendar week for Thanksgiving day
-    thanksgiving_cal_week_num = thanksgiving_day_date.isocalendar()[1]
-
-    return thanksgiving_cal_week_num
-
-
-def calculate_nfl_thanksgiving_week(
-    nfl_start_cal_week_num: int, thanksgiving_cal_week_num: int
-) -> int:
-    # Find delta between NFL week 1 and Thanksgiving Week
-    delta = thanksgiving_cal_week_num - nfl_start_cal_week_num
-
-    # Add one since indexed at 1
-    pull_week = delta + 1
-
-    return pull_week
-
-
-def create_output_dir(path: str) -> Path:
-    """
-    Creates a root directory to house yearly output.
-    Directory name should be YEAR the script is run.
-    """
-    # Create a Path object to dir named curr_year
-    output_dir = Path(path)
-
-    # Check if dir exists, if not create
-    if not output_dir.is_dir():
-        output_dir.mkdir()
-
-    return output_dir
 
 
 def merge_points(
