@@ -9,6 +9,7 @@ from datetime import datetime, timedelta
 # Third-party libraries
 import numpy as np
 import pytest
+import requests
 
 # Local libraries
 from scrape import Scraper
@@ -174,3 +175,9 @@ def test_Scraper_nfl_thanksgiving_calendar_week(
     )
 
     # Cleanup - none necessary
+
+
+# Placeholder example
+def test_url(requests_mock):
+    requests_mock.get("http://test.com", text="data")
+    assert "data" == requests.get("http://test.com").text
