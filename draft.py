@@ -5,6 +5,7 @@ Draft functions
 import json
 import random
 from pathlib import Path
+from typing import Dict
 
 # Third-party libraries
 import pandas as pd
@@ -15,8 +16,14 @@ class Draft:
         self.year = year
         self.output_dir = Path(f"archive/{self.year}")
 
+    def __repr__(self):
+        return f"Draft({self.year})"
+
+    def __str__(self):
+        return f"Turkey Bowl Draft: {self.year}"
+
     def setup(self) -> None:
-        """ Instantiate draft with needed files and directories. """
+        """ Instantiate draft with attributes, files, and directories. """
         self.draft_order_path = self.output_dir.joinpath(
             f"{self.year}_draft_order.json"
         )
@@ -83,34 +90,22 @@ class Draft:
                         writer, sheet_name=participant.title(), index=False
                     )
 
+    def load(self) -> Dict[str, pd.DataFrame]:
+        """
+        Loads draft data by parsing excel spreadsheet.
 
-def get_draft_data(draft_file_path):
-    """
-    Parses an excel spreadsheet into participant teams.
+        The drafted teams should be collected within one excel
+        spreadsheet in which each participant is a separate sheet.
 
-    The drafted teams should be collected within one excel spreadsheet
-    in which each participant is a separate sheet. The sheet names
-    correspond to the names of the participants and each sheet should have
-    a 'Position' column, a 'Player', and a 'Team' column. For the time being,
-    the draft-able positions are as follows:
-        'QB', 'RB_1', 'RB_2', 'WR_1', 'WR_2', 'TE',
-        'Flex (RB/WR)', 'K', 'Defense (Team Name)', 'Bench (RB/WR)'.
+        The sheet names correspond to the names of the participants and
+        each sheet should have a 'Position' column, a 'Player', and a
+        'Team' column.
 
-    Args:
-        draft_file_path (pathlib.Path): Path to excel spreadsheet. Ideally, each year will
-            have its own directory and the excel spreadsheet would be named
-            'draft_sheet_{year}.xlsx'. For example, in the year 2018,
-            xlsx_path = '2018/draft_sheet_2018.xlsx'.
+        For the time being, the draft-able positions are as follows:
+            'QB', 'RB_1', 'RB_2', 'WR_1', 'WR_2', 'TE',
+            'Flex (RB/WR/TE)', 'K', 'Defense (Team Name)',
+            'Bench (RB/WR/TE)'.
+        """
+        participant_teams = pd.read_excel(self.draft_sheet_path, sheet_name=None)
 
-    Returns:
-        participant_teams (dict): A dictionary of participant (str),
-        team (pandas DataFrame) key, value pairs.
-        (i.e., each participants drafted team as a DF housed in a dict).
-    """
-    # Load excel sheet
-    xlsx = pd.ExcelFile(draft_file_path)
-
-    # Get each participant's drafted players
-    participant_teams = {p: xlsx.parse(p) for p in xlsx.sheet_names}
-
-    return participant_teams
+        return participant_teams
