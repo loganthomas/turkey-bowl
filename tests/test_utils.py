@@ -39,3 +39,18 @@ def test_get_current_year(current_date, freezer, frozen_date, expected):
     assert result == expected
 
     # Cleanup - none necessary
+
+
+def test_load_stat_ids():
+    # Setup - none necessary
+
+    # Exercise
+    result = utils.load_stat_ids()
+
+    # Verify
+    assert len(result) == 91
+
+    for k, v in result.items():
+        assert int(k) == v["id"]
+
+    # Cleanup - none necessary

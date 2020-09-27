@@ -2,6 +2,7 @@
 Utility functions
 """
 # Standard libraries
+import json
 from datetime import datetime
 from typing import Dict
 
@@ -11,6 +12,13 @@ import pandas as pd
 
 def get_current_year() -> int:
     return datetime.now().year
+
+
+def load_stat_ids() -> Dict[int, Dict[str, str]]:
+    with open("stat_ids.json", "r") as stat_ids_file:
+        stat_ids_dict = json.load(stat_ids_file)
+
+    return stat_ids_dict
 
 
 def merge_points(
