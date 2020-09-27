@@ -20,6 +20,9 @@ def test_Draft_instantiation():
     assert draft.year == 2020
     assert draft.output_dir.as_posix() == "archive/2020"
 
+    assert draft.__repr__() == "Draft(2020)"
+    assert draft.__str__() == "Turkey Bowl Draft: 2020"
+
     # Cleanup - none necessary
 
 
@@ -100,7 +103,7 @@ def test_Draft_setup_nothing_exists(tmp_path, monkeypatch):
 
 
 def test_Draft_setup_already_exists(tmp_path, monkeypatch):
-    """ Test Draft.setup() when no directories exist in root. """
+    """ Test Draft.setup() when files exist in root. """
     # Setup
     tmp_archive_dir = tmp_path.joinpath("archive")
     tmp_archive_dir.mkdir()
@@ -158,6 +161,10 @@ def test_Draft_setup_already_exists(tmp_path, monkeypatch):
     # Verify
     assert draft.year == 2020
     assert draft.output_dir == tmp_archive_dir.joinpath("2020")
+
+    assert draft.__repr__() == "Draft(2020)"
+    assert draft.__str__() == "Turkey Bowl Draft: 2020"
+
     assert draft.draft_order_path == tmp_archive_dir.joinpath(
         "2020/2020_draft_order.json"
     )
@@ -168,6 +175,95 @@ def test_Draft_setup_already_exists(tmp_path, monkeypatch):
     assert tmp_archive_dir.joinpath("2020").exists() is True
     assert tmp_archive_dir.joinpath("2020/2020_draft_order.json").exists() is True
     assert tmp_archive_dir.joinpath("2020/2020_draft_sheet.xlsx").exists() is True
+
+    assert draft.participant_list == existing_draft_order
+    assert draft.draft_order == existing_draft_order
+
+    # Cleanup - none necessary
+
+
+def test_Draft_load(tmp_path, monkeypatch):
+    # Setup
+    tmp_archive_dir = tmp_path.joinpath("archive")
+    tmp_archive_dir.mkdir()
+
+    tmp_year_dir = tmp_archive_dir.joinpath("2005")
+    tmp_year_dir.mkdir()
+
+    existing_draft_order = ["yeager", "emily", "dodd", "logan", "becca_hud", "cindy"]
+    existing_draft_order_dict = {
+        "yeager": 1,
+        "emily": 2,
+        "dodd": 3,
+        "logan": 4,
+        "becca_hud": 5,
+        "cindy": 6,
+    }
+
+    with open(tmp_year_dir.joinpath("2005_draft_order.json"), "w") as written_json:
+        json.dump(existing_draft_order_dict, written_json)
+
+    draft_info = {
+        "Position": [
+            "QB",
+            "RB_1",
+            "RB_2",
+            "WR_1",
+            "WR_2",
+            "TE",
+            "Flex (RB/WR/TE)",
+            "K",
+            "Defense (Team Name)",
+            "Bench (RB/WR/TE)",
+        ],
+        "Player": [""] * 10,
+        "Team": [""] * 10,
+    }
+    draft_df = pd.DataFrame(draft_info)
+
+    with pd.ExcelWriter(tmp_year_dir.joinpath("2005_draft_sheet.xlsx")) as writer:
+        for participant in existing_draft_order:
+            draft_df.to_excel(writer, sheet_name=participant.title(), index=False)
+
+    # Ensure everything exists prior to Draft.setup() call
+    assert tmp_archive_dir.joinpath("2005").exists() is True
+    assert tmp_archive_dir.joinpath("2005/2005_draft_order.json").exists() is True
+    assert tmp_archive_dir.joinpath("2005/2005_draft_sheet.xlsx").exists() is True
+
+    # Exercise
+    draft = Draft(2005)
+
+    # Override output dir to temp path crated for testing
+    monkeypatch.setattr(draft, "output_dir", tmp_year_dir)
+    draft.setup()
+    result = draft.load()
+
+    # Verify
+    assert list(result.keys()) == [
+        "Yeager",
+        "Emily",
+        "Dodd",
+        "Logan",
+        "Becca_Hud",
+        "Cindy",
+    ]
+
+    assert draft.year == 2005
+    assert draft.output_dir == tmp_archive_dir.joinpath("2005")
+
+    assert draft.__repr__() == "Draft(2005)"
+    assert draft.__str__() == "Turkey Bowl Draft: 2005"
+
+    assert draft.draft_order_path == tmp_archive_dir.joinpath(
+        "2005/2005_draft_order.json"
+    )
+    assert draft.draft_sheet_path == tmp_archive_dir.joinpath(
+        "2005/2005_draft_sheet.xlsx"
+    )
+
+    assert tmp_archive_dir.joinpath("2005").exists() is True
+    assert tmp_archive_dir.joinpath("2005/2005_draft_order.json").exists() is True
+    assert tmp_archive_dir.joinpath("2005/2005_draft_sheet.xlsx").exists() is True
 
     assert draft.participant_list == existing_draft_order
     assert draft.draft_order == existing_draft_order
