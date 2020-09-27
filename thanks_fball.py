@@ -8,6 +8,7 @@ import pandas as pd
 import api
 import utils
 from draft import Draft
+from scrape import Scraper
 
 
 def main():
@@ -28,6 +29,14 @@ def main():
 
     # Load drafted teams
     participant_teams = draft.load()
+
+    # Instantiate Scraper
+    scraper = Scraper(year)
+    projected_player_pts = scraper.get_projected_player_pts()
+    actual_player_pts = scraper.get_actual_player_pts()
+
+    # Update player ids (needs to be done once)
+    scraper.update_player_ids(projected_player_pts)
 
     # Determine week to pull for stats
     nfl_start_cal_week_num = utils.get_nfl_start_week(year)
