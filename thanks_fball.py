@@ -27,12 +27,7 @@ def main():
     draft.setup()
 
     # Load drafted teams
-    participant_teams = draft.get_draft_data(draft_file_path)
-
-    # Create a random draft order, if it already exists load it
-    draft_order_path, draft_order = draft.make_draft_order(
-        year, output_dir, participant_teams
-    )
+    participant_teams = draft.load()
 
     # Determine week to pull for stats
     nfl_start_cal_week_num = utils.get_nfl_start_week(year)
