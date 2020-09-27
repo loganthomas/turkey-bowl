@@ -4,7 +4,6 @@ Draft functions
 # Standard libraries
 import json
 import random
-import shutil
 from pathlib import Path
 
 # Third-party libraries
@@ -31,7 +30,7 @@ class Draft:
 
         if not self.draft_order_path.exists():
             participant_list = input(
-                "Please enter the participants separated by a comma: "
+                "\nPlease enter the participants separated by a comma: "
             ).split(",")
 
             self.participant_list = [*map(str.strip, participant_list)]
@@ -42,15 +41,22 @@ class Draft:
 
             draft_order_dict = {p: i for i, p in enumerate(self.draft_order, 1)}
 
+            print(f"\n\tDraft Order: {self.draft_order}")
+
             with open(self.draft_order_path, "w") as draft_order_file:
                 json.dump(draft_order_dict, draft_order_file)
 
+            print(f"\tSaved draft order to {self.draft_order_path}")
+
         else:
+            print(f"\nDraft order already exists at {self.draft_order_path}")
             with open(self.draft_order_path, "r") as draft_order_file:
                 draft_order_dict = json.load(draft_order_file)
 
             self.participant_list = list(draft_order_dict.keys())
             self.draft_order = list(draft_order_dict.keys())
+
+            print(f"\n\tDraft Order: {self.draft_order}")
 
         if not self.draft_sheet_path.exists():
             draft_info = {
@@ -76,9 +82,6 @@ class Draft:
                     draft_df.to_excel(
                         writer, sheet_name=participant.title(), index=False
                     )
-
-        print(f"\n{'-'*5} {self.year} Turkey Bowl {'-'*5}")
-        print(f"\n\tDraft Order: {self.draft_order}")
 
 
 def get_draft_data(draft_file_path):
@@ -111,49 +114,3 @@ def get_draft_data(draft_file_path):
     participant_teams = {p: xlsx.parse(p) for p in xlsx.sheet_names}
 
     return participant_teams
-
-
-def make_draft_order(year, output_dir, participant_teams):
-    """
-    Creates a random draft order by shuffling participants.
-
-    Given a dictionary of participants and their corresponding teams,
-    this function returns a list of randomly shuffled participants
-    that can be used for a random draft order.
-
-    Args:
-        participant_teams (dict): A dictionary of participant (str),
-            team (pandas DataFrame) key, value pairs.
-
-    Returns:
-        draft_order (list of str): A random draft order of participants.
-    """
-    draft_order_path = output_dir.joinpath(f"{year}_draft_order.csv")
-
-    if draft_order_path.is_file():
-        print(f"\nDraft order already exists at {draft_order_path}")
-        print(f"\nLoading pre-existing draft order...")
-
-        draft_df = pd.read_csv(draft_order_path)
-        draft_order = draft_df["Participant"].tolist()
-
-        print("\nDraft Oder:\n")
-        print(f"\t{draft_order}\n")
-
-    else:
-        # Gather list of participants
-        draft_order = list(participant_teams.keys())
-
-        # Create random list of participants
-        random.shuffle(draft_order)
-
-        # Convert to dataframe and save
-        draft_df = pd.DataFrame([(p, i) for i, p in enumerate(draft_order, 1)])
-        draft_df.columns = ["Participant", "Slot"]
-
-        draft_df.to_csv(draft_order_path, index=False)
-        print("\nDraft Oder:\n")
-        print(f"\t{draft_order}\n")
-        print(f"\tSaved draft order to {draft_order_path}")
-
-    return draft_order_path, draft_order

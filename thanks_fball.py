@@ -6,14 +6,13 @@ import pandas as pd
 
 # Local libraries
 import api
-import draft
 import utils
+from draft import Draft
 
 
 def main():
     """
     TODO:
-        - Consider making a draft class so isn't call each time?
         - Consider making a leader board class with an updated method?
     """
     # Set option for nice DataFrame display
@@ -21,15 +20,11 @@ def main():
 
     # Establish current year
     year = utils.get_current_year()
+    print(f"\n{'-'*5} {year} Turkey Bowl {'-'*5}")
 
-    # Create output directory as current year
-    output_dir = utils.create_output_dir(path=f"archive/{str(year)}")
-
-    # Create a path to the draft file
-    draft_file_path = draft.create_draft_file_path(year, output_dir)
-
-    # Check if the draft file exists, if not create a blank draft file
-    draft.check_draft_file_exists(draft_file_path)
+    # Instantiate Draft
+    draft = Draft(year)
+    draft.setup()
 
     # Load drafted teams
     participant_teams = draft.get_draft_data(draft_file_path)
