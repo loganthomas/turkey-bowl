@@ -14,13 +14,14 @@ import pandas as pd
 class Draft:
     def __init__(self, year: int) -> None:
         self.year = year
+        self.output_dir = Path(f"archive/{self.year}")
 
     def setup(self) -> None:
         """ Instantiate draft with needed files and directories. """
-        self.output_dir = Path(f"archive/{self.year}")
         self.draft_order_path = self.output_dir.joinpath(
             f"{self.year}_draft_order.json"
         )
+
         self.draft_sheet_path = self.output_dir.joinpath(
             f"{self.year}_draft_sheet.xlsx"
         )
@@ -32,15 +33,18 @@ class Draft:
             participant_list = input(
                 "Please enter the participants separated by a comma: "
             ).split(",")
+
             self.participant_list = [*map(str.strip, participant_list)]
 
             self.draft_order = random.sample(
                 self.participant_list, len(self.participant_list)
             )
+
             draft_order_dict = {p: i for i, p in enumerate(self.draft_order, 1)}
 
             with open(self.draft_order_path, "w") as draft_order_file:
                 json.dump(draft_order_dict, draft_order_file)
+
         else:
             with open(self.draft_order_path, "r") as draft_order_file:
                 draft_order_dict = json.load(draft_order_file)

@@ -1,0 +1,175 @@
+# Standard libraries
+import json
+import random
+
+# Third-party libraries
+import pandas as pd
+import pytest
+
+# Local libraries
+from draft import Draft
+
+
+def test_Draft_instantiation():
+    # Setup - none necessary
+
+    # Exercise
+    draft = Draft(2020)
+
+    # Verify
+    assert draft.year == 2020
+    assert draft.output_dir.as_posix() == "archive/2020"
+
+    # Cleanup - none necessary
+
+
+def test_Draft_setup_nothing_exists(tmp_path, monkeypatch):
+    """ Test Draft.setup() when no directories exist in root. """
+    # Setup - create temp archive dir (assumed to always exist)
+    tmp_archive_dir = tmp_path.joinpath("archive")
+    tmp_archive_dir.mkdir()
+
+    # Ensure nothing exists prior to Draft.setup() call
+    assert tmp_archive_dir.joinpath("2020").exists() is False
+    assert tmp_archive_dir.joinpath("2020/2020_draft_order.json").exists() is False
+    assert tmp_archive_dir.joinpath("2020/2020_draft_sheet.xlsx").exists() is False
+
+    # Exercise
+    draft = Draft(2020)
+
+    # Override input() func to always return same list of participants
+    monkeypatch.setattr("builtins.input", lambda _: "logan, becca, dodd")
+
+    # Override output dir to temp path crated for testing
+    monkeypatch.setattr(draft, "output_dir", tmp_archive_dir.joinpath("2020"))
+
+    # Set random seed for draft order consistency in testing
+    random.seed(42)
+    draft.setup()
+
+    # Verify
+    assert draft.year == 2020
+    assert draft.output_dir == tmp_archive_dir.joinpath("2020")
+    assert draft.draft_order_path == tmp_archive_dir.joinpath(
+        "2020/2020_draft_order.json"
+    )
+    assert draft.draft_sheet_path == tmp_archive_dir.joinpath(
+        "2020/2020_draft_sheet.xlsx"
+    )
+
+    assert tmp_archive_dir.joinpath("2020").exists() is True
+    assert tmp_archive_dir.joinpath("2020/2020_draft_order.json").exists() is True
+    assert tmp_archive_dir.joinpath("2020/2020_draft_sheet.xlsx").exists() is True
+
+    assert draft.participant_list == ["logan", "becca", "dodd"]
+    assert draft.draft_order == ["dodd", "logan", "becca"]
+
+    with open(
+        tmp_archive_dir.joinpath("2020/2020_draft_order.json"), "r"
+    ) as written_json:
+        loaded_json = json.load(written_json)
+    assert list(loaded_json.keys()) == ["dodd", "logan", "becca"]
+
+    draft_sheet_data = pd.read_excel(
+        tmp_archive_dir.joinpath("2020/2020_draft_sheet.xlsx"),
+        sheet_name=None,
+        engine="xlrd",
+    )
+    assert list(draft_sheet_data) == ["Dodd", "Logan", "Becca"]
+
+    for participant, participant_draft_info in draft_sheet_data.items():
+        assert list(participant_draft_info.columns) == ["Position", "Player", "Team"]
+        assert participant_draft_info["Position"].equals(
+            pd.Series(
+                [
+                    "QB",
+                    "RB_1",
+                    "RB_2",
+                    "WR_1",
+                    "WR_2",
+                    "TE",
+                    "Flex (RB/WR/TE)",
+                    "K",
+                    "Defense (Team Name)",
+                    "Bench (RB/WR/TE)",
+                ]
+            )
+        )
+
+    # Cleanup - none necessary
+
+
+def test_Draft_setup_already_exists(tmp_path, monkeypatch):
+    """ Test Draft.setup() when no directories exist in root. """
+    # Setup
+    tmp_archive_dir = tmp_path.joinpath("archive")
+    tmp_archive_dir.mkdir()
+
+    tmp_year_dir = tmp_archive_dir.joinpath("2020")
+    tmp_year_dir.mkdir()
+
+    existing_draft_order = ["yeager", "emily", "dodd", "logan", "becca_hud", "cindy"]
+    existing_draft_order_dict = {
+        "yeager": 1,
+        "emily": 2,
+        "dodd": 3,
+        "logan": 4,
+        "becca_hud": 5,
+        "cindy": 6,
+    }
+
+    with open(tmp_year_dir.joinpath("2020_draft_order.json"), "w") as written_json:
+        json.dump(existing_draft_order_dict, written_json)
+
+    draft_info = {
+        "Position": [
+            "QB",
+            "RB_1",
+            "RB_2",
+            "WR_1",
+            "WR_2",
+            "TE",
+            "Flex (RB/WR/TE)",
+            "K",
+            "Defense (Team Name)",
+            "Bench (RB/WR/TE)",
+        ],
+        "Player": [""] * 10,
+        "Team": [""] * 10,
+    }
+    draft_df = pd.DataFrame(draft_info)
+
+    with pd.ExcelWriter(tmp_year_dir.joinpath("2020_draft_sheet.xlsx")) as writer:
+        for participant in existing_draft_order:
+            draft_df.to_excel(writer, sheet_name=participant.title(), index=False)
+
+    # Ensure everything exists prior to Draft.setup() call
+    assert tmp_archive_dir.joinpath("2020").exists() is True
+    assert tmp_archive_dir.joinpath("2020/2020_draft_order.json").exists() is True
+    assert tmp_archive_dir.joinpath("2020/2020_draft_sheet.xlsx").exists() is True
+
+    # Exercise
+    draft = Draft(2020)
+
+    # Override output dir to temp path crated for testing
+    monkeypatch.setattr(draft, "output_dir", tmp_year_dir)
+    draft.setup()
+
+    # Verify
+    assert draft.year == 2020
+    assert draft.output_dir == tmp_archive_dir.joinpath("2020")
+    assert draft.draft_order_path == tmp_archive_dir.joinpath(
+        "2020/2020_draft_order.json"
+    )
+    assert draft.draft_sheet_path == tmp_archive_dir.joinpath(
+        "2020/2020_draft_sheet.xlsx"
+    )
+
+    assert tmp_archive_dir.joinpath("2020").exists() is True
+    assert tmp_archive_dir.joinpath("2020/2020_draft_order.json").exists() is True
+    assert tmp_archive_dir.joinpath("2020/2020_draft_sheet.xlsx").exists() is True
+
+    assert draft.participant_list == existing_draft_order
+    assert draft.draft_order == existing_draft_order
+
+    # Cleanup - none necessary
