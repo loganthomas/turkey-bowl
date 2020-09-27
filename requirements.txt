@@ -7,5 +7,6 @@ pytest
 pytest-cov
 pytest-freezegun
 requests
+requests-mock
 XlsxWriter
 xlrd
