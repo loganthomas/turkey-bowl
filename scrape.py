@@ -18,19 +18,27 @@ Notes:
 
 # Standard libraries
 import calendar
+from collections import namedtuple
 from datetime import datetime
+from pathlib import Path
 from typing import Any, Dict
 from urllib.parse import urlencode
 
 # Third-party libraries
 import numpy as np
+import pandas as pd
 import requests
+from tqdm import tqdm
+
+# Local libraries
+import utils
 
 
 class Scraper:
     def __init__(self, year: int) -> None:
         self.year = year
-        self.base_url = "https://api.fantasy.nfl.com/v2/players"
+        self.player_ids_json_path = Path("./player_ids.json")
+        self.stat_ids_json_path = Path("./stat_ids.json")
 
     def __repr__(self):
         return f"Scraper({self.year})"
@@ -126,7 +134,33 @@ class Scraper:
 
         return nfl_thanksgiving_calendar_week
 
-    def create_query_url(self, stats_type: str) -> str:
+    def _encode_url_params(self, url: str) -> str:
+        """
+        Helper function to encode year (season) and week as url params.
+        """
+        params = {"season": self.year, "week": self.nfl_thanksgiving_calendar_week}
+        params_encoded = urlencode(params)
+
+        url_encoded = f"{url}{params_encoded}"
+
+        return url_encoded
+
+    @property
+    def projected_pts_url(self) -> str:
+        """
+        Url for web scrapping (or API calling) PRJECTED fantasy points.
+
+        The base url will always remain the same. However, this method
+        will create a query url for the desired year, week, and
+        stats type (projected) in order to scrape the correct player
+        fantasy points.
+        """
+        url = "https://api.fantasy.nfl.com/v2/players/weekprojectedstats?"
+        projected_pts_url = self._encode_url_params(url)
+        return projected_pts_url
+
+    @property
+    def actual_pts_url(self) -> str:
         """
         Create a url for web scrapping (or API calling) fantasy points.
 
@@ -134,54 +168,124 @@ class Scraper:
         will create a query url for the desired year, week, and
         stats type in order to scrape the correct player fantasy points.
         """
-        if stats_type not in ("actual", "projected"):
-            raise ValueError(
-                f"Invalid `stats_type`: '{stats_type}'. Must be 'actual' or 'projected'."
-            )
-
-        if stats_type == "projected":
-            url = f"{self.base_url}/weekprojectedstats?"
-        else:
-            url = f"{self.base_url}/weekstats?"
-
-        # Encode year and week parameters
-        params = {"season": self.year, "week": self.nfl_thanksgiving_calendar_week}
-        params_encoded = urlencode(params)
-
-        query_url = f"{url}{params_encoded}"
-
-        return query_url
+        url = "https://api.fantasy.nfl.com/v2/players/weekstats?"
+        actual_pts_url = self._encode_url_params(url)
+        return actual_pts_url
 
     @staticmethod
-    def scrape_url(query_url: str) -> Dict[str, Any]:
+    def scrape_url(query_url: str, verbose: bool = True) -> Dict[str, Any]:
         """
         Send a GET request for the query url provided.
         Return the json dictionary received from the request.
         """
         response = requests.get(query_url)
 
-        if response.status_code == requests.codes.ok:
-            print(f"Successful API response obtained for: {query_url}")
-        else:
-            print(f"WARNING: API response unsuccessful for: {query_url}")
+        if verbose:
+            if response.status_code == requests.codes.ok:
+                print(f"Successful API response obtained for: {query_url}")
+            else:
+                print(f"WARNING: API response unsuccessful for: {query_url}")
 
         return response.json()
 
-    @staticmethod
-    def collect_player_ids_pts(
-        player_pts_response_json: Dict[str, Any]
-    ) -> Dict[str, Any]:
+    def get_projected_player_pts(self) -> Dict[str, Any]:
         """
-        Collect only the players and their corresponding points for a
-        provided GET request (sub-select from the json returned from
-        the json dictionary returned from the request).
+        Collect players and their corresponding PROJECTED points.
 
-        Note: this assumes that ``player_pts_reponse_json`` is a result
-        of sending a GET request for a the fantasy points (not for the
-        player metadata).
+        A GET request is sent to the  projected_pts_url. The returned
+        json is parsed to only get relevant player points.
         """
         # This is a unique identifier NOT truly a GAME identifier
-        system_config = player_pts_response_json.get("systemConfig").get("currentGameId")  # type: ignore[union-attr]
-        player_ids_pts = player_pts_response_json.get("games").get(system_config).get("players")  # type: ignore[union-attr]
+        print("\nCollecting projected player points...")
+        response_json = self.scrape_url(self.projected_pts_url)
+        system_config = response_json.get("systemConfig").get("currentGameId")  # type: ignore[union-attr]
+        projected_player_pts = response_json.get("games").get(system_config).get("players")  # type: ignore[union-attr]
 
-        return player_ids_pts
+        return projected_player_pts
+
+    def get_actual_player_pts(self) -> Dict[str, Any]:
+        """
+        Collect players and their corresponding PROJECTED points.
+
+        A GET request is sent to the  projected_pts_url. The returned
+        json is parsed to only get relevant player points.
+        """
+        # This is a unique identifier NOT truly a GAME identifier
+        print("\nCollecting actual player points...")
+        response_json = self.scrape_url(self.actual_pts_url)
+        system_config = response_json.get("systemConfig").get("currentGameId")  # type: ignore[union-attr]
+        actual_player_pts = response_json.get("games").get(system_config).get("players")  # type: ignore[union-attr]
+
+        return actual_player_pts
+
+    def _check_player_ids_need_update(self) -> bool:
+        """
+        Helper function to check if player ids exist.
+        If it does, player ids need to be updated only if ``year`` does
+        not match THIS year.
+        """
+        if self.player_ids_json_path.exists():
+            player_ids_loaded = utils.load_from_json(self.player_ids_json_path)
+
+            if player_ids_loaded.get("year") == self.year:
+                return False
+        return True
+
+    def _get_player_metadata(self, player_id: str) -> Dict[str, str]:
+        """
+        Helper function to scrape NFL.com for individual player data.
+        """
+        url = f"https://api.fantasy.nfl.com/v2/player/ngs-content?playerId={player_id}"
+        response_json = self.scrape_url(url, verbose=False)
+
+        # This is a unique identifier not truly a GAME identifier
+        game_id = list(response_json.get("games").keys())[0]  # type: ignore[union-attr]
+        metadata = response_json.get("games").get(game_id).get("players")[player_id]  # type: ignore[union-attr]
+
+        return metadata
+
+    def update_player_ids(self, projected_player_pts: Dict[str, Any]) -> None:
+        """
+        Updates player ids (name, pos, team) and saves to json file.
+        """
+        if self._check_player_ids_need_update():
+            pulled_player_ids = list(projected_player_pts.keys())
+
+            # Sort by numerical string value
+            pulled_player_ids.sort(key=int)
+
+            # Add a year reference (for checking)
+            pulled_player_ids.insert(0, "year")
+            pulled_player_data = {pid: {} for pid in pulled_player_ids}  # type: ignore[var-annotated]
+
+            for pid in tqdm(pulled_player_ids, desc="Updating player ids", ncols=75):
+                if pid == "year":
+                    pulled_player_data[pid] = self.year  # type: ignore[assignment]
+
+                else:
+                    player_metadata = self._get_player_metadata(pid)
+
+                    pulled_player_data[pid]["name"] = player_metadata.get("name")
+                    pulled_player_data[pid]["position"] = player_metadata.get(
+                        "position"
+                    )
+                    pulled_player_data[pid]["team"] = player_metadata.get("nflTeamAbbr")
+                    pulled_player_data[pid]["injury"] = player_metadata.get(
+                        "injuryGameStatus"
+                    )
+
+            utils.write_to_json(
+                json_dict=pulled_player_data, filename=self.player_ids_json_path
+            )
+
+        else:
+            print(f"\nPlayer ids are up to date at: {self.player_ids_json_path}")
+
+    def create_player_pts_df(self, player_pts: Dict[str, Any]) -> pd.DataFrame:
+        """
+        Create a DataFrame to house all player projected and actual points.
+        The ``player_pts`` argument can be ``projected_player_pts`` or
+        ``actual_player_pts``.
+        """
+
+        stat_ids_dict = utils.load_from_json(self.stat_ids_json_path)
