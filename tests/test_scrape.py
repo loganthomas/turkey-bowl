@@ -23,6 +23,7 @@ def test_Scraper_instantiation():
 
     # Verify
     assert scraper.year == 2020
+    assert scraper.base_url == "https://api.fantasy.nfl.com/v2/players"
 
     assert scraper.__repr__() == "Scraper(2020)"
     assert scraper.__str__() == "Turkey Bowl Scraper (Year: 2020 NFL Week: 12)"
@@ -145,7 +146,7 @@ def test_Scraper_thanksgiving_calendar_week_start(year, expected_thanksgiving_da
 
 
 @pytest.mark.parametrize(
-    "year, expected_nfl_nfl_thanksgiving_calendar_WEEK",
+    "year, expected_nfl_thanksgiving_calendar_WEEK",
     [
         (2015, 12),
         (2016, 12),
@@ -156,7 +157,7 @@ def test_Scraper_thanksgiving_calendar_week_start(year, expected_thanksgiving_da
     ],
 )
 def test_Scraper_nfl_thanksgiving_calendar_week(
-    year, expected_nfl_nfl_thanksgiving_calendar_WEEK
+    year, expected_nfl_thanksgiving_calendar_WEEK
 ):
     """
     Test that the NFL week of Thanksgiving is returned.
@@ -171,8 +172,78 @@ def test_Scraper_nfl_thanksgiving_calendar_week(
     # Verify
     assert (
         scraper.nfl_thanksgiving_calendar_week
-        == expected_nfl_nfl_thanksgiving_calendar_WEEK
+        == expected_nfl_thanksgiving_calendar_WEEK
     )
+
+    # Cleanup - none necessary
+
+
+def test_Scraper_create_query_url_raises_ValueError():
+    # Setup - none necessary
+
+    # Exercise
+    scraper = Scraper(2020)
+
+    # Verify
+    with pytest.raises(ValueError) as err:
+        scraper.create_query_url(stats_type="bad")
+
+    assert (
+        str(err.value)
+        == "Invalid `stats_type`: 'bad'. Must be 'actual' or 'projected'."
+    )
+
+    # Cleanup - none necessary
+
+
+@pytest.mark.parametrize(
+    "year, week",
+    [
+        (2015, 12),
+        (2016, 12),
+        (2017, 12),
+        (2018, 12),
+        (2019, 13),
+        (2020, 12),
+    ],
+)
+def test_Scraper_create_query_url_actual(year, week):
+    # Setup
+    expected = (
+        f"https://api.fantasy.nfl.com/v2/players/weekstats?season={year}&week={week}"
+    )
+
+    # Exercise
+    scraper = Scraper(year)
+    result = scraper.create_query_url(stats_type="actual")
+
+    # Verify
+    assert result == expected
+
+    # Cleanup - none necessary
+
+
+@pytest.mark.parametrize(
+    "year, week",
+    [
+        (2015, 12),
+        (2016, 12),
+        (2017, 12),
+        (2018, 12),
+        (2019, 13),
+        (2020, 12),
+    ],
+)
+def test_Scraper_create_query_url_projected(year, week):
+    # Setup
+    expected = f"https://api.fantasy.nfl.com/v2/players/weekprojectedstats?season={year}&week={week}"
+
+    # Exercise
+    scraper = Scraper(year)
+    result = scraper.create_query_url(stats_type="projected")
+
+    # Verify
+    assert result == expected
 
     # Cleanup - none necessary
 

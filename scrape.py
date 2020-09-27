@@ -1,6 +1,24 @@
+"""
+Scraping utilities
+
+Notes:
+    2018 used ESPN web scraping.
+    ESPN changed the API in 2019 and broke everything.
+    http://fantasy.espn.com/apis/v3/games/ffl/seasons/2019/segments/0/leagues/1241838?
+        view=mDraftDetail&view=mLiveScoring&view=mMatchupScore&scoringPeriodId=11
+    http://fantasy.espn.com/apis/v3/games/ffl/seasons/2019/segments/0/leagues/1241838?
+        view=mLiveScoring&view=mMatchupScore&scoringPeriodId=11
+
+    2019 uses NFL.com instead of ESPN. API docs found below:
+    https://api.fantasy.nfl.com/v2/docs/service?serviceName=playersWeekStats
+    https://api.fantasy.nfl.com/v2/docs/service?serviceName=playersWeekProjectedStats
+    https://api.fantasy.nfl.com/v2/docs/service?serviceName=playerNgsContent
+"""
+
 # Standard libraries
 import calendar
 from datetime import datetime
+from urllib.parse import urlencode
 
 # Third-party libraries
 import numpy as np
@@ -9,6 +27,7 @@ import numpy as np
 class Scraper:
     def __init__(self, year: int) -> None:
         self.year = year
+        self.base_url = "https://api.fantasy.nfl.com/v2/players"
 
     def __repr__(self):
         return f"Scraper({self.year})"
@@ -25,7 +44,7 @@ class Scraper:
         a Thursday (not including pre-season games).
 
         The API requires that scores be pulled by WEEK (hence the reason
-        for creating a function to return the NFL start WEEK).
+        for creating a method to return the NFL start WEEK).
 
         This is 1-indexed not 0-indexed. Thus, Week 1 is the true start
         of the NFL season.
@@ -56,8 +75,8 @@ class Scraper:
         Get the calendar week in which Thanksgiving starts.
 
         The API requires that scores be pulled by WEEK. The
-        ``nfl_calendar_week_start`` property function is
-        created to return the NFL start WEEK. This function returns the
+        ``nfl_calendar_week_start`` property method is
+        created to return the NFL start WEEK. This method returns the
         Thanksgiving start WEEK.
 
         The correct week to pull from the API is based on subtracting
@@ -103,3 +122,29 @@ class Scraper:
         nfl_thanksgiving_calendar_week = delta + 1
 
         return nfl_thanksgiving_calendar_week
+
+    def create_query_url(self, stats_type: str) -> str:
+        """
+        Create a url for web scrapping (or API calling) fantasy points.
+
+        The base url will always remain the same. However, this method
+        will create a query url for the desired year, week, and
+        stats type in order to scrape the correct player fantasy points.
+        """
+        if stats_type not in ("actual", "projected"):
+            raise ValueError(
+                f"Invalid `stats_type`: '{stats_type}'. Must be 'actual' or 'projected'."
+            )
+
+        if stats_type == "projected":
+            url = f"{self.base_url}/weekprojectedstats?"
+        else:
+            url = f"{self.base_url}/weekstats?"
+
+        # Encode year and week parameters
+        params = {"season": self.year, "week": self.nfl_thanksgiving_calendar_week}
+        params_encoded = urlencode(params)
+
+        query_url = f"{url}{params_encoded}"
+
+        return query_url
