@@ -38,6 +38,17 @@ def main():
     # Update player ids (needs to be done once)
     scraper.update_player_ids(projected_player_pts)
 
+    # Create a DataFrame of PROJECTED player pts
+    #   Create/Save if it doesn't already exist
+    #   Load if it already exists
+    projected_player_pts_df = scraper.create_player_pts_df(projected_player_pts)
+
+    # Create a DataFrame of ACTUAL player pts
+    # This will be created as multiple points in time.
+    # Note: ``actual_player_pts`` will be none until games start
+    if actual_player_pts is not None:
+        actual_player_pts_df = scraper.create_player_pts_df(actual_player_pts)
+
     # Determine week to pull for stats
     nfl_start_cal_week_num = utils.get_nfl_start_week(year)
     thanksgiving_cal_week_num = utils.get_thanksgiving_week(year)
