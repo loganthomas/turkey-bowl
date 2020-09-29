@@ -9,7 +9,7 @@ from datetime import datetime, timedelta
 # Third-party libraries
 import numpy as np
 import pytest
-import requests
+import responses
 
 # Local libraries
 from scrape import Scraper
@@ -23,7 +23,7 @@ def test_Scraper_instantiation():
 
     # Verify
     assert scraper.year == 2020
-    assert scraper.base_url == "https://api.fantasy.nfl.com/v2/players"
+    assert scraper.player_ids_json_path.as_posix() == "player_ids.json"
 
     assert scraper.__repr__() == "Scraper(2020)"
     assert scraper.__str__() == "Turkey Bowl Scraper (Year: 2020 NFL Week: 12)"
@@ -178,20 +178,28 @@ def test_Scraper_nfl_thanksgiving_calendar_week(
     # Cleanup - none necessary
 
 
-def test_Scraper_create_query_url_raises_ValueError():
-    # Setup - none necessary
+@pytest.mark.parametrize(
+    "year, week",
+    [
+        (2015, 12),
+        (2016, 12),
+        (2017, 12),
+        (2018, 12),
+        (2019, 13),
+        (2020, 12),
+    ],
+)
+def test_Scraper_encode_url_params(year, week):
+    # Setup
+    url = "https://test.com/v2/players/test?"
+    expected = f"https://test.com/v2/players/test?season={year}&week={week}"
 
     # Exercise
-    scraper = Scraper(2020)
+    scraper = Scraper(year)
+    result = scraper._encode_url_params(url)
 
     # Verify
-    with pytest.raises(ValueError) as err:
-        scraper.create_query_url(stats_type="bad")
-
-    assert (
-        str(err.value)
-        == "Invalid `stats_type`: 'bad'. Must be 'actual' or 'projected'."
-    )
+    assert result == expected
 
     # Cleanup - none necessary
 
@@ -207,7 +215,31 @@ def test_Scraper_create_query_url_raises_ValueError():
         (2020, 12),
     ],
 )
-def test_Scraper_create_query_url_actual(year, week):
+def test_Scraper_projected_pts_url(year, week):
+    # Setup
+    expected = f"https://api.fantasy.nfl.com/v2/players/weekprojectedstats?season={year}&week={week}"
+
+    # Exercise
+    scraper = Scraper(year)
+
+    # Verify
+    assert scraper.projected_pts_url == expected
+
+    # Cleanup - none necessary
+
+
+@pytest.mark.parametrize(
+    "year, week",
+    [
+        (2015, 12),
+        (2016, 12),
+        (2017, 12),
+        (2018, 12),
+        (2019, 13),
+        (2020, 12),
+    ],
+)
+def test_Scraper_actual_pts_url(year, week):
     # Setup
     expected = (
         f"https://api.fantasy.nfl.com/v2/players/weekstats?season={year}&week={week}"
@@ -215,40 +247,54 @@ def test_Scraper_create_query_url_actual(year, week):
 
     # Exercise
     scraper = Scraper(year)
-    result = scraper.create_query_url(stats_type="actual")
 
     # Verify
-    assert result == expected
+    assert scraper.actual_pts_url == expected
 
     # Cleanup - none necessary
 
 
-@pytest.mark.parametrize(
-    "year, week",
-    [
-        (2015, 12),
-        (2016, 12),
-        (2017, 12),
-        (2018, 12),
-        (2019, 13),
-        (2020, 12),
-    ],
-)
-def test_Scraper_create_query_url_projected(year, week):
+@responses.activate
+def test_Scraper_scrape_url_bad_status_code(capsys):
     # Setup
-    expected = f"https://api.fantasy.nfl.com/v2/players/weekprojectedstats?season={year}&week={week}"
+    url = "https://test.com"
+    expected_json = {
+        "errors": [
+            {
+                "id": "leaguePlayer",
+                "message": "PLAYER_INVALID",
+                "messageStringId": "PLAYER_INVALID",
+            }
+        ]
+    }
+    responses.add(method=responses.GET, url=url, json=expected_json, status=400)
 
     # Exercise
-    scraper = Scraper(year)
-    result = scraper.create_query_url(stats_type="projected")
+    scraper = Scraper(2020)
+    result = scraper.scrape_url(url)
+    captured = capsys.readouterr()
 
     # Verify
-    assert result == expected
+    assert result == expected_json
+    assert captured.out == "WARNING: API response unsuccessful for: https://test.com\n"
 
     # Cleanup - none necessary
 
 
-# Placeholder example
-def test_url(requests_mock):
-    requests_mock.get("http://test.com", text="data")
-    assert "data" == requests.get("http://test.com").text
+@responses.activate
+def test_Scraper_scrape_url_good_status_code(capsys):
+    # Setup
+    url = "https://test.com"
+    expected_json = {"data": "good"}
+    responses.add(method=responses.GET, url=url, json=expected_json, status=200)
+
+    # Exercise
+    scraper = Scraper(2020)
+    result = scraper.scrape_url(url)
+    captured = capsys.readouterr()
+
+    # Verify
+    assert result == expected_json
+    assert captured.out == "Successful API response obtained for: https://test.com\n"
+
+    # Cleanup - none necessary
