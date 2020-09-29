@@ -5,6 +5,7 @@ Thanksgiving Football module
 import pandas as pd
 
 # Local libraries
+import aggregate
 import api
 import utils
 from draft import Draft
@@ -41,7 +42,10 @@ def main():
     # Create a DataFrame of PROJECTED player pts
     #   Create/Save if it doesn't already exist
     #   Load if it already exists
-    projected_player_pts_df = scraper.create_player_pts_df(projected_player_pts)
+    week = scraper.nfl_thanksgiving_calendar_week
+    projected_player_pts_df = aggregate.create_player_pts_df(
+        year=year, week=week, player_pts=projected_player_pts
+    )
 
     # Create a DataFrame of ACTUAL player pts
     # This will be created as multiple points in time.
