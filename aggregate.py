@@ -92,17 +92,17 @@ def create_player_pts_df(
             prefix = "ACTUAL_"
 
         player_pts_df = player_pts_df.add_prefix(prefix)
-        player_pts_df = player_pts_df.reset_index().rename(columns={"index": "Name"})
+        player_pts_df = player_pts_df.reset_index().rename(columns={"index": "Player"})
 
         # Get definition of each player team and name based on player id
         player_ids_json_path = Path("./player_ids.json")
         player_ids = utils.load_from_json(player_ids_json_path)
-        team = player_pts_df["Name"].apply(lambda x: player_ids[x]["team"])
+        team = player_pts_df["Player"].apply(lambda x: player_ids[x]["team"])
         player_pts_df.insert(1, "Team", team)
 
         player_defns = {k: v["name"] for k, v in player_ids.items() if k != "year"}
-        name = player_pts_df["Name"].apply(lambda x: player_defns[x])
-        player_pts_df["Name"] = name
+        name = player_pts_df["Player"].apply(lambda x: player_defns[x])
+        player_pts_df["Player"] = name
 
         # Make pts col the third column for easy access
         pts_col = player_pts_df.filter(regex="pts")
@@ -113,7 +113,7 @@ def create_player_pts_df(
         # Convert all col types to non-string as strings come from scrape
         col_types = {}
         for c in player_pts_df.columns:
-            if c in ("Name", "Team"):
+            if c in ("Player", "Team"):
                 col_types[c] = "object"
             elif "Games_Played" in c:
                 col_types[c] = "int64"
@@ -128,3 +128,7 @@ def create_player_pts_df(
             player_pts_df.to_csv(proj_filename)
 
     return player_pts_df
+
+
+# dodd = participant_teams['Dodd']
+# merged = pd.merge(dodd, projected_player_pts_df, how='left', on=['Player', 'Team'])
