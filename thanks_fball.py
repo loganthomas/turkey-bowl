@@ -33,6 +33,9 @@ def main():
 
     # Instantiate Scraper
     scraper = Scraper(year)
+
+    # TODO: projected points only need to be pulled once...
+    # check if df exists (these won't change)
     projected_player_pts = scraper.get_projected_player_pts()
     actual_player_pts = scraper.get_actual_player_pts()
 
@@ -51,7 +54,7 @@ def main():
     # This will be created as multiple points in time.
     # Note: ``actual_player_pts`` will be none until games start
     if actual_player_pts is not None:
-        actual_player_pts_df = scraper.create_player_pts_df(actual_player_pts)
+        actual_player_pts_df = aggregate.create_player_pts_df(actual_player_pts)
 
     # Determine week to pull for stats
     nfl_start_cal_week_num = utils.get_nfl_start_week(year)
