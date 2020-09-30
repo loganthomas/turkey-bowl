@@ -255,6 +255,7 @@ class Scraper:
             pulled_player_ids.insert(0, "year")
             pulled_player_data = {pid: {} for pid in pulled_player_ids}  # type: ignore[var-annotated]
 
+            print()
             for pid in tqdm(pulled_player_ids, desc="Updating player ids", ncols=75):
                 if pid == "year":
                     pulled_player_data[pid] = self.year  # type: ignore[assignment]
