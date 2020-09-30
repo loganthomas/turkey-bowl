@@ -316,7 +316,7 @@
     "name": "Kareem Jackson",
     "position": "DB",
     "team": "DEN",
-    "injury": "Questionable"
+    "injury": null
   },
   "496760": {
     "name": "Tyson Alualu",
@@ -802,7 +802,7 @@
     "name": "Chris Harris",
     "position": "DB",
     "team": "LAC",
-    "injury": "Questionable"
+    "injury": "Injured Reserve"
   },
   "2530515": {
     "name": "Chris Hogan",
@@ -1116,6 +1116,12 @@
     "team": "BAL",
     "injury": null
   },
+  "2539219": {
+    "name": "Blidi Wreh-Wilson",
+    "position": "DB",
+    "team": "ATL",
+    "injury": null
+  },
   "2539227": {
     "name": "Dustin Hopkins",
     "position": "K",
@@ -1192,7 +1198,7 @@
     "name": "Alex Okafor",
     "position": "DL",
     "team": "KC",
-    "injury": "Inactive"
+    "injury": "Questionable"
   },
   "2539320": {
     "name": "Kenny Vaccaro",
@@ -1564,6 +1570,12 @@
     "name": "Darqueze Dennard",
     "position": "DB",
     "team": "ATL",
+    "injury": "Injured Reserve"
+  },
+  "2543477": {
+    "name": "Blake Bortles",
+    "position": "QB",
+    "team": "DEN",
     "injury": null
   },
   "2543483": {
@@ -1642,7 +1654,7 @@
     "name": "DaQuan Jones",
     "position": "DL",
     "team": "TEN",
-    "injury": null
+    "injury": "Reserve - Covid-19"
   },
   "2543505": {
     "name": "Bradley Roby",
@@ -1816,7 +1828,7 @@
     "name": "Shelby Harris",
     "position": "DL",
     "team": "DEN",
-    "injury": "Questionable"
+    "injury": null
   },
   "2550154": {
     "name": "Dan McCullers",
@@ -2404,7 +2416,7 @@
     "name": "Bryce Callahan",
     "position": "DB",
     "team": "DEN",
-    "injury": "Questionable"
+    "injury": null
   },
   "2553502": {
     "name": "DeAndre Carter",
@@ -2458,12 +2470,6 @@
     "name": "James Vaughters",
     "position": "LB",
     "team": "CHI",
-    "injury": null
-  },
-  "2553790": {
-    "name": "DeVante Bausby",
-    "position": "DB",
-    "team": "DEN",
     "injury": null
   },
   "2553796": {
@@ -2560,7 +2566,7 @@
     "name": "Chris Moore",
     "position": "WR",
     "team": "BAL",
-    "injury": "Inactive"
+    "injury": "Questionable"
   },
   "2555220": {
     "name": "Derek Watt",
@@ -2608,7 +2614,7 @@
     "name": "Matthew Ioannidis",
     "position": "DL",
     "team": "WAS",
-    "injury": "Out"
+    "injury": "Injured Reserve"
   },
   "2555242": {
     "name": "Sheldon Rankins",
@@ -3052,7 +3058,7 @@
     "name": "Chris Jones",
     "position": "DL",
     "team": "KC",
-    "injury": null
+    "injury": "Questionable"
   },
   "2556370": {
     "name": "Michael Thomas",
@@ -3214,6 +3220,12 @@
     "name": "Antonio Hamilton",
     "position": "DB",
     "team": "KC",
+    "injury": null
+  },
+  "2556817": {
+    "name": "Tony McRae",
+    "position": "DB",
+    "team": "DET",
     "injury": null
   },
   "2556852": {
@@ -3426,12 +3438,6 @@
     "team": "NYG",
     "injury": null
   },
-  "2557961": {
-    "name": "Quincy Wilson",
-    "position": "DB",
-    "team": "NYJ",
-    "injury": "Questionable"
-  },
   "2557965": {
     "name": "Myles Garrett",
     "position": "DL",
@@ -3538,7 +3544,7 @@
     "name": "Budda Baker",
     "position": "DB",
     "team": "ARI",
-    "injury": "Questionable"
+    "injury": "Doubtful"
   },
   "2558010": {
     "name": "John Ross",
@@ -4146,10 +4152,10 @@
     "team": "LAC",
     "injury": null
   },
-  "2559181": {
-    "name": "Justin Hardee",
-    "position": "DB",
-    "team": "NO",
+  "2559200": {
+    "name": "Joe Jones",
+    "position": "LB",
+    "team": "DEN",
     "injury": null
   },
   "2559205": {
@@ -4283,6 +4289,12 @@
     "position": "DB",
     "team": "SEA",
     "injury": null
+  },
+  "2560731": {
+    "name": "John Franklin-Myers",
+    "position": "DL",
+    "team": "NYJ",
+    "injury": "Questionable"
   },
   "2560735": {
     "name": "Michael Gallup",
@@ -4474,7 +4486,7 @@
     "name": "Avonte Maddox",
     "position": "DB",
     "team": "PHI",
-    "injury": "Questionable"
+    "injury": "Doubtful"
   },
   "2560799": {
     "name": "Hercules Mata'afa",
@@ -4822,7 +4834,7 @@
     "name": "Marcus Allen",
     "position": "DB",
     "team": "PIT",
-    "injury": null
+    "injury": "Doubtful"
   },
   "2560957": {
     "name": "Mark Andrews",
@@ -4912,7 +4924,7 @@
     "name": "Dallas Goedert",
     "position": "TE",
     "team": "PHI",
-    "injury": "Doubtful"
+    "injury": "Injured Reserve"
   },
   "2561002": {
     "name": "DaeSean Hamilton",
@@ -5142,6 +5154,12 @@
     "team": "MIA",
     "injury": null
   },
+  "2561155": {
+    "name": "Zaire Franklin",
+    "position": "LB",
+    "team": "IND",
+    "injury": null
+  },
   "2561157": {
     "name": "Keion Crossen",
     "position": "DB",
@@ -5196,12 +5214,6 @@
     "team": "CLE",
     "injury": null
   },
-  "2561282": {
-    "name": "Jacob Tuioti-Mariner",
-    "position": "DL",
-    "team": "ATL",
-    "injury": null
-  },
   "2561293": {
     "name": "Deon Yelder",
     "position": "TE",
@@ -5242,7 +5254,7 @@
     "name": "Trey Marshall",
     "position": "DB",
     "team": "DEN",
-    "injury": "Questionable"
+    "injury": null
   },
   "2561376": {
     "name": "Montrel Meander",
@@ -5283,7 +5295,7 @@
   "2561521": {
     "name": "Cameron Batson",
     "position": "WR",
-    "team": "TEN",
+    "team": "",
     "injury": null
   },
   "2561538": {
@@ -5406,6 +5418,12 @@
     "team": "MIA",
     "injury": null
   },
+  "2562273": {
+    "name": "Carl Granderson",
+    "position": "DL",
+    "team": "NO",
+    "injury": null
+  },
   "2562280": {
     "name": "Chase Hansen",
     "position": "LB",
@@ -5428,12 +5446,6 @@
     "name": "Alec Ingold",
     "position": "RB",
     "team": "LV",
-    "injury": null
-  },
-  "2562293": {
-    "name": "Ty Johnson",
-    "position": "RB",
-    "team": "DET",
     "injury": null
   },
   "2562295": {
@@ -5680,6 +5692,12 @@
     "name": "Darrell Henderson",
     "position": "RB",
     "team": "LA",
+    "injury": null
+  },
+  "2562578": {
+    "name": "Emeke Egbule",
+    "position": "LB",
+    "team": "LAC",
     "injury": null
   },
   "2562580": {
@@ -6352,7 +6370,7 @@
     "name": "Justin Madubuike",
     "position": "DL",
     "team": "BAL",
-    "injury": "Inactive"
+    "injury": "Questionable"
   },
   "2563572": {
     "name": "James Proche",
@@ -6600,6 +6618,12 @@
     "team": "GB",
     "injury": "Questionable"
   },
+  "2563986": {
+    "name": "A.J. Dillon",
+    "position": "RB",
+    "team": "GB",
+    "injury": null
+  },
   "2563992": {
     "name": "Jonathan Garvin",
     "position": "DL",
@@ -6742,7 +6766,7 @@
     "name": "Brandon Wright",
     "position": "K",
     "team": "JAX",
-    "injury": "Questionable"
+    "injury": "Injured Reserve"
   },
   "2564271": {
     "name": "Clyde Edwards-Helaire",
@@ -6760,7 +6784,7 @@
     "name": "Bopete Keyes",
     "position": "DB",
     "team": "KC",
-    "injury": "Inactive"
+    "injury": null
   },
   "2564304": {
     "name": "L'Jarius Sneed",
@@ -6814,7 +6838,7 @@
     "name": "Damon Arnette",
     "position": "DB",
     "team": "LV",
-    "injury": null
+    "injury": "Questionable"
   },
   "2564412": {
     "name": "Lynn Bowden",
