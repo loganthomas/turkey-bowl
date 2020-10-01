@@ -108,4 +108,11 @@ class Draft:
         """
         participant_teams = pd.read_excel(self.draft_sheet_path, sheet_name=None)
 
+        # Strip all whitespace
+        # All columns are string values so can be apply across DataFrame
+        for participant, participant_team in participant_teams.items():
+            participant_teams[participant] = participant_team.apply(
+                lambda x: x.str.strip()
+            )
+
         return participant_teams
