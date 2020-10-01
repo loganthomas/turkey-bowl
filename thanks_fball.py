@@ -56,6 +56,16 @@ def main():
     if actual_player_pts is not None:
         actual_player_pts_df = aggregate.create_player_pts_df(actual_player_pts)
 
+    # Merge points to teams
+    participant_teams = aggregate.merge_points(projected_player_pts_df)
+    participant_teams = aggregate.merge_points(actual_player_pts_df)
+
+    # Sort robust columns so actual is next to projected
+    participant_teams = aggregate.sort_robust_cols(participant_teams)
+
+    # Write robust scores to excel for reviewing if desired
+    aggregate.wrtie_robust_participant_team_scores(participant_teams)
+
     # Determine week to pull for stats
     nfl_start_cal_week_num = utils.get_nfl_start_week(year)
     thanksgiving_cal_week_num = utils.get_thanksgiving_week(year)
