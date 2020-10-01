@@ -8,6 +8,7 @@ import random
 
 # Third-party libraries
 import pandas as pd
+import pytest
 
 # Local libraries
 from draft import Draft
@@ -219,8 +220,8 @@ def test_Draft_load(tmp_path, monkeypatch):
             "Defense (Team Name)",
             "Bench (RB/WR/TE)",
         ],
-        "Player": [""] * 10,
-        "Team": [""] * 10,
+        "Player": ["test"] * 10,
+        "Team": ["test"] * 10,
     }
     draft_df = pd.DataFrame(draft_info)
 
@@ -270,5 +271,16 @@ def test_Draft_load(tmp_path, monkeypatch):
 
     assert draft.participant_list == existing_draft_order
     assert draft.draft_order == existing_draft_order
+
+    # Cleanup - none necessary
+
+
+def test_Draft_load_stripping_whitespace():
+    pytest.xfail("test")
+    # Setup
+
+    # Exercise
+
+    # Verify
 
     # Cleanup - none necessary
