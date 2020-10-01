@@ -6,6 +6,7 @@ from pathlib import Path
 from typing import Any, Dict
 
 # Third-party libraries
+import numpy as np
 import pandas as pd
 
 # Local libraries
@@ -125,10 +126,104 @@ def create_player_pts_df(
         # Write projected players to csv so only done once
         if stats_type == "projectedStats":
 
+            print(f"\nWriting projected player stats to: {proj_filename}...")
             player_pts_df.to_csv(proj_filename)
 
     return player_pts_df
 
 
-# dodd = participant_teams['Dodd']
-# merged = pd.merge(dodd, projected_player_pts_df, how='left', on=['Player', 'Team'])
+def merge_points(
+    participant_teams: Dict[str, pd.DataFrame], pts_df: pd.DataFrame
+) -> Dict[str, pd.DataFrame]:
+    """
+    Merge participant team with collected player points.
+
+    ``pts_df`` can be projected or actual points scraped.
+    """
+    for participant, participant_team in participant_teams.items():
+
+        # Merge points
+        merged = pd.merge(participant_team, pts_df, how="left", on=["Player", "Team"])
+
+        # Drop columns where all values are nan
+        merged = merged.dropna(axis=1, how="all")
+
+        # Check that all players are found
+        not_found_mask = np.where(merged.filter(regex="_pts")[:-1].isna())[0]
+
+        if len(not_found_mask) > 0:
+            missing = merged["Player"][not_found_mask].tolist()
+            print(f"WARNING: {participant} has missing players: {missing}")
+
+        # Fill remaining nan with 0.0 (must come after check)
+        merged = merged.fillna(0.0)
+
+        participant_teams[participant] = merged
+
+    return participant_teams
+
+
+def sort_robust_cols(
+    participant_teams: Dict[str, pd.DataFrame]
+) -> Dict[str, pd.DataFrame]:
+    """
+    Sort projected and actual columns so that they line up post merge
+    """
+    for participant, participant_team in participant_teams.items():
+        orig_cols = list(participant_team.columns)
+        new_cols = []
+
+        for c in orig_cols:
+            stripped_c = c.replace("PROJ_", "").replace("ACTUAL_", "")
+
+            if (
+                (f"PROJ_{stripped_c}" in orig_cols)
+                & (f"ACTUAL_{stripped_c}" in orig_cols)
+            ) & (
+                (f"PROJ_{stripped_c}" not in new_cols)
+                & (f"ACTUAL_{stripped_c}" not in new_cols)
+            ):
+                new_cols.append(f"ACTUAL_{stripped_c}")
+                new_cols.append(f"PROJ_{stripped_c}")
+            else:
+                if c not in new_cols:
+                    new_cols.append(c)
+
+        participant_teams[participant] = participant_team[new_cols]
+
+    return participant_teams
+
+
+def write_robust_participant_team_scores(
+    year: int, week: int, participant_teams: Dict[str, pd.DataFrame]
+) -> None:
+    """
+    Writes the total points to an excel file that can be reviewed.
+    """
+    filename = Path(f"archive/{year}").joinpath(
+        f"{year}_{week}_robust_participant_player_pts.xlsx"
+    )
+    print(f"\nWriting robust player points summary to: {filename}...")
+
+    with pd.ExcelWriter(filename) as writer:
+        for participant, participant_team in participant_teams.items():
+
+            # Write data to sheet
+            participant_team.to_excel(writer, sheet_name=participant, index=False)
+
+            # Auto-format column lengths and center columns
+            worksheet = writer.sheets[participant]
+            workbook = writer.book
+            center = workbook.add_format()
+            center.set_align("center")
+            center.set_align("vcenter")
+
+            for i, col in enumerate(participant_team):
+                series = participant_team[col]
+                max_len = max(series.astype(str).map(len).max(), len(str(series.name)))
+
+                # Add a little extra spacing
+                if col in ("Position", "Player", "Team"):
+                    worksheet.set_column(i, i, max_len + 2)
+                else:
+                    worksheet.set_column(i, i, max_len + 2, center)
