@@ -275,12 +275,115 @@ def test_Draft_load(tmp_path, monkeypatch):
     # Cleanup - none necessary
 
 
-def test_Draft_load_stripping_whitespace():
-    pytest.xfail("test")
+def test_Draft_load_stripping_whitespace(tmp_path, monkeypatch):
     # Setup
+    expected_players = [
+        "QB with spaces",
+        "RB_1 with spaces",
+        "RB_2 with spaces",
+        "WR_1",
+        "WR_2",
+        "TE",
+        "Luke Weyman Thomas",
+        "Logan Thomas",
+        "Chicago Bears",
+        "Hudson Thomas",
+    ]
+
+    expected_teams = [
+        "MIA",
+        "DAL",
+        "CHI",
+        "NE",
+        "HOU",
+        "GB",
+        "PIT",
+        "Logan Thomas",
+        "Chicago Bears",
+        "Hudson Thomas",
+    ]
+
+    tmp_archive_dir = tmp_path.joinpath("archive")
+    tmp_archive_dir.mkdir()
+
+    tmp_year_dir = tmp_archive_dir.joinpath("2005")
+    tmp_year_dir.mkdir()
+
+    existing_draft_order = ["yeager", "emily", "dodd", "logan", "becca_hud", "cindy"]
+    existing_draft_order_dict = {
+        "yeager": 1,
+        "emily": 2,
+        "dodd": 3,
+        "logan": 4,
+        "becca_hud": 5,
+        "cindy": 6,
+    }
+
+    with open(tmp_year_dir.joinpath("2005_draft_order.json"), "w") as written_json:
+        json.dump(existing_draft_order_dict, written_json)
+
+    draft_info = {
+        "Position": [
+            "QB",
+            "RB_1",
+            "RB_2",
+            "WR_1",
+            "WR_2",
+            "TE",
+            "Flex (RB/WR/TE)",
+            "K",
+            "Defense (Team Name)",
+            "Bench (RB/WR/TE)",
+        ],
+        "Player": [
+            "   QB with spaces    ",
+            " RB_1 with spaces ",
+            "RB_2 with spaces ",
+            "WR_1           ",
+            "           WR_2",
+            "TE         ",
+            " Luke Weyman Thomas ",
+            "  Logan Thomas    ",
+            "    Chicago Bears   ",
+            " Hudson Thomas       ",
+        ],
+        "Team": [
+            "   MIA    ",
+            " DAL ",
+            "CHI ",
+            "NE           ",
+            "           HOU",
+            "GB         ",
+            " PIT ",
+            "  Logan Thomas    ",
+            "    Chicago Bears   ",
+            " Hudson Thomas       ",
+        ],
+    }
+    draft_df = pd.DataFrame(draft_info)
+
+    with pd.ExcelWriter(tmp_year_dir.joinpath("2005_draft_sheet.xlsx")) as writer:
+        for participant in existing_draft_order:
+            draft_df.to_excel(writer, sheet_name=participant.title(), index=False)
 
     # Exercise
+    draft = Draft(2005)
+
+    # Override output dir to temp path crated for testing
+    monkeypatch.setattr(draft, "output_dir", tmp_year_dir)
+    draft.setup()
+    result = draft.load()
 
     # Verify
+    assert list(result.keys()) == [
+        "Yeager",
+        "Emily",
+        "Dodd",
+        "Logan",
+        "Becca_Hud",
+        "Cindy",
+    ]
 
-    # Cleanup - none necessary
+    for participant, participant_team in result.items():
+        assert participant_team["Player"].tolist() == expected_players
+        assert participant_team["Team"].tolist() == expected_teams
