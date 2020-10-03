@@ -6,7 +6,6 @@ import pandas as pd
 
 # Local libraries
 import aggregate
-import api
 import utils
 from draft import Draft
 from leader_board import LeaderBoard
@@ -74,44 +73,6 @@ def main():
     board = LeaderBoard(year, participant_teams)
     board.display()
     board.save()
-
-    # Determine week to pull for stats
-    nfl_start_cal_week_num = utils.get_nfl_start_week(year)
-    thanksgiving_cal_week_num = utils.get_thanksgiving_week(year)
-
-    week = utils.calculate_nfl_thanksgiving_week(
-        nfl_start_cal_week_num,
-        thanksgiving_cal_week_num,
-    )
-
-    # Collect prior weeks player data (notice week - 1)
-    prior_players_df_path = api.create_prior_players_file_path(
-        year, week - 1, output_dir
-    )
-
-    # Check if prior week players data exists, if not create it (notice week - 1)
-    prior_players_df = api.check_prior_players_file_exists(
-        year, week - 1, prior_players_df_path
-    )
-
-    # Merge prior week players data to drafted teams (this will be prior weeks data)
-    participant_teams = utils.merge_points(participant_teams, prior_players_df)
-
-    # Update projected points to current week (currently week prior projections)
-    participant_teams = api.update_pts(
-        year=year,
-        week=week,
-        participant_teams=participant_teams,
-        stats_type="projected",
-    )
-
-    # Update actual points to current week (currently week prior actuals)
-    # Can call both below multiple times when launched from IPython console
-    participant_teams = api.update_pts(
-        year=year, week=week, participant_teams=participant_teams, stats_type="actual"
-    )
-
-    utils.create_leader_board(year, output_dir, participant_teams)
 
 
 if __name__ == "__main__":
