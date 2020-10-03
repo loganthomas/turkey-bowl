@@ -195,8 +195,8 @@ class Scraper:
         # This is a unique identifier NOT truly a GAME identifier
         print("\nCollecting projected player points...")
         response_json = self.scrape_url(self.projected_pts_url)
-        system_config = response_json.get("systemConfig").get("currentGameId")  # type: ignore[union-attr]
-        projected_player_pts = response_json.get("games").get(system_config).get("players")  # type: ignore[union-attr]
+        system_config = response_json["systemConfig"].get("currentGameId")
+        projected_player_pts = response_json["games"][system_config].get("players")
 
         return projected_player_pts
 
@@ -210,8 +210,8 @@ class Scraper:
         # This is a unique identifier NOT truly a GAME identifier
         print("\nCollecting actual player points...")
         response_json = self.scrape_url(self.actual_pts_url)
-        system_config = response_json.get("systemConfig").get("currentGameId")  # type: ignore[union-attr]
-        actual_player_pts = response_json.get("games").get(system_config).get("players")  # type: ignore[union-attr]
+        system_config = response_json["systemConfig"].get("currentGameId")
+        actual_player_pts = response_json["games"][system_config].get("players")
 
         return actual_player_pts
 
