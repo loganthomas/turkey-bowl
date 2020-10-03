@@ -4,6 +4,7 @@ Unit tests for scrape.py
 
 # Standard libraries
 import calendar
+import json
 from datetime import datetime, timedelta
 
 # Third-party libraries
@@ -499,5 +500,80 @@ def test_Scraper_get_actual_player_pts(capsys):
     # Verify
     assert result == expected_player_pts
     assert captured.out == expected_out
+
+    # Cleanup - none necessary
+
+
+def test_Scraper__check_player_ids_need_update_exists_same_year(tmp_path, monkeypatch):
+    # Setup
+    tmp_player_ids_json_path = tmp_path.joinpath("player_ids.json")
+
+    player_ids = {
+        "year": 2020,
+        "252": {"name": "Chad Henne", "position": "QB", "team": "KC", "injury": None},
+        "310": {
+            "name": "Matt Ryan",
+            "position": "QB",
+            "team": "ATL",
+            "injury": "Questionable",
+        },
+        "382": {"name": "Joe Flacco", "position": "QB", "team": "NYJ", "injury": None},
+    }
+
+    with open(tmp_player_ids_json_path, "w") as tmp_file:
+        json.dump(player_ids, tmp_file)
+
+    # Exercise
+    scraper = Scraper(2020)
+    monkeypatch.setattr(scraper, "player_ids_json_path", tmp_player_ids_json_path)
+    result = scraper._check_player_ids_need_update()
+
+    # Verify
+    assert result is False
+
+    # Cleanup - none necessary
+
+
+def test_Scraper__check_player_ids_need_update_exists_diff_year(tmp_path, monkeypatch):
+    # Setup
+    tmp_player_ids_json_path = tmp_path.joinpath("player_ids.json")
+
+    player_ids = {
+        "year": 2019,
+        "252": {"name": "Chad Henne", "position": "QB", "team": "KC", "injury": None},
+        "310": {
+            "name": "Matt Ryan",
+            "position": "QB",
+            "team": "ATL",
+            "injury": "Questionable",
+        },
+        "382": {"name": "Joe Flacco", "position": "QB", "team": "NYJ", "injury": None},
+    }
+
+    with open(tmp_player_ids_json_path, "w") as tmp_file:
+        json.dump(player_ids, tmp_file)
+
+    # Exercise
+    scraper = Scraper(2020)
+    monkeypatch.setattr(scraper, "player_ids_json_path", tmp_player_ids_json_path)
+    result = scraper._check_player_ids_need_update()
+
+    # Verify
+    assert result is True
+
+    # Cleanup - none necessary
+
+
+def test_Scraper__check_player_ids_need_update_doesnt_exist(tmp_path, monkeypatch):
+    # Setup
+    tmp_player_ids_json_path = tmp_path.joinpath("player_ids.json")
+
+    # Exercise
+    scraper = Scraper(2020)
+    monkeypatch.setattr(scraper, "player_ids_json_path", tmp_player_ids_json_path)
+    result = scraper._check_player_ids_need_update()
+
+    # Verify
+    assert result is True
 
     # Cleanup - none necessary
