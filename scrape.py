@@ -236,8 +236,8 @@ class Scraper:
         response_json = self.scrape_url(url, verbose=False)
 
         # This is a unique identifier not truly a GAME identifier
-        game_id = list(response_json.get("games").keys())[0]  # type: ignore[union-attr]
-        metadata = response_json.get("games").get(game_id).get("players")[player_id]  # type: ignore[union-attr]
+        game_id = list(response_json["games"].keys())[0]
+        metadata = response_json["games"][game_id]["players"].get(player_id)
 
         return metadata
 
