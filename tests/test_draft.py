@@ -8,7 +8,6 @@ import random
 
 # Third-party libraries
 import pandas as pd
-import pytest
 
 # Local libraries
 from draft import Draft
