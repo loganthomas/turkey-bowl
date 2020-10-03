@@ -628,3 +628,221 @@ def test_Scraper__get_player_metadata():
     assert result.get("injuryGameStatus") is None
 
     # Cleanup - none necessary
+
+
+def test_Scraper_update_player_ids_exist(tmp_path, monkeypatch, capsys):
+    # Setup
+    tmp_player_ids_json_path = tmp_path.joinpath("player_ids.json")
+
+    player_ids = {
+        "year": 2020,
+        "252": {"name": "Chad Henne", "position": "QB", "team": "KC", "injury": None},
+        "310": {
+            "name": "Matt Ryan",
+            "position": "QB",
+            "team": "ATL",
+            "injury": "Questionable",
+        },
+        "382": {"name": "Joe Flacco", "position": "QB", "team": "NYJ", "injury": None},
+    }
+
+    with open(tmp_player_ids_json_path, "w") as tmp_file:
+        json.dump(player_ids, tmp_file)
+
+    projected_player_pts = {}  # placeholder (not used)
+
+    expected_out = f"\nPlayer ids are up to date at: {tmp_player_ids_json_path}\n"
+
+    # Exercise
+    scraper = Scraper(2020)
+    monkeypatch.setattr(scraper, "player_ids_json_path", tmp_player_ids_json_path)
+    scraper.update_player_ids(projected_player_pts)
+
+    # Verify
+    captured = capsys.readouterr()
+    assert captured.out == expected_out
+
+
+@responses.activate
+def test_Scraper_update_player_ids_dont_exist(tmp_path, monkeypatch):
+    # Setup
+    tmp_player_ids_json_path = tmp_path.joinpath("player_ids.json")
+
+    request_jsons = {
+        "252": {
+            "games": {
+                "102020": {
+                    "players": {
+                        "252": {
+                            "playerId": "252",
+                            "nflGlobalEntityId": "32005455-5257-6945-9a73-9303e69596b7",
+                            "esbId": "TUR576945",
+                            "name": "Chad Henne",
+                            "firstName": "Chad",
+                            "lastName": "Henne",
+                            "position": "QB",
+                            "nflTeamAbbr": "KC",
+                            "nflTeamId": "8",
+                            "injuryGameStatus": None,
+                            "imageUrl": "https://static.www.nfl.com/image/private/w_200,h_200,c_fill/league/oo74j3pazlr6xc0w4jum",
+                            "smallImageUrl": "https://static.www.nfl.com/image/private/w_65,h_90,c_fill/league/oo74j3pazlr6xc0w4jum",
+                            "largeImageUrl": "https://static.www.nfl.com/image/private/w_1400,h_1000,c_fill/league/oo74j3pazlr6xc0w4jum",
+                            "byeWeek": "10",
+                            "isUndroppable": False,
+                            "isReserveStatus": False,
+                            "lastVideoTimestamp": "1969-12-31T16:00:00-08:00",
+                        }
+                    }
+                }
+            }
+        },
+        "310": {
+            "games": {
+                "102020": {
+                    "players": {
+                        "310": {
+                            "playerId": "310",
+                            "nflGlobalEntityId": "32005455-5257-6945-9a73-9303e69596b7",
+                            "esbId": "TUR576945",
+                            "name": "Matt Ryan",
+                            "firstName": "Matt",
+                            "lastName": "Ryan",
+                            "position": "QB",
+                            "nflTeamAbbr": "ATL",
+                            "nflTeamId": "8",
+                            "injuryGameStatus": "Questionable",
+                            "imageUrl": "https://static.www.nfl.com/image/private/w_200,h_200,c_fill/league/oo74j3pazlr6xc0w4jum",
+                            "smallImageUrl": "https://static.www.nfl.com/image/private/w_65,h_90,c_fill/league/oo74j3pazlr6xc0w4jum",
+                            "largeImageUrl": "https://static.www.nfl.com/image/private/w_1400,h_1000,c_fill/league/oo74j3pazlr6xc0w4jum",
+                            "byeWeek": "10",
+                            "isUndroppable": False,
+                            "isReserveStatus": False,
+                            "lastVideoTimestamp": "1969-12-31T16:00:00-08:00",
+                        }
+                    }
+                }
+            }
+        },
+        "382": {
+            "games": {
+                "102020": {
+                    "players": {
+                        "382": {
+                            "playerId": "382",
+                            "nflGlobalEntityId": "32005455-5257-6945-9a73-9303e69596b7",
+                            "esbId": "TUR576945",
+                            "name": "Joe Flacco",
+                            "firstName": "Joe",
+                            "lastName": "Flacco",
+                            "position": "QB",
+                            "nflTeamAbbr": "NYJ",
+                            "nflTeamId": "8",
+                            "injuryGameStatus": None,
+                            "imageUrl": "https://static.www.nfl.com/image/private/w_200,h_200,c_fill/league/oo74j3pazlr6xc0w4jum",
+                            "smallImageUrl": "https://static.www.nfl.com/image/private/w_65,h_90,c_fill/league/oo74j3pazlr6xc0w4jum",
+                            "largeImageUrl": "https://static.www.nfl.com/image/private/w_1400,h_1000,c_fill/league/oo74j3pazlr6xc0w4jum",
+                            "byeWeek": "10",
+                            "isUndroppable": False,
+                            "isReserveStatus": False,
+                            "lastVideoTimestamp": "1969-12-31T16:00:00-08:00",
+                        }
+                    }
+                }
+            }
+        },
+    }
+
+    projected_player_pts = {
+        "310": {
+            "projectedStats": {
+                "week": {
+                    "2020": {
+                        "12": {
+                            "1": "1",
+                            "14": "0.05",
+                            "20": "1.94",
+                            "21": "20.23",
+                            "22": "0.13",
+                            "pts": "4.75",
+                        }
+                    }
+                }
+            }
+        },
+        "382": {
+            "projectedStats": {
+                "week": {
+                    "2020": {
+                        "12": {
+                            "1": "1",
+                            "14": "0.05",
+                            "20": "1.1",
+                            "21": "13.11",
+                            "22": "0.09",
+                            "pts": "2.96",
+                        }
+                    }
+                }
+            }
+        },
+        # Intentionally at bottom to test sort
+        "252": {
+            "projectedStats": {
+                "week": {
+                    "2020": {
+                        "12": {
+                            "1": "1",
+                            "14": "0.06",
+                            "20": "3.75",
+                            "21": "52.05",
+                            "22": "0.41",
+                            "pts": "11.42",
+                        }
+                    }
+                }
+            }
+        },
+    }
+
+    # Exercise
+    assert tmp_player_ids_json_path.exists() is False
+
+    scraper = Scraper(2020)
+    monkeypatch.setattr(scraper, "player_ids_json_path", tmp_player_ids_json_path)
+
+    for player_id in ("252", "310", "382"):
+        responses.add(
+            method=responses.GET,
+            url=f"https://api.fantasy.nfl.com/v2/player/ngs-content?playerId={player_id}",
+            json=request_jsons[player_id],
+            status=200,
+        )
+
+    scraper.update_player_ids(projected_player_pts)
+
+    # Verify
+    assert tmp_player_ids_json_path.exists() is True
+
+    with open(tmp_player_ids_json_path, "r") as written_file:
+        result = json.load(written_file)
+
+    assert result["year"] == 2020
+    assert list(result.keys()) == ["year", "252", "310", "382"]
+    assert result["252"] == {
+        "name": "Chad Henne",
+        "position": "QB",
+        "team": "KC",
+        "injury": None,
+    }
+    assert result["310"] == {
+        "name": "Matt Ryan",
+        "position": "QB",
+        "team": "ATL",
+        "injury": "Questionable",
+    }
+    assert result["382"] == {
+        "name": "Joe Flacco",
+        "position": "QB",
+        "team": "NYJ",
+        "injury": None,
+    }
