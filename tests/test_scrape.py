@@ -577,3 +577,54 @@ def test_Scraper__check_player_ids_need_update_doesnt_exist(tmp_path, monkeypatc
     assert result is True
 
     # Cleanup - none necessary
+
+
+@responses.activate
+def test_Scraper__get_player_metadata():
+    # Setup
+    player_id = "2561671"
+    url = f"https://api.fantasy.nfl.com/v2/player/ngs-content?playerId={player_id}"
+
+    request_json = {
+        "games": {
+            "102020": {
+                "players": {
+                    "2561671": {
+                        "playerId": "2561671",
+                        "nflGlobalEntityId": "32005455-5257-6945-9a73-9303e69596b7",
+                        "esbId": "TUR576945",
+                        "name": "Malik Turner",
+                        "firstName": "Malik",
+                        "lastName": "Turner",
+                        "position": "WR",
+                        "nflTeamAbbr": "DAL",
+                        "nflTeamId": "8",
+                        "injuryGameStatus": None,
+                        "imageUrl": "https://static.www.nfl.com/image/private/w_200,h_200,c_fill/league/oo74j3pazlr6xc0w4jum",
+                        "smallImageUrl": "https://static.www.nfl.com/image/private/w_65,h_90,c_fill/league/oo74j3pazlr6xc0w4jum",
+                        "largeImageUrl": "https://static.www.nfl.com/image/private/w_1400,h_1000,c_fill/league/oo74j3pazlr6xc0w4jum",
+                        "byeWeek": "10",
+                        "isUndroppable": False,
+                        "isReserveStatus": False,
+                        "lastVideoTimestamp": "1969-12-31T16:00:00-08:00",
+                    }
+                }
+            }
+        }
+    }
+
+    responses.add(method=responses.GET, url=url, json=request_json, status=200)
+    expected = request_json["games"]["102020"]["players"][player_id]
+
+    # Exercise
+    scraper = Scraper(2020)
+    result = scraper._get_player_metadata(player_id)
+
+    # Verify
+    assert result == expected
+    assert result.get("name") == "Malik Turner"
+    assert result.get("position") == "WR"
+    assert result.get("nflTeamAbbr") == "DAL"
+    assert result.get("injuryGameStatus") is None
+
+    # Cleanup - none necessary
