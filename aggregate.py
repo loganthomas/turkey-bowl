@@ -33,14 +33,14 @@ def _get_player_pnts_stat_type(player_pts: Dict[str, Any]) -> str:
     return stats_type
 
 
-def _unpack_player_pnts(
+def _unpack_player_pts(
     year: int, week: int, player_pts_dict: Dict[str, Any]
 ) -> Dict[str, str]:
     """
     Helper function to unpack player points nested dictionaries.
     """
     ((_, points_dict),) = player_pts_dict.items()
-    points_dict = points_dict.get("week").get(str(year)).get(str(week))
+    points_dict = points_dict["week"][str(year)].get(str(week))
 
     return points_dict
 
@@ -73,8 +73,8 @@ def create_player_pts_df(
         index = []
         points = []
 
-        for pid, player_pnts_dict in player_pts.items():
-            points_dict = _unpack_player_pnts(year, week, player_pnts_dict)
+        for pid, player_pts_dict in player_pts.items():
+            points_dict = _unpack_player_pts(year, week, player_pts_dict)
             index.append(pid)
             points.append(points_dict)
 
