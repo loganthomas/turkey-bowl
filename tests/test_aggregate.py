@@ -159,3 +159,43 @@ def test__get_player_pnts_stats_type(stat_type):
     # Verify
 
     # Cleanup - none necessary
+
+
+def test__unpack_player_pts():
+    # Setup
+    year = 2020
+    week = 12
+
+    single_player_pts_dict = {
+        "stats": {
+            "week": {
+                str(year): {
+                    str(week): {
+                        "1": "1",
+                        "14": "0.05",
+                        "20": "1.1",
+                        "21": "13.11",
+                        "22": "0.09",
+                        "pts": "2.96",
+                    }
+                }
+            }
+        }
+    }
+
+    expected = {
+        "1": "1",
+        "14": "0.05",
+        "20": "1.1",
+        "21": "13.11",
+        "22": "0.09",
+        "pts": "2.96",
+    }
+
+    # Exercise
+    result = aggregate._unpack_player_pts(year, week, single_player_pts_dict)
+
+    # Verify
+    assert result == expected
+
+    # Cleanup - none necessary
