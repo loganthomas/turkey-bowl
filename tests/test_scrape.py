@@ -298,3 +298,206 @@ def test_Scraper_scrape_url_good_status_code(capsys):
     assert captured.out == "Successful API response obtained for: https://test.com\n"
 
     # Cleanup - none necessary
+
+
+@responses.activate
+def test_Scraper_get_projected_player_pts(capsys):
+    # Setup
+    request_json = {
+        "systemConfig": {"currentGameId": "102020"},
+        "games": {
+            "102020": {
+                "players": {
+                    "2504211": {
+                        "projectedStats": {
+                            "week": {
+                                "2020": {
+                                    "12": {
+                                        "1": "1",
+                                        "14": "0.05",
+                                        "20": "1.1",
+                                        "21": "13.11",
+                                        "22": "0.09",
+                                        "pts": "2.96",
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "310": {
+                        "projectedStats": {
+                            "week": {
+                                "2020": {
+                                    "12": {
+                                        "1": "1",
+                                        "14": "5.5",
+                                        "20": "3.3",
+                                        "21": "17.11",
+                                        "22": "0.07",
+                                        "pts": "9.96",
+                                    }
+                                }
+                            }
+                        }
+                    },
+                }
+            }
+        },
+    }
+
+    scraper = Scraper(2020)
+    responses.add(
+        method=responses.GET,
+        url=scraper.projected_pts_url,
+        json=request_json,
+        status=200,
+    )
+
+    expected_player_pts = {
+        "2504211": {
+            "projectedStats": {
+                "week": {
+                    "2020": {
+                        "12": {
+                            "1": "1",
+                            "14": "0.05",
+                            "20": "1.1",
+                            "21": "13.11",
+                            "22": "0.09",
+                            "pts": "2.96",
+                        }
+                    }
+                }
+            }
+        },
+        "310": {
+            "projectedStats": {
+                "week": {
+                    "2020": {
+                        "12": {
+                            "1": "1",
+                            "14": "5.5",
+                            "20": "3.3",
+                            "21": "17.11",
+                            "22": "0.07",
+                            "pts": "9.96",
+                        }
+                    }
+                }
+            }
+        },
+    }
+
+    expected_out = "\nCollecting projected player points...\n"
+    expected_out += (
+        f"Successful API response obtained for: {scraper.projected_pts_url}\n"
+    )
+    # Exercise
+
+    result = scraper.get_projected_player_pts()
+    captured = capsys.readouterr()
+
+    # Verify
+    assert result == expected_player_pts
+    assert captured.out == expected_out
+
+    # Cleanup - none necessary
+
+
+@responses.activate
+def test_Scraper_get_actual_player_pts(capsys):
+    # Setup
+    request_json = {
+        "systemConfig": {"currentGameId": "102020"},
+        "games": {
+            "102020": {
+                "players": {
+                    "2649": {
+                        "stats": {
+                            "week": {
+                                "2020": {
+                                    "12": {
+                                        "1": "1",
+                                        "14": "0.05",
+                                        "20": "1.1",
+                                        "21": "13.11",
+                                        "22": "0.09",
+                                        "pts": "2.96",
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "382": {
+                        "stats": {
+                            "week": {
+                                "2020": {
+                                    "12": {
+                                        "1": "1",
+                                        "14": "5.5",
+                                        "20": "3.3",
+                                        "21": "17.11",
+                                        "22": "0.07",
+                                        "pts": "9.96",
+                                    }
+                                }
+                            }
+                        }
+                    },
+                }
+            }
+        },
+    }
+
+    scraper = Scraper(2020)
+    responses.add(
+        method=responses.GET, url=scraper.actual_pts_url, json=request_json, status=200
+    )
+
+    expected_player_pts = {
+        "2649": {
+            "stats": {
+                "week": {
+                    "2020": {
+                        "12": {
+                            "1": "1",
+                            "14": "0.05",
+                            "20": "1.1",
+                            "21": "13.11",
+                            "22": "0.09",
+                            "pts": "2.96",
+                        }
+                    }
+                }
+            }
+        },
+        "382": {
+            "stats": {
+                "week": {
+                    "2020": {
+                        "12": {
+                            "1": "1",
+                            "14": "5.5",
+                            "20": "3.3",
+                            "21": "17.11",
+                            "22": "0.07",
+                            "pts": "9.96",
+                        }
+                    }
+                }
+            }
+        },
+    }
+
+    expected_out = "\nCollecting actual player points...\n"
+    expected_out += f"Successful API response obtained for: {scraper.actual_pts_url}\n"
+    # Exercise
+
+    result = scraper.get_actual_player_pts()
+    captured = capsys.readouterr()
+
+    # Verify
+    assert result == expected_player_pts
+    assert captured.out == expected_out
+
+    # Cleanup - none necessary
