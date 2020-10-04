@@ -3,7 +3,7 @@ Data aggregation functions
 """
 # Standard libraries
 from pathlib import Path
-from typing import Any, Dict
+from typing import Any, Dict, Optional
 
 # Third-party libraries
 import numpy as np
@@ -13,7 +13,7 @@ import pandas as pd
 import utils
 
 
-def _get_player_pnts_stat_type(player_pts: Dict[str, Any]) -> str:
+def _get_player_pts_stat_type(player_pts: Dict[str, Any]) -> str:
     """
     Helper function to get the stat type within the pulled player
     points. Will be either 'projectedStats' or 'stats'.
@@ -46,7 +46,7 @@ def _unpack_player_pts(
 
 
 def create_player_pts_df(
-    year: int, week: int, player_pts: Dict[str, Any]
+    year: int, week: int, player_pts: Dict[str, Any], savepath: Optional[Path] = None
 ) -> pd.DataFrame:
     """
     Create a DataFrame to house all player projected and actual points.
@@ -58,76 +58,81 @@ def create_player_pts_df(
     # be pulled multiple times throughout as more games are
     # played/completed. Projected points should be pulled once and
     # only once.
-    stats_type = _get_player_pnts_stat_type(player_pts)
+    stats_type = _get_player_pts_stat_type(player_pts)
 
-    proj_filename = Path(f"archive/{year}").joinpath(
-        f"{year}_{week}_projected_player_pts.csv"
-    )
+    if stats_type == "projectedStats":
+        prefix = "PROJ_"
 
-    if (stats_type == "projectedStats") & (proj_filename.exists()):
-        print(f"Projected player data already exists at: {proj_filename}")
-        player_pts_df = pd.read_csv(proj_filename, index_col=0)
+        # Projected points should always be saved (pulled only once)
+        if savepath is None:
+            raise ValueError(
+                "When creating a projected player points dataframe, ``savepath`` must be specified."
+            )
 
+        if savepath.exists():
+            print(f"Projected player data already exists at: {savepath}")
+            player_pts_df = pd.read_csv(savepath, index_col=0)
+
+            return player_pts_df
+
+    # _get_player_pts_stat_type handles check and raises error if not
+    # projectedStats or stats
     else:
+        prefix = "ACTUAL_"
 
-        index = []
-        points = []
+    index = []
+    points = []
 
-        for pid, player_pts_dict in player_pts.items():
-            points_dict = _unpack_player_pts(year, week, player_pts_dict)
-            index.append(pid)
-            points.append(points_dict)
+    for pid, player_pts_dict in player_pts.items():
+        points_dict = _unpack_player_pts(year, week, player_pts_dict)
+        index.append(pid)
+        points.append(points_dict)
 
-        player_pts_df = pd.DataFrame(points, index=index)
+    player_pts_df = pd.DataFrame(points, index=index)
 
-        # Get definition of each point attribute
-        stat_ids_json_path = Path("./stat_ids.json")
-        stat_ids_dict = utils.load_from_json(stat_ids_json_path)
-        stat_defns = {k: v["name"].replace(" ", "_") for k, v in stat_ids_dict.items()}
-        player_pts_df = player_pts_df.rename(columns=stat_defns)
+    # Get definition of each point attribute
+    stat_ids_json_path = Path("./stat_ids.json")
+    stat_ids_dict = utils.load_from_json(stat_ids_json_path)
+    stat_defns = {k: v["name"].replace(" ", "_") for k, v in stat_ids_dict.items()}
+    player_pts_df = player_pts_df.rename(columns=stat_defns)
 
-        if stats_type == "projectedStats":
-            prefix = "PROJ_"
+    player_pts_df = player_pts_df.add_prefix(prefix)
+    player_pts_df = player_pts_df.reset_index().rename(columns={"index": "Player"})
 
-        if stats_type == "stats":
-            prefix = "ACTUAL_"
+    # Get definition of each player team and name based on player id
+    player_ids_json_path = Path("./player_ids.json")
+    player_ids = utils.load_from_json(player_ids_json_path)
+    team = player_pts_df["Player"].apply(lambda x: player_ids[x]["team"])
+    player_pts_df.insert(1, "Team", team)
 
-        player_pts_df = player_pts_df.add_prefix(prefix)
-        player_pts_df = player_pts_df.reset_index().rename(columns={"index": "Player"})
+    player_defns = {k: v["name"] for k, v in player_ids.items() if k != "year"}
+    name = player_pts_df["Player"].apply(lambda x: player_defns[x])
+    player_pts_df["Player"] = name
 
-        # Get definition of each player team and name based on player id
-        player_ids_json_path = Path("./player_ids.json")
-        player_ids = utils.load_from_json(player_ids_json_path)
-        team = player_pts_df["Player"].apply(lambda x: player_ids[x]["team"])
-        player_pts_df.insert(1, "Team", team)
+    # Make pts col the third column for easy access
+    pts_col = player_pts_df.filter(regex="pts")
+    pts_col_name = f"{prefix}pts"
+    player_pts_df = player_pts_df.drop(pts_col_name, axis=1)
+    player_pts_df.insert(2, pts_col_name, pts_col)
 
-        player_defns = {k: v["name"] for k, v in player_ids.items() if k != "year"}
-        name = player_pts_df["Player"].apply(lambda x: player_defns[x])
-        player_pts_df["Player"] = name
+    # Convert all col types to non-string as strings come from scrape
+    col_types = {}
+    for c in player_pts_df.columns:
+        if c in ("Player", "Team"):
+            col_types[c] = "object"
+        elif "Games_Played" in c:
+            col_types[c] = "int64"
+        else:
+            col_types[c] = "float64"
 
-        # Make pts col the third column for easy access
-        pts_col = player_pts_df.filter(regex="pts")
-        pts_col_name = f"{prefix}pts"
-        player_pts_df = player_pts_df.drop(pts_col_name, axis=1)
-        player_pts_df.insert(2, pts_col_name, pts_col)
+    player_pts_df = player_pts_df.astype(col_types)
+    player_pts_df = player_pts_df.fillna(0.0)
 
-        # Convert all col types to non-string as strings come from scrape
-        col_types = {}
-        for c in player_pts_df.columns:
-            if c in ("Player", "Team"):
-                col_types[c] = "object"
-            elif "Games_Played" in c:
-                col_types[c] = "int64"
-            else:
-                col_types[c] = "float64"
+    # Write projected players to csv so only done once
+    if stats_type == "projectedStats":
 
-        player_pts_df = player_pts_df.astype(col_types)
-
-        # Write projected players to csv so only done once
-        if stats_type == "projectedStats":
-
-            print(f"\nWriting projected player stats to: {proj_filename}...")
-            player_pts_df.to_csv(proj_filename)
+        print(f"\nWriting projected player stats to: {savepath}...")
+        player_pts_df.to_csv(savepath)
 
     return player_pts_df
 
