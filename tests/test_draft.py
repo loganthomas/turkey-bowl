@@ -83,7 +83,7 @@ def test_Draft_setup_nothing_exists(tmp_path, monkeypatch):
     )
     assert list(draft_sheet_data) == ["Dodd", "Logan", "Becca"]
 
-    for participant, participant_draft_info in draft_sheet_data.items():
+    for participant_draft_info in draft_sheet_data.values():
         assert list(participant_draft_info.columns) == ["Position", "Player", "Team"]
         assert participant_draft_info["Position"].equals(
             pd.Series(
