@@ -27,7 +27,8 @@ def _get_player_pts_stat_type(player_pts: Dict[str, Any]) -> str:
 
     if stats_type not in ("projectedStats", "stats"):
         raise ValueError(
-            f"Unrecognized stats type: '{stats_type}'. Expected either 'projectedStats' or 'stats'."
+            f"Unrecognized stats type: '{stats_type}'. "
+            + "Expected either 'projectedStats' or 'stats'."
         )
 
     return stats_type
@@ -66,7 +67,8 @@ def create_player_pts_df(
         # Projected points should always be saved (pulled only once)
         if savepath is None:
             raise ValueError(
-                "When creating a projected player points dataframe, ``savepath`` must be specified."
+                "When creating a projected player points dataframe, "
+                + "``savepath`` must be specified."
             )
 
         if savepath.exists():
