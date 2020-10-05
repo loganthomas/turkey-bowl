@@ -6,7 +6,6 @@ from pathlib import Path
 from typing import Any, Dict, Optional
 
 # Third-party libraries
-import numpy as np
 import pandas as pd
 
 # Local libraries
