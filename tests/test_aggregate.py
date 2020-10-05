@@ -1484,6 +1484,11 @@ def test_write_robust_pariticipant_team_scores(tmp_path, capsys):
         k: pd.DataFrame(v).fillna(0.0) for k, v in participant_teams.items()
     }
 
+    expected_out = (
+        "\nWriting robust player points summary to: "
+        + f"{tmp_robust_participant_player_pts_path}...\n"
+    )
+
     # Exercise
     assert tmp_robust_participant_player_pts_path.exists() is False
     aggregate.write_robust_participant_team_scores(
@@ -1513,9 +1518,6 @@ def test_write_robust_pariticipant_team_scores(tmp_path, capsys):
         assert participant_teams[participant].equals(participant_team)
 
     captured = capsys.readouterr()
-    assert (
-        captured.out
-        == f"\nWriting robust player points summary to: {tmp_robust_participant_player_pts_path}...\n"
-    )
+    assert captured.out == expected_out
 
     # Cleanup - none necessary
