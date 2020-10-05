@@ -1,7 +1,11 @@
 """
 Thanksgiving Football module
 """
+# Standard libraries
+from pathlib import Path
+
 # Third-party libraries
+import numpy as np
 import pandas as pd
 
 # Local libraries
@@ -28,6 +32,7 @@ def main():
     draft = Draft(year)
     draft.setup()
 
+    # May need a check function here to ensure draft is complete
     # Load drafted teams
     participant_teams = draft.load()
 
@@ -47,14 +52,20 @@ def main():
     #   Load if it already exists
     week = scraper.nfl_thanksgiving_calendar_week
     projected_player_pts_df = aggregate.create_player_pts_df(
-        year=year, week=week, player_pts=projected_player_pts
+        year=year,
+        week=week,
+        player_pts=projected_player_pts,
+        savepath=Path(f"archive/{year}/{year}_{week}_projected_player_pts.csv"),
     )
 
     # Create a DataFrame of ACTUAL player pts
     # This will be created as multiple points in time.
     # Note: ``actual_player_pts`` will be none until games start
-    if actual_player_pts is not None:
+    if actual_player_pts:
         actual_player_pts_df = aggregate.create_player_pts_df(actual_player_pts)
+    else:
+        actual_player_pts_df = projected_player_pts_df[["Player", "Team"]].copy()
+        actual_player_pts_df["ACTUAL_pts"] = 0.0
 
     # Merge points to teams
     participant_teams = aggregate.merge_points(
@@ -67,7 +78,12 @@ def main():
 
     # Write robust scores to excel for reviewing if desired
     aggregate.write_robust_participant_team_scores(
-        year=year, week=week, participant_teams=participant_teams
+        year=year,
+        week=week,
+        participant_teams=participant_teams,
+        savepath=Path(
+            f"archive/{year}/{year}_{week}_robust_participant_player_pts.xlsx"
+        ),
     )
 
     board = LeaderBoard(year, participant_teams)
