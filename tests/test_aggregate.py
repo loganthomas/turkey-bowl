@@ -1,3 +1,6 @@
+"""
+Unit tests for aggregate.py
+"""
 # Third-party libraries
 import numpy as np
 import pandas as pd

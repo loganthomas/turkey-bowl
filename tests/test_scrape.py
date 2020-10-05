@@ -1,7 +1,6 @@
 """
 Unit tests for scrape.py
 """
-
 # Standard libraries
 import calendar
 import json

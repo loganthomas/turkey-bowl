@@ -1,7 +1,6 @@
 """
 Unit tests for draft.py
 """
-
 # Standard libraries
 import json
 import random
