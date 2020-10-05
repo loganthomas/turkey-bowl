@@ -1147,3 +1147,175 @@ def test_merge_points_prints_warning_if_player_not_found(capsys):
     assert captured.out == expected_warning
 
     # Cleanup - none necessary
+
+
+def test_sort_robust_cols():
+    # Setup
+    participant_teams = {
+        "Dodd": {
+            "Position": {
+                0: "QB",
+                1: "RB_1",
+                2: "RB_2",
+                3: "WR_1",
+                4: "WR_2",
+                5: "TE",
+                6: "Flex (RB/WR/TE)",
+                7: "K",
+                8: "Defense (Team Name)",
+                9: "Bench (RB/WR/TE)",
+            },
+            "Player": {
+                0: "Josh Alle",
+                1: "David Montgomery",
+                2: "Tarik Cohen",
+                3: "Allen Robinson",
+                4: "Anthony Miller",
+                5: "Dawson Knox",
+                6: "Jared Cook",
+                7: "Cairo Santos",
+                8: "Chicago Bears",
+                9: "Latavius Murray",
+            },
+            "Team": {
+                0: "BUF",
+                1: "CHI",
+                2: "CHI",
+                3: "CHI",
+                4: "CHI",
+                5: "BUF",
+                6: "NO",
+                7: "CHI",
+                8: "CHI",
+                9: "NO",
+            },
+            # Intentionally group PROJ first and ACTUAL second (test sort order)
+            "PROJ_pts": {},
+            "ACTUAL_pts": {},
+            "PROJ_A": {},
+            "PROJ_B": {},
+            "PROJ_C": {},
+            "ACTUAL_A": {},
+            "ACTUAL_B": {},
+            "ACTUAL_Z": {},
+        },
+        "Becca": {
+            "Position": {
+                0: "QB",
+                1: "RB_1",
+                2: "RB_2",
+                3: "WR_1",
+                4: "WR_2",
+                5: "TE",
+                6: "Flex (RB/WR/TE)",
+                7: "K",
+                8: "Defense (Team Name)",
+                9: "Bench (RB/WR/TE)",
+            },
+            "Player": {
+                0: "Dak Prescot",
+                1: "Adrian Peterson",
+                2: "Kerryon Johnson",
+                3: "Marvin Jones",
+                4: "John Brown",
+                5: "T.J. Hockenson",
+                6: "Alvin Kamara",
+                7: "Matt Prater",
+                8: "Detroit Lions",
+                9: "Michael Gallup",
+            },
+            "Team": {
+                0: "DAL",
+                1: "DET",
+                2: "DET",
+                3: "DET",
+                4: "BUF",
+                5: "DET",
+                6: "NO",
+                7: "DET",
+                8: "DET",
+                9: "DAL",
+            },
+            # Intentionally group PROJ first and ACTUAL second (test sort order)
+            "PROJ_pts": {},
+            "ACTUAL_pts": {},
+            "PROJ_A": {},
+            "PROJ_B": {},
+            "PROJ_C": {},
+            "ACTUAL_A": {},
+            "ACTUAL_B": {},
+            "ACTUAL_Z": {},
+        },
+        "Logan": {
+            "Position": {
+                0: "QB",
+                1: "RB_1",
+                2: "RB_2",
+                3: "WR_1",
+                4: "WR_2",
+                5: "TE",
+                6: "Flex (RB/WR/TE)",
+                7: "K",
+                8: "Defense (Team Name)",
+                9: "Bench (RB/WR/TE)",
+            },
+            "Player": {
+                0: "Matt Rya",
+                1: "D'Andre Swift",
+                2: "Devin Singletary",
+                3: "Russell Gage",
+                4: "Amari Cooper",
+                5: "Jimmy Graham",
+                6: "Michael Thomas",
+                7: "Tyler Bass",
+                8: "Dallas Cowboys",
+                9: "Randall Cobb",
+            },
+            "Team": {
+                0: "ATL",
+                1: "DET",
+                2: "BUF",
+                3: "ATL",
+                4: "DAL",
+                5: "CHI",
+                6: "NO",
+                7: "BUF",
+                8: "DAL",
+                9: "DAL",
+            },
+            # Intentionally group PROJ first and ACTUAL second (test sort order)
+            "PROJ_pts": {},
+            "ACTUAL_pts": {},
+            "PROJ_A": {},
+            "PROJ_B": {},
+            "PROJ_C": {},
+            "ACTUAL_A": {},
+            "ACTUAL_B": {},
+            "ACTUAL_Z": {},
+        },
+    }
+
+    participant_teams = {k: pd.DataFrame(v) for k, v in participant_teams.items()}
+
+    # Exercise
+    result = aggregate.sort_robust_cols(participant_teams)
+
+    # Verify
+    assert list(result.keys()) == ["Dodd", "Becca", "Logan"]
+
+    for participant_team in participant_teams.values():
+        assert list(participant_team.columns) == [
+            "Position",
+            "Player",
+            "Team",
+            "ACTUAL_pts",
+            "PROJ_pts",
+            "ACTUAL_A",
+            "PROJ_A",
+            "ACTUAL_B",
+            "PROJ_B",
+            "PROJ_C",
+            "ACTUAL_Z",
+        ]
+
+    # Cleanup - none necessary
