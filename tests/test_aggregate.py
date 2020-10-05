@@ -1319,3 +1319,197 @@ def test_sort_robust_cols():
         ]
 
     # Cleanup - none necessary
+
+
+def test_write_robust_pariticipant_team_scores(tmp_path, capsys):
+    # Setup
+    year = 2020
+    week = 12
+
+    tmp_archive_dir = tmp_path.joinpath("archive")
+    tmp_archive_dir.mkdir()
+
+    tmp_year_dir = tmp_archive_dir.joinpath(str(year))
+    tmp_year_dir.mkdir()
+
+    tmp_robust_participant_player_pts_path = tmp_path.joinpath(
+        f"{year}_{week}_robust_participant_player_pts.xlsx"
+    )
+
+    participant_teams = {
+        "Dodd": {
+            "Position": {
+                0: "QB",
+                1: "RB_1",
+                2: "RB_2",
+                3: "WR_1",
+                4: "WR_2",
+                5: "TE",
+                6: "Flex (RB/WR/TE)",
+                7: "K",
+                8: "Defense (Team Name)",
+                9: "Bench (RB/WR/TE)",
+            },
+            "Player": {
+                0: "Josh Allen",
+                1: "David Montgomery",
+                2: "Tarik Cohen",
+                3: "Allen Robinson",
+                4: "Anthony Miller",
+                5: "Dawson Knox",
+                6: "Jared Cook",
+                7: "Cairo Santos",
+                8: "Chicago Bears",
+                9: "Latavius Murray",
+            },
+            "Team": {
+                0: "BUF",
+                1: "CHI",
+                2: "CHI",
+                3: "CHI",
+                4: "CHI",
+                5: "BUF",
+                6: "NO",
+                7: "CHI",
+                8: "CHI",
+                9: "NO",
+            },
+            # Intentionally group PROJ first and ACTUAL second (test sort order)
+            "PROJ_pts": {},
+            "ACTUAL_pts": {},
+            "PROJ_A": {},
+            "PROJ_B": {},
+            "PROJ_C": {},
+            "ACTUAL_A": {},
+            "ACTUAL_B": {},
+            "ACTUAL_Z": {},
+        },
+        "Becca": {
+            "Position": {
+                0: "QB",
+                1: "RB_1",
+                2: "RB_2",
+                3: "WR_1",
+                4: "WR_2",
+                5: "TE",
+                6: "Flex (RB/WR/TE)",
+                7: "K",
+                8: "Defense (Team Name)",
+                9: "Bench (RB/WR/TE)",
+            },
+            "Player": {
+                0: "Dak Prescott",
+                1: "Adrian Peterson",
+                2: "Kerryon Johnson",
+                3: "Marvin Jones",
+                4: "John Brown",
+                5: "T.J. Hockenson",
+                6: "Alvin Kamara",
+                7: "Matt Prater",
+                8: "Detroit Lions",
+                9: "Michael Gallup",
+            },
+            "Team": {
+                0: "DAL",
+                1: "DET",
+                2: "DET",
+                3: "DET",
+                4: "BUF",
+                5: "DET",
+                6: "NO",
+                7: "DET",
+                8: "DET",
+                9: "DAL",
+            },
+            # Intentionally group PROJ first and ACTUAL second (test sort order)
+            "PROJ_pts": {},
+            "ACTUAL_pts": {},
+            "PROJ_A": {},
+            "PROJ_B": {},
+            "PROJ_C": {},
+            "ACTUAL_A": {},
+            "ACTUAL_B": {},
+            "ACTUAL_Z": {},
+        },
+        "Logan": {
+            "Position": {
+                0: "QB",
+                1: "RB_1",
+                2: "RB_2",
+                3: "WR_1",
+                4: "WR_2",
+                5: "TE",
+                6: "Flex (RB/WR/TE)",
+                7: "K",
+                8: "Defense (Team Name)",
+                9: "Bench (RB/WR/TE)",
+            },
+            "Player": {
+                0: "Matt Ryan",
+                1: "D'Andre Swift",
+                2: "Devin Singletary",
+                3: "Russell Gage",
+                4: "Amari Cooper",
+                5: "Jimmy Graham",
+                6: "Michael Thomas",
+                7: "Tyler Bass",
+                8: "Dallas Cowboys",
+                9: "Randall Cobb",
+            },
+            "Team": {
+                0: "ATL",
+                1: "DET",
+                2: "BUF",
+                3: "ATL",
+                4: "DAL",
+                5: "CHI",
+                6: "NO",
+                7: "BUF",
+                8: "DAL",
+                9: "DAL",
+            },
+            # Intentionally group PROJ first and ACTUAL second (test sort order)
+            "PROJ_pts": {},
+            "ACTUAL_pts": {},
+            "PROJ_A": {},
+            "PROJ_B": {},
+            "PROJ_C": {},
+            "ACTUAL_A": {},
+            "ACTUAL_B": {},
+            "ACTUAL_Z": {},
+        },
+    }
+
+    participant_teams = {
+        k: pd.DataFrame(v).fillna(0.0) for k, v in participant_teams.items()
+    }
+
+    # Exercise
+    assert tmp_robust_participant_player_pts_path.exists() is False
+    aggregate.write_robust_participant_team_scores(
+        year, week, participant_teams, tmp_robust_participant_player_pts_path
+    )
+
+    # Verify
+    assert tmp_robust_participant_player_pts_path.exists()
+    written = pd.read_excel(tmp_robust_participant_player_pts_path, sheet_name=None)
+
+    expected_dtypes = {
+        "Position": np.dtype("O"),
+        "Player": np.dtype("O"),
+        "Team": np.dtype("O"),
+        "PROJ_pts": np.dtype("float64"),
+        "ACTUAL_pts": np.dtype("float64"),
+        "PROJ_A": np.dtype("float64"),
+        "PROJ_B": np.dtype("float64"),
+        "PROJ_C": np.dtype("float64"),
+        "ACTUAL_A": np.dtype("float64"),
+        "ACTUAL_B": np.dtype("float64"),
+        "ACTUAL_Z": np.dtype("float64"),
+    }
+
+    for participant, participant_team in written.items():
+        participant_team = participant_team.astype(expected_dtypes)
+        assert participant_teams[participant].equals(participant_team)
+
+    # Cleanup - none necessary
