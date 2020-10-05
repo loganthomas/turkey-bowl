@@ -202,17 +202,14 @@ def sort_robust_cols(
 
 
 def write_robust_participant_team_scores(
-    year: int, week: int, participant_teams: Dict[str, pd.DataFrame]
+    year: int, week: int, participant_teams: Dict[str, pd.DataFrame], savepath: Path
 ) -> None:
     """
     Writes the total points to an excel file that can be reviewed.
     """
-    filename = Path(f"archive/{year}").joinpath(
-        f"{year}_{week}_robust_participant_player_pts.xlsx"
-    )
-    print(f"\nWriting robust player points summary to: {filename}...")
+    print(f"\nWriting robust player points summary to: {savepath}...")
 
-    with pd.ExcelWriter(filename) as writer:
+    with pd.ExcelWriter(savepath) as writer:
         for participant, participant_team in participant_teams.items():
 
             # Write data to sheet
