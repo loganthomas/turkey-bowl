@@ -7,11 +7,51 @@ import pytest
 import aggregate
 
 
-def test__get_player_pts_stats_type_raises_error_for_multi_types():
-    # Setup
+@pytest.fixture
+def mock_proj_player_pts():
     player_pts = {
         "2504211": {
             "projectedStats": {
+                "week": {
+                    "2020": {
+                        "12": {
+                            "1": "1",
+                            "14": "0.05",
+                            "20": "1.1",
+                            "21": "13.11",
+                            "22": "0.09",
+                            "pts": "2.96",
+                        }
+                    }
+                }
+            }
+        },
+        "310": {
+            "projectedStats": {
+                "week": {
+                    "2020": {
+                        "12": {
+                            "1": "1",
+                            "14": "5.5",
+                            "20": "3.3",
+                            "21": "17.11",
+                            "22": "0.07",
+                            "pts": "9.96",
+                        }
+                    }
+                }
+            }
+        },
+    }
+
+    return player_pts
+
+
+@pytest.fixture
+def mock_actual_player_pts():
+    player_pts = {
+        "2504211": {
+            "stats": {
                 "week": {
                     "2020": {
                         "12": {
@@ -42,6 +82,22 @@ def test__get_player_pts_stats_type_raises_error_for_multi_types():
                 }
             }
         },
+    }
+
+    return player_pts
+
+
+def test__get_player_pts_stats_type_raises_error_for_multi_types(
+    mock_proj_player_pts, mock_actual_player_pts
+):
+    # Setup
+    proj_player_pts = mock_proj_player_pts
+    actual_player_pts = mock_actual_player_pts
+
+    # Intentionally mix proj and actual to raise an error
+    player_pts = {
+        "2504211": proj_player_pts["2504211"],
+        "310": actual_player_pts["310"],
     }
 
     expected_error1 = (
@@ -115,42 +171,14 @@ def test__get_player_pts_stats_type_raises_error_for_unrecognized_type():
 @pytest.mark.parametrize(
     "stat_type", ["projectedStats", "stats"], ids=["projected", "actual"]
 )
-def test__get_player_pts_stats_type(stat_type):
+def test__get_player_pts_stats_type(
+    stat_type, mock_proj_player_pts, mock_actual_player_pts
+):
     # Setup
-    player_pts = {
-        "2504211": {
-            stat_type: {
-                "week": {
-                    "2020": {
-                        "12": {
-                            "1": "1",
-                            "14": "0.05",
-                            "20": "1.1",
-                            "21": "13.11",
-                            "22": "0.09",
-                            "pts": "2.96",
-                        }
-                    }
-                }
-            }
-        },
-        "310": {
-            stat_type: {
-                "week": {
-                    "2020": {
-                        "12": {
-                            "1": "1",
-                            "14": "5.5",
-                            "20": "3.3",
-                            "21": "17.11",
-                            "22": "0.07",
-                            "pts": "9.96",
-                        }
-                    }
-                }
-            }
-        },
-    }
+    if stat_type == "projectedStats":
+        player_pts = mock_proj_player_pts
+    else:
+        player_pts = mock_actual_player_pts
 
     # Exercise
     result = aggregate._get_player_pts_stat_type(player_pts)
@@ -596,8 +624,8 @@ def test_create_player_pts_df_actual(tmp_path):
     # Cleanup - none necessary
 
 
-def test_merge_points():
-    # Setup
+@pytest.fixture
+def mock_participant_teams():
     participant_teams = {
         "Dodd": {
             "Position": {
@@ -849,6 +877,13 @@ def test_merge_points():
     }
 
     pts_df = pd.DataFrame(pts_df_data)
+
+    return participant_teams, pts_df
+
+
+def test_merge_points(mock_participant_teams):
+    # Setup
+    participant_teams, pts_df = mock_participant_teams
     pts_df["drop_me"] = 0.0
 
     # Exercise
@@ -878,259 +913,17 @@ def test_merge_points():
     # Cleanup - none necessary
 
 
-def test_merge_points_prints_warning_if_player_not_found(capsys):
+def test_merge_points_prints_warning_if_player_not_found(
+    mock_participant_teams, capsys
+):
     # Setup
-    participant_teams = {
-        "Dodd": {
-            "Position": {
-                0: "QB",
-                1: "RB_1",
-                2: "RB_2",
-                3: "WR_1",
-                4: "WR_2",
-                5: "TE",
-                6: "Flex (RB/WR/TE)",
-                7: "K",
-                8: "Defense (Team Name)",
-                9: "Bench (RB/WR/TE)",
-            },
-            "Player": {
-                0: "Josh Alle",
-                1: "David Montgomery",
-                2: "Tarik Cohen",
-                3: "Allen Robinson",
-                4: "Anthony Miller",
-                5: "Dawson Knox",
-                6: "Jared Cook",
-                7: "Cairo Santos",
-                8: "Chicago Bears",
-                9: "Latavius Murray",
-            },
-            "Team": {
-                0: "BUF",
-                1: "CHI",
-                2: "CHI",
-                3: "CHI",
-                4: "CHI",
-                5: "BUF",
-                6: "NO",
-                7: "CHI",
-                8: "CHI",
-                9: "NO",
-            },
-        },
-        "Becca": {
-            "Position": {
-                0: "QB",
-                1: "RB_1",
-                2: "RB_2",
-                3: "WR_1",
-                4: "WR_2",
-                5: "TE",
-                6: "Flex (RB/WR/TE)",
-                7: "K",
-                8: "Defense (Team Name)",
-                9: "Bench (RB/WR/TE)",
-            },
-            "Player": {
-                0: "Dak Prescot",
-                1: "Adrian Peterson",
-                2: "Kerryon Johnson",
-                3: "Marvin Jones",
-                4: "John Brown",
-                5: "T.J. Hockenson",
-                6: "Alvin Kamara",
-                7: "Matt Prater",
-                8: "Detroit Lions",
-                9: "Michael Gallup",
-            },
-            "Team": {
-                0: "DAL",
-                1: "DET",
-                2: "DET",
-                3: "DET",
-                4: "BUF",
-                5: "DET",
-                6: "NO",
-                7: "DET",
-                8: "DET",
-                9: "DAL",
-            },
-        },
-        "Logan": {
-            "Position": {
-                0: "QB",
-                1: "RB_1",
-                2: "RB_2",
-                3: "WR_1",
-                4: "WR_2",
-                5: "TE",
-                6: "Flex (RB/WR/TE)",
-                7: "K",
-                8: "Defense (Team Name)",
-                9: "Bench (RB/WR/TE)",
-            },
-            "Player": {
-                0: "Matt Rya",
-                1: "D'Andre Swift",
-                2: "Devin Singletary",
-                3: "Russell Gage",
-                4: "Amari Cooper",
-                5: "Jimmy Graham",
-                6: "Michael Thomas",
-                7: "Tyler Bass",
-                8: "Dallas Cowboys",
-                9: "Randall Cobb",
-            },
-            "Team": {
-                0: "ATL",
-                1: "DET",
-                2: "BUF",
-                3: "ATL",
-                4: "DAL",
-                5: "CHI",
-                6: "NO",
-                7: "BUF",
-                8: "DAL",
-                9: "DAL",
-            },
-        },
-    }
+    participant_teams, pts_df = mock_participant_teams
 
-    participant_teams = {k: pd.DataFrame(v) for k, v in participant_teams.items()}
+    # Intentional misspell
+    participant_teams["Dodd"].loc[0, "Player"] = "Josh Alle"
+    participant_teams["Becca"].loc[0, "Player"] = "Dak Prescot"
+    participant_teams["Logan"].loc[0, "Player"] = "Matt Rya"
 
-    pts_df_data = {
-        "Player": {
-            0: "Josh Allen",
-            1: "David Montgomery",
-            2: "Tarik Cohen",
-            3: "Allen Robinson",
-            4: "Anthony Miller",
-            5: "Dawson Knox",
-            6: "Jared Cook",
-            7: "Cairo Santos",
-            8: "Chicago Bears",
-            9: "Latavius Murray",
-            10: "Dak Prescott",
-            11: "Adrian Peterson",
-            12: "Kerryon Johnson",
-            13: "Marvin Jones",
-            14: "John Brown",
-            15: "T.J. Hockenson",
-            16: "Alvin Kamara",
-            17: "Matt Prater",
-            18: "Detroit Lions",
-            19: "Michael Gallup",
-            20: "Matt Ryan",
-            21: "D'Andre Swift",
-            22: "Devin Singletary",
-            23: "Russell Gage",
-            24: "Amari Cooper",
-            25: "Jimmy Graham",
-            26: "Michael Thomas",
-            27: "Tyler Bass",
-            28: "Dallas Cowboys",
-            29: "Randall Cobb",
-        },
-        "Team": {
-            0: "BUF",
-            1: "CHI",
-            2: "CHI",
-            3: "CHI",
-            4: "CHI",
-            5: "BUF",
-            6: "NO",
-            7: "CHI",
-            8: "CHI",
-            9: "NO",
-            10: "DAL",
-            11: "DET",
-            12: "DET",
-            13: "DET",
-            14: "BUF",
-            15: "DET",
-            16: "NO",
-            17: "DET",
-            18: "DET",
-            19: "DAL",
-            20: "ATL",
-            21: "DET",
-            22: "BUF",
-            23: "ATL",
-            24: "DAL",
-            25: "CHI",
-            26: "NO",
-            27: "BUF",
-            28: "DAL",
-            29: "DAL",
-        },
-        "ACTUAL_pts": {
-            0: 1.8499999999999999,
-            1: 3.51,
-            2: 84.19,
-            3: 93.97,
-            4: 31.31,
-            5: 11.75,
-            6: 96.39,
-            7: 42.54,
-            8: 19.580000000000002,
-            9: 97.33000000000001,
-            10: 21.2,
-            11: 33.45,
-            12: 59.5,
-            13: 90.16999999999999,
-            14: 47.29,
-            15: 86.6,
-            16: 47.05,
-            17: 76.46,
-            18: 95.21,
-            19: 9.610000000000001,
-            20: 69.14,
-            21: 59.099999999999994,
-            22: 42.93,
-            23: 23.25,
-            24: 59.699999999999996,
-            25: 8.02,
-            26: 72.6,
-            27: 0.59,
-            28: 19.759999999999998,
-            29: 38.879999999999995,
-        },
-        "PROJ_pts": {
-            0: 75.33999999999999,
-            1: 49.830000000000005,
-            2: 81.96,
-            3: 24.04,
-            4: 51.68000000000001,
-            5: 87.45,
-            6: 0.7100000000000001,
-            7: 89.53999999999999,
-            8: 3.7900000000000005,
-            9: 72.98,
-            10: 76.75,
-            11: 19.85,
-            12: 44.07,
-            13: 52.7,
-            14: 87.09,
-            15: 40.11,
-            16: 7.449999999999999,
-            17: 31.680000000000003,
-            18: 64.44,
-            19: 59.489999999999995,
-            20: 84.59,
-            21: 86.03,
-            22: 69.37,
-            23: 44.800000000000004,
-            24: 24.11,
-            25: 80.84,
-            26: 85.68,
-            27: 46.989999999999995,
-            28: 50.949999999999996,
-            29: 36.35,
-        },
-    }
-
-    pts_df = pd.DataFrame(pts_df_data)
     pts_df["drop_me"] = 0.0
 
     expected_warning = (
@@ -1149,153 +942,20 @@ def test_merge_points_prints_warning_if_player_not_found(capsys):
     # Cleanup - none necessary
 
 
-def test_sort_robust_cols():
+def test_sort_robust_cols(mock_participant_teams):
     # Setup
-    participant_teams = {
-        "Dodd": {
-            "Position": {
-                0: "QB",
-                1: "RB_1",
-                2: "RB_2",
-                3: "WR_1",
-                4: "WR_2",
-                5: "TE",
-                6: "Flex (RB/WR/TE)",
-                7: "K",
-                8: "Defense (Team Name)",
-                9: "Bench (RB/WR/TE)",
-            },
-            "Player": {
-                0: "Josh Alle",
-                1: "David Montgomery",
-                2: "Tarik Cohen",
-                3: "Allen Robinson",
-                4: "Anthony Miller",
-                5: "Dawson Knox",
-                6: "Jared Cook",
-                7: "Cairo Santos",
-                8: "Chicago Bears",
-                9: "Latavius Murray",
-            },
-            "Team": {
-                0: "BUF",
-                1: "CHI",
-                2: "CHI",
-                3: "CHI",
-                4: "CHI",
-                5: "BUF",
-                6: "NO",
-                7: "CHI",
-                8: "CHI",
-                9: "NO",
-            },
-            # Intentionally group PROJ first and ACTUAL second (test sort order)
-            "PROJ_pts": {},
-            "ACTUAL_pts": {},
-            "PROJ_A": {},
-            "PROJ_B": {},
-            "PROJ_C": {},
-            "ACTUAL_A": {},
-            "ACTUAL_B": {},
-            "ACTUAL_Z": {},
-        },
-        "Becca": {
-            "Position": {
-                0: "QB",
-                1: "RB_1",
-                2: "RB_2",
-                3: "WR_1",
-                4: "WR_2",
-                5: "TE",
-                6: "Flex (RB/WR/TE)",
-                7: "K",
-                8: "Defense (Team Name)",
-                9: "Bench (RB/WR/TE)",
-            },
-            "Player": {
-                0: "Dak Prescot",
-                1: "Adrian Peterson",
-                2: "Kerryon Johnson",
-                3: "Marvin Jones",
-                4: "John Brown",
-                5: "T.J. Hockenson",
-                6: "Alvin Kamara",
-                7: "Matt Prater",
-                8: "Detroit Lions",
-                9: "Michael Gallup",
-            },
-            "Team": {
-                0: "DAL",
-                1: "DET",
-                2: "DET",
-                3: "DET",
-                4: "BUF",
-                5: "DET",
-                6: "NO",
-                7: "DET",
-                8: "DET",
-                9: "DAL",
-            },
-            # Intentionally group PROJ first and ACTUAL second (test sort order)
-            "PROJ_pts": {},
-            "ACTUAL_pts": {},
-            "PROJ_A": {},
-            "PROJ_B": {},
-            "PROJ_C": {},
-            "ACTUAL_A": {},
-            "ACTUAL_B": {},
-            "ACTUAL_Z": {},
-        },
-        "Logan": {
-            "Position": {
-                0: "QB",
-                1: "RB_1",
-                2: "RB_2",
-                3: "WR_1",
-                4: "WR_2",
-                5: "TE",
-                6: "Flex (RB/WR/TE)",
-                7: "K",
-                8: "Defense (Team Name)",
-                9: "Bench (RB/WR/TE)",
-            },
-            "Player": {
-                0: "Matt Rya",
-                1: "D'Andre Swift",
-                2: "Devin Singletary",
-                3: "Russell Gage",
-                4: "Amari Cooper",
-                5: "Jimmy Graham",
-                6: "Michael Thomas",
-                7: "Tyler Bass",
-                8: "Dallas Cowboys",
-                9: "Randall Cobb",
-            },
-            "Team": {
-                0: "ATL",
-                1: "DET",
-                2: "BUF",
-                3: "ATL",
-                4: "DAL",
-                5: "CHI",
-                6: "NO",
-                7: "BUF",
-                8: "DAL",
-                9: "DAL",
-            },
-            # Intentionally group PROJ first and ACTUAL second (test sort order)
-            "PROJ_pts": {},
-            "ACTUAL_pts": {},
-            "PROJ_A": {},
-            "PROJ_B": {},
-            "PROJ_C": {},
-            "ACTUAL_A": {},
-            "ACTUAL_B": {},
-            "ACTUAL_Z": {},
-        },
-    }
+    participant_teams, _ = mock_participant_teams
+    for participant_team in participant_teams.values():
 
-    participant_teams = {k: pd.DataFrame(v) for k, v in participant_teams.items()}
+        # Intentionally group PROJ first and ACTUAL second (test sort order)
+        participant_team["PROJ_pts"] = 0.0
+        participant_team["ACTUAL_pts"] = 0.0
+        participant_team["PROJ_A"] = 0.0
+        participant_team["PROJ_B"] = 0.0
+        participant_team["PROJ_C"] = 0.0
+        participant_team["ACTUAL_A"] = 0.0
+        participant_team["ACTUAL_B"] = 0.0
+        participant_team["ACTUAL_Z"] = 0.0
 
     # Exercise
     result = aggregate.sort_robust_cols(participant_teams)
@@ -1321,7 +981,9 @@ def test_sort_robust_cols():
     # Cleanup - none necessary
 
 
-def test_write_robust_pariticipant_team_scores(tmp_path, capsys):
+def test_write_robust_pariticipant_team_scores(
+    mock_participant_teams, tmp_path, capsys
+):
     # Setup
     year = 2020
     week = 12
@@ -1336,153 +998,18 @@ def test_write_robust_pariticipant_team_scores(tmp_path, capsys):
         f"{year}_{week}_robust_participant_player_pts.xlsx"
     )
 
-    participant_teams = {
-        "Dodd": {
-            "Position": {
-                0: "QB",
-                1: "RB_1",
-                2: "RB_2",
-                3: "WR_1",
-                4: "WR_2",
-                5: "TE",
-                6: "Flex (RB/WR/TE)",
-                7: "K",
-                8: "Defense (Team Name)",
-                9: "Bench (RB/WR/TE)",
-            },
-            "Player": {
-                0: "Josh Allen",
-                1: "David Montgomery",
-                2: "Tarik Cohen",
-                3: "Allen Robinson",
-                4: "Anthony Miller",
-                5: "Dawson Knox",
-                6: "Jared Cook",
-                7: "Cairo Santos",
-                8: "Chicago Bears",
-                9: "Latavius Murray",
-            },
-            "Team": {
-                0: "BUF",
-                1: "CHI",
-                2: "CHI",
-                3: "CHI",
-                4: "CHI",
-                5: "BUF",
-                6: "NO",
-                7: "CHI",
-                8: "CHI",
-                9: "NO",
-            },
-            # Intentionally group PROJ first and ACTUAL second (test sort order)
-            "PROJ_pts": {},
-            "ACTUAL_pts": {},
-            "PROJ_A": {},
-            "PROJ_B": {},
-            "PROJ_C": {},
-            "ACTUAL_A": {},
-            "ACTUAL_B": {},
-            "ACTUAL_Z": {},
-        },
-        "Becca": {
-            "Position": {
-                0: "QB",
-                1: "RB_1",
-                2: "RB_2",
-                3: "WR_1",
-                4: "WR_2",
-                5: "TE",
-                6: "Flex (RB/WR/TE)",
-                7: "K",
-                8: "Defense (Team Name)",
-                9: "Bench (RB/WR/TE)",
-            },
-            "Player": {
-                0: "Dak Prescott",
-                1: "Adrian Peterson",
-                2: "Kerryon Johnson",
-                3: "Marvin Jones",
-                4: "John Brown",
-                5: "T.J. Hockenson",
-                6: "Alvin Kamara",
-                7: "Matt Prater",
-                8: "Detroit Lions",
-                9: "Michael Gallup",
-            },
-            "Team": {
-                0: "DAL",
-                1: "DET",
-                2: "DET",
-                3: "DET",
-                4: "BUF",
-                5: "DET",
-                6: "NO",
-                7: "DET",
-                8: "DET",
-                9: "DAL",
-            },
-            # Intentionally group PROJ first and ACTUAL second (test sort order)
-            "PROJ_pts": {},
-            "ACTUAL_pts": {},
-            "PROJ_A": {},
-            "PROJ_B": {},
-            "PROJ_C": {},
-            "ACTUAL_A": {},
-            "ACTUAL_B": {},
-            "ACTUAL_Z": {},
-        },
-        "Logan": {
-            "Position": {
-                0: "QB",
-                1: "RB_1",
-                2: "RB_2",
-                3: "WR_1",
-                4: "WR_2",
-                5: "TE",
-                6: "Flex (RB/WR/TE)",
-                7: "K",
-                8: "Defense (Team Name)",
-                9: "Bench (RB/WR/TE)",
-            },
-            "Player": {
-                0: "Matt Ryan",
-                1: "D'Andre Swift",
-                2: "Devin Singletary",
-                3: "Russell Gage",
-                4: "Amari Cooper",
-                5: "Jimmy Graham",
-                6: "Michael Thomas",
-                7: "Tyler Bass",
-                8: "Dallas Cowboys",
-                9: "Randall Cobb",
-            },
-            "Team": {
-                0: "ATL",
-                1: "DET",
-                2: "BUF",
-                3: "ATL",
-                4: "DAL",
-                5: "CHI",
-                6: "NO",
-                7: "BUF",
-                8: "DAL",
-                9: "DAL",
-            },
-            # Intentionally group PROJ first and ACTUAL second (test sort order)
-            "PROJ_pts": {},
-            "ACTUAL_pts": {},
-            "PROJ_A": {},
-            "PROJ_B": {},
-            "PROJ_C": {},
-            "ACTUAL_A": {},
-            "ACTUAL_B": {},
-            "ACTUAL_Z": {},
-        },
-    }
+    participant_teams, _ = mock_participant_teams
+    for participant_team in participant_teams.values():
 
-    participant_teams = {
-        k: pd.DataFrame(v).fillna(0.0) for k, v in participant_teams.items()
-    }
+        # Intentionally group PROJ first and ACTUAL second (test sort order)
+        participant_team["PROJ_pts"] = 0.0
+        participant_team["ACTUAL_pts"] = 0.0
+        participant_team["PROJ_A"] = 0.0
+        participant_team["PROJ_B"] = 0.0
+        participant_team["PROJ_C"] = 0.0
+        participant_team["ACTUAL_A"] = 0.0
+        participant_team["ACTUAL_B"] = 0.0
+        participant_team["ACTUAL_Z"] = 0.0
 
     expected_out = (
         "\nWriting robust player points summary to: "
