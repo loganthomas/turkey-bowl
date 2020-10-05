@@ -18,6 +18,12 @@ class LeaderBoard:
             f"archive/{self.year}/{self.year}_leader_board.xlsx"
         )
 
+    def __repr__(self):
+        return f"LeaderBoard({self.year}, participant_teams={{}})"
+
+    def __str__(self):
+        return f"Turkey Bowl Leader Board: {self.year}"
+
     @property
     def data(self) -> pd.DataFrame:
         leader_board_data = {}
