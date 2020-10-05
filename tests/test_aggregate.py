@@ -1512,4 +1512,10 @@ def test_write_robust_pariticipant_team_scores(tmp_path, capsys):
         participant_team = participant_team.astype(expected_dtypes)
         assert participant_teams[participant].equals(participant_team)
 
+    captured = capsys.readouterr()
+    assert (
+        captured.out
+        == f"\nWriting robust player points summary to: {tmp_robust_participant_player_pts_path}...\n"
+    )
+
     # Cleanup - none necessary
