@@ -5,6 +5,7 @@ Unit tests for leader_board.py
 import textwrap
 
 # Third-party libraries
+import numpy as np
 import pandas as pd
 import pytest
 
@@ -1147,11 +1148,7 @@ def test_LeaderBoard_data_no_acutal_pts(mock_participant_teams):
     participant_teams = mock_participant_teams
     expected_data = {
         "PTS": {"Dodd": 0.0, "Becca": 0.0, "Logan": 0.0},
-        "margin": {
-            "Dodd": 0.0,
-            "Becca": 0.0,
-            "Logan": None,
-        },
+        "margin": {"Dodd": 0.0, "Becca": 0.0, "Logan": None},
         "pts_back": {"Dodd": 0.0, "Becca": 0.0, "Logan": 0.0},
     }
 
@@ -1210,11 +1207,7 @@ def test_LeaderBoard_data_with_acutal_pts(mock_participant_teams):
     # Bench (last value) doesn't count
     expected_data = {
         "PTS": {"Logan": 126.0, "Becca": 46.0, "Dodd": 45.0},
-        "margin": {
-            "Logan": 80.0,
-            "Becca": 1.0,
-            "Dodd": None,
-        },
+        "margin": {"Logan": 80.0, "Becca": 1.0, "Dodd": None},
         "pts_back": {"Logan": 0.0, "Becca": 80.0, "Dodd": 81.0},
     }
 
@@ -1419,3 +1412,100 @@ def test_LeaderBoard_display_with_actual_pts(mock_participant_teams, capsys):
     # Verify
     captured = capsys.readouterr()
     assert captured.out == textwrap.dedent(expected_out)
+
+
+def test_LeaderBoard_save(mock_participant_teams, tmp_path, monkeypatch, capsys):
+    # Setup
+    year = 2020
+    participant_teams = mock_participant_teams
+    participant_teams["Dodd"]["ACTUAL_pts"] = [
+        1.0,
+        2.0,
+        3.0,
+        4.0,
+        5.0,
+        6.0,
+        7.0,
+        8.0,
+        9.0,
+        10.0,
+    ]
+    participant_teams["Becca"]["ACTUAL_pts"] = [
+        1.0,
+        2.0,
+        3.0,
+        4.0,
+        5.0,
+        6.0,
+        7.0,
+        8.0,
+        10.0,
+        11.0,
+    ]
+    participant_teams["Logan"]["ACTUAL_pts"] = [
+        10.0,
+        11.0,
+        12.0,
+        13.0,
+        14.0,
+        15.0,
+        16.0,
+        17.0,
+        18.0,
+        19.0,
+    ]
+
+    tmp_archive_dir = tmp_path.joinpath("archive")
+    tmp_archive_dir.mkdir()
+
+    tmp_year_dir = tmp_archive_dir.joinpath(str(year))
+    tmp_year_dir.mkdir()
+
+    tmp_leader_board_path = tmp_path.joinpath(f"{year}_leader_board.xlsx")
+
+    # Bench (last value) doesn't count
+    expected_data = {
+        "PTS": {"Logan": 126.0, "Becca": 46.0, "Dodd": 45.0},
+        "margin": {"Logan": 80.0, "Becca": 1.0, "Dodd": None},
+        "pts_back": {"Logan": 0.0, "Becca": 80.0, "Dodd": 81.0},
+    }
+
+    expected_board_data_df = pd.DataFrame(expected_data)
+
+    expected_out = f"Saving LeaderBoard to: {tmp_leader_board_path}...\n"
+    # Exercise
+    assert tmp_leader_board_path.exists() is False
+    board = LeaderBoard(year, participant_teams)
+    monkeypatch.setattr(board, "output_file_path", tmp_leader_board_path)
+    board.save()
+
+    # Verify
+    assert tmp_leader_board_path.exists()
+
+    participant_dtypes = {"ACTUAL_pts": "float64", "PROJ_pts": "float64"}
+
+    written_board = pd.read_excel(
+        tmp_leader_board_path, sheet_name="Leader Board", index_col=0
+    )
+    written_board = written_board.astype("float64")
+
+    written_dodd = pd.read_excel(tmp_leader_board_path, sheet_name="Dodd")
+    written_dodd = written_dodd.astype(participant_dtypes)
+
+    written_becca = pd.read_excel(tmp_leader_board_path, sheet_name="Becca")
+    written_becca = written_becca.astype(participant_dtypes)
+
+    written_logan = pd.read_excel(tmp_leader_board_path, sheet_name="Logan")
+    written_logan = written_logan.astype(participant_dtypes)
+
+    assert written_board.equals(expected_board_data_df)
+    assert written_dodd.equals(
+        participant_teams["Dodd"][
+            ["Position", "Player", "Team", "ACTUAL_pts", "PROJ_pts"]
+        ]
+    )
+
+    captured = capsys.readouterr()
+    assert captured.out == expected_out
+
+    # Cleanup - none necessary
