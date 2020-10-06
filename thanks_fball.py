@@ -62,7 +62,7 @@ def main():
     # Note: ``actual_player_pts`` will be none until games start
     if actual_player_pts:
         actual_player_pts_df = aggregate.create_player_pts_df(
-            year=year, week=week, player_pts=actual_player_pts, savpath=None
+            year=year, week=week, player_pts=actual_player_pts, savepath=None
         )
     else:
         actual_player_pts_df = projected_player_pts_df[["Player", "Team"]].copy()
