@@ -1136,3 +1136,28 @@ def test_LeaderBoard_instantiation(mock_participant_teams):
     assert board.__str__() == "Turkey Bowl Leader Board: 2020"
 
     # Cleanup - none necessary
+
+
+def test_LeaderBoard_data(mock_participant_teams):
+    # Setup
+    year = 2020
+    participant_teams = mock_participant_teams
+    expected_data = {
+        "PTS": {"Dodd": 0.0, "Becca": 0.0, "Logan": 0.0},
+        "margin": {
+            "Dodd": 0.0,
+            "Becca": 0.0,
+            "Logan": None,
+        },
+        "pts_back": {"Dodd": 0.0, "Becca": 0.0, "Logan": 0.0},
+    }
+
+    expected_board_data_df = pd.DataFrame(expected_data)
+
+    # Exercise
+    board = LeaderBoard(year, participant_teams)
+    result = board.data
+    # Verify
+    assert result.equals(expected_board_data_df)
+
+    # Cleanup - none necessary
