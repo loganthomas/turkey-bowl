@@ -5,7 +5,6 @@ Thanksgiving Football module
 from pathlib import Path
 
 # Third-party libraries
-import numpy as np
 import pandas as pd
 
 # Local libraries
@@ -62,7 +61,9 @@ def main():
     # This will be created as multiple points in time.
     # Note: ``actual_player_pts`` will be none until games start
     if actual_player_pts:
-        actual_player_pts_df = aggregate.create_player_pts_df(actual_player_pts)
+        actual_player_pts_df = aggregate.create_player_pts_df(
+            year=year, week=week, player_pts=actual_player_pts, savpath=None
+        )
     else:
         actual_player_pts_df = projected_player_pts_df[["Player", "Team"]].copy()
         actual_player_pts_df["ACTUAL_pts"] = 0.0
