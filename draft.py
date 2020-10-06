@@ -79,8 +79,8 @@ class Draft:
                     "Defense (Team Name)",
                     "Bench (RB/WR/TE)",
                 ],
-                "Player": [""] * 10,
-                "Team": [""] * 10,
+                "Player": [" "] * 10,  # intentional space so strip works in load
+                "Team": [" "] * 10,  # intentional space so strip works in load
             }
             draft_df = pd.DataFrame(draft_info)
 
