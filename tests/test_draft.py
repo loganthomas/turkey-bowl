@@ -45,7 +45,7 @@ def test_Draft_setup_nothing_exists(tmp_path, monkeypatch):
     # Override input() func to always return same list of participants
     monkeypatch.setattr("builtins.input", lambda _: "logan, becca, dodd")
 
-    # Override output dir to temp path crated for testing
+    # Override output dir to temp path created for testing
     monkeypatch.setattr(draft, "output_dir", tmp_archive_dir.joinpath("2020"))
 
     # Set random seed for draft order consistency in testing
