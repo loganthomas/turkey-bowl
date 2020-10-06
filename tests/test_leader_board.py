@@ -1,6 +1,9 @@
 """
 Unit tests for leader_board.py
 """
+# Standard libraries
+import textwrap
+
 # Third-party libraries
 import pandas as pd
 import pytest
@@ -1138,7 +1141,7 @@ def test_LeaderBoard_instantiation(mock_participant_teams):
     # Cleanup - none necessary
 
 
-def test_LeaderBoard_data(mock_participant_teams):
+def test_LeaderBoard_data_no_acutal_pts(mock_participant_teams):
     # Setup
     year = 2020
     participant_teams = mock_participant_teams
@@ -1161,3 +1164,258 @@ def test_LeaderBoard_data(mock_participant_teams):
     assert result.equals(expected_board_data_df)
 
     # Cleanup - none necessary
+
+
+def test_LeaderBoard_data_with_acutal_pts(mock_participant_teams):
+    # Setup
+    year = 2020
+    participant_teams = mock_participant_teams
+    participant_teams["Dodd"]["ACTUAL_pts"] = [
+        1.0,
+        2.0,
+        3.0,
+        4.0,
+        5.0,
+        6.0,
+        7.0,
+        8.0,
+        9.0,
+        10.0,
+    ]
+    participant_teams["Becca"]["ACTUAL_pts"] = [
+        1.0,
+        2.0,
+        3.0,
+        4.0,
+        5.0,
+        6.0,
+        7.0,
+        8.0,
+        10.0,
+        11.0,
+    ]
+    participant_teams["Logan"]["ACTUAL_pts"] = [
+        10.0,
+        11.0,
+        12.0,
+        13.0,
+        14.0,
+        15.0,
+        16.0,
+        17.0,
+        18.0,
+        19.0,
+    ]
+
+    # Bench (last value) doesn't count
+    expected_data = {
+        "PTS": {"Logan": 126.0, "Becca": 46.0, "Dodd": 45.0},
+        "margin": {
+            "Logan": 80.0,
+            "Becca": 1.0,
+            "Dodd": None,
+        },
+        "pts_back": {"Logan": 0.0, "Becca": 80.0, "Dodd": 81.0},
+    }
+
+    expected_board_data_df = pd.DataFrame(expected_data)
+
+    # Exercise
+    board = LeaderBoard(year, participant_teams)
+    result = board.data
+    # Verify
+    assert result.equals(expected_board_data_df)
+
+    # Cleanup - none necessary
+
+
+def test_LeaderBoard_display_no_actual_pts(mock_participant_teams, capsys):
+    # Setup
+    participant_teams = mock_participant_teams
+
+    expected_out = """
+        ### DODD stats ###
+
+                      Position            Player Team  ACTUAL_pts  PROJ_pts
+        0                   QB        Josh Allen  BUF         0.0     20.22
+        1                 RB_1  David Montgomery  CHI         0.0     14.68
+        2                 RB_2         Ryan Nall  CHI         0.0      2.40
+        3                 WR_1    Allen Robinson  CHI         0.0     14.39
+        4                 WR_2    Anthony Miller  CHI         0.0      6.19
+        5                   TE       Dawson Knox  BUF         0.0      5.54
+        6      Flex (RB/WR/TE)        Jared Cook   NO         0.0      0.00
+        7                    K      Cairo Santos  CHI         0.0      6.46
+        8  Defense (Team Name)     Chicago Bears  CHI         0.0      6.66
+        9     Bench (RB/WR/TE)   Latavius Murray   NO         0.0      6.98
+
+
+
+
+
+        ### BECCA stats ###
+
+                      Position           Player Team  ACTUAL_pts  PROJ_pts
+        0                   QB     Dak Prescott  DAL         0.0     21.55
+        1                 RB_1  Adrian Peterson  DET         0.0     12.88
+        2                 RB_2  Kerryon Johnson  DET         0.0      6.95
+        3                 WR_1     Marvin Jones  DET         0.0     11.24
+        4                 WR_2       John Brown  BUF         0.0     10.72
+        5                   TE   T.J. Hockenson  DET         0.0      9.32
+        6      Flex (RB/WR/TE)     Alvin Kamara   NO         0.0     21.77
+        7                    K      Matt Prater  DET         0.0      7.34
+        8  Defense (Team Name)    Detroit Lions  DET         0.0      6.74
+        9     Bench (RB/WR/TE)   Michael Gallup  DAL         0.0     14.37
+
+
+
+
+
+        ### LOGAN stats ###
+
+                      Position            Player Team  ACTUAL_pts  PROJ_pts
+        0                   QB         Matt Ryan  ATL         0.0     20.01
+        1                 RB_1     D'Andre Swift  DET         0.0      7.15
+        2                 RB_2  Devin Singletary  BUF         0.0     13.38
+        3                 WR_1      Russell Gage  ATL         0.0      8.78
+        4                 WR_2      Amari Cooper  DAL         0.0     16.72
+        5                   TE      Jimmy Graham  CHI         0.0      7.74
+        6      Flex (RB/WR/TE)    Michael Thomas   NO         0.0      0.00
+        7                    K        Tyler Bass  BUF         0.0      6.15
+        8  Defense (Team Name)    Dallas Cowboys  DAL         0.0      7.40
+        9     Bench (RB/WR/TE)      Randall Cobb  DAL         0.0      0.00
+
+
+
+
+
+        Dodd winning with 0.0 pts
+
+               PTS  margin  pts_back
+        Dodd   0.0     0.0       0.0
+        Becca  0.0     0.0       0.0
+        Logan  0.0     NaN       0.0\n\n
+        """
+
+    # Exercise
+    year = 2020
+    board = LeaderBoard(year, participant_teams)
+    board.display()
+
+    # Verify
+    captured = capsys.readouterr()
+    assert captured.out == textwrap.dedent(expected_out)
+
+    # Cleanup - none necessary
+
+
+def test_LeaderBoard_display_with_actual_pts(mock_participant_teams, capsys):
+    # Setup
+    participant_teams = mock_participant_teams
+    participant_teams["Dodd"]["ACTUAL_pts"] = [
+        1.0,
+        2.0,
+        3.0,
+        4.0,
+        5.0,
+        6.0,
+        7.0,
+        8.0,
+        9.0,
+        10.0,
+    ]
+    participant_teams["Becca"]["ACTUAL_pts"] = [
+        1.0,
+        2.0,
+        3.0,
+        4.0,
+        5.0,
+        6.0,
+        7.0,
+        8.0,
+        10.0,
+        11.0,
+    ]
+    participant_teams["Logan"]["ACTUAL_pts"] = [
+        10.0,
+        11.0,
+        12.0,
+        13.0,
+        14.0,
+        15.0,
+        16.0,
+        17.0,
+        18.0,
+        19.0,
+    ]
+
+    expected_out = """
+        ### DODD stats ###
+
+                      Position            Player Team  ACTUAL_pts  PROJ_pts
+        0                   QB        Josh Allen  BUF         1.0     20.22
+        1                 RB_1  David Montgomery  CHI         2.0     14.68
+        2                 RB_2         Ryan Nall  CHI         3.0      2.40
+        3                 WR_1    Allen Robinson  CHI         4.0     14.39
+        4                 WR_2    Anthony Miller  CHI         5.0      6.19
+        5                   TE       Dawson Knox  BUF         6.0      5.54
+        6      Flex (RB/WR/TE)        Jared Cook   NO         7.0      0.00
+        7                    K      Cairo Santos  CHI         8.0      6.46
+        8  Defense (Team Name)     Chicago Bears  CHI         9.0      6.66
+        9     Bench (RB/WR/TE)   Latavius Murray   NO        10.0      6.98
+
+
+
+
+
+        ### BECCA stats ###
+
+                      Position           Player Team  ACTUAL_pts  PROJ_pts
+        0                   QB     Dak Prescott  DAL         1.0     21.55
+        1                 RB_1  Adrian Peterson  DET         2.0     12.88
+        2                 RB_2  Kerryon Johnson  DET         3.0      6.95
+        3                 WR_1     Marvin Jones  DET         4.0     11.24
+        4                 WR_2       John Brown  BUF         5.0     10.72
+        5                   TE   T.J. Hockenson  DET         6.0      9.32
+        6      Flex (RB/WR/TE)     Alvin Kamara   NO         7.0     21.77
+        7                    K      Matt Prater  DET         8.0      7.34
+        8  Defense (Team Name)    Detroit Lions  DET        10.0      6.74
+        9     Bench (RB/WR/TE)   Michael Gallup  DAL        11.0     14.37
+
+
+
+
+
+        ### LOGAN stats ###
+
+                      Position            Player Team  ACTUAL_pts  PROJ_pts
+        0                   QB         Matt Ryan  ATL        10.0     20.01
+        1                 RB_1     D'Andre Swift  DET        11.0      7.15
+        2                 RB_2  Devin Singletary  BUF        12.0     13.38
+        3                 WR_1      Russell Gage  ATL        13.0      8.78
+        4                 WR_2      Amari Cooper  DAL        14.0     16.72
+        5                   TE      Jimmy Graham  CHI        15.0      7.74
+        6      Flex (RB/WR/TE)    Michael Thomas   NO        16.0      0.00
+        7                    K        Tyler Bass  BUF        17.0      6.15
+        8  Defense (Team Name)    Dallas Cowboys  DAL        18.0      7.40
+        9     Bench (RB/WR/TE)      Randall Cobb  DAL        19.0      0.00
+
+
+
+
+
+        Logan winning with 126.0 pts
+
+                 PTS  margin  pts_back
+        Logan  126.0    80.0       0.0
+        Becca   46.0     1.0      80.0
+        Dodd    45.0     NaN      81.0\n\n
+        """
+
+    # Exercise
+    year = 2020
+    board = LeaderBoard(year, participant_teams)
+    board.display()
+
+    # Verify
+    captured = capsys.readouterr()
+    assert captured.out == textwrap.dedent(expected_out)
