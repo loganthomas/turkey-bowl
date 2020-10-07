@@ -20,7 +20,7 @@ Notes:
 import calendar
 from datetime import datetime
 from pathlib import Path
-from typing import Any, Dict
+from typing import Any, Dict, Optional
 from urllib.parse import urlencode
 
 # Third-party libraries
@@ -36,6 +36,7 @@ class Scraper:
     def __init__(self, year: int) -> None:
         self.year = year
         self.player_ids_json_path = Path("./player_ids.json")
+        self.nfl_thanksgiving_calendar_week = self.get_nfl_thanksgiving_calendar_week()
 
     def __repr__(self):
         return f"Scraper({self.year})"
@@ -111,8 +112,7 @@ class Scraper:
 
         return thanksgiving_calendar_week_start
 
-    @property
-    def nfl_thanksgiving_calendar_week(self) -> int:
+    def get_nfl_thanksgiving_calendar_week(self) -> int:
         """
         Calculate the NFL week that corresponds to Thanksgiving.
 
@@ -130,6 +130,39 @@ class Scraper:
         nfl_thanksgiving_calendar_week = delta + 1
 
         return nfl_thanksgiving_calendar_week
+
+    @property
+    def nfl_thanksgiving_calendar_week(self):
+        return self._nfl_thanksgiving_calendar_week
+
+    @nfl_thanksgiving_calendar_week.setter
+    def nfl_thanksgiving_calendar_week(self, week: Optional[int] = None) -> None:
+        """
+        Setter for pull week. If ``None`` provided, then revert back to
+        original (correct) nfl_thanksgiving_calendar_week.
+
+        Example usage:
+            from scrape import Scraper
+            scraper = Scraper(2019)
+            scraper.nfl_thanksgiving_calendar_week  # 13
+            scraper.nfl_thanksgiving_calendar_week = 2
+            scraper.nfl_thanksgiving_calendar_week  # 2
+            scraper.nfl_thanksgiving_calendar_week = None
+            scraper.nfl_thanksgiving_calendar_week # 13
+
+        Notes:
+            - This makes testing easier as the NFL Thanksgiving calendar
+              week is really the pull week used to gather player data.
+              By having a setter, a user can change this week to a
+              different week for testing purposes (like the week prior
+              to Thanksgiving to ensure everything is working correctly)
+        """
+        if week:
+            self._nfl_thanksgiving_calendar_week = week
+        else:
+            self._nfl_thanksgiving_calendar_week = (
+                self.get_nfl_thanksgiving_calendar_week()
+            )
 
     def _encode_url_params(self, url: str) -> str:
         """

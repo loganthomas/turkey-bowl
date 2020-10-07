@@ -179,6 +179,48 @@ def test_Scraper_nfl_thanksgiving_calendar_week(
 
 
 @pytest.mark.parametrize(
+    "year, expected_nfl_thanksgiving_calendar_WEEK",
+    [
+        (2015, 12),
+        (2016, 12),
+        (2017, 12),
+        (2018, 12),
+        (2019, 13),
+        (2020, 12),
+    ],
+)
+def test_Scraper_nfl_thanksgiving_calendar_week_setter(
+    year, expected_nfl_thanksgiving_calendar_WEEK
+):
+    """
+    Test that setter works for changing nfl_calendar_week_start.
+    This is useful for testing as the actual week to pull player stats
+    is the nfl_thanksgiving_calendar_week. If wanting to pull a prior
+    week to ensure things work as expected, this setter can be used.
+    """
+    # Setup
+    scraper = Scraper(year)
+    assert (
+        scraper.nfl_thanksgiving_calendar_week
+        == expected_nfl_thanksgiving_calendar_WEEK
+    )
+
+    # Exercise
+    scraper.nfl_thanksgiving_calendar_week = 5
+
+    # Verify
+    assert scraper.nfl_thanksgiving_calendar_week == 5
+
+    # Verify ``None`` changes back to correct
+    scraper.nfl_thanksgiving_calendar_week = None
+    assert (
+        scraper.nfl_thanksgiving_calendar_week
+        == expected_nfl_thanksgiving_calendar_WEEK
+    )
+    # Cleanup - none necessary
+
+
+@pytest.mark.parametrize(
     "year, week",
     [
         (2015, 12),
