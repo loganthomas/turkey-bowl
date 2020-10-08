@@ -111,7 +111,7 @@ def create_player_pts_df(
     player_pts_df["Player"] = name
 
     # Make pts col the third column for easy access
-    pts_col = player_pts_df.filter(regex="pts")
+    pts_col = player_pts_df.filter(regex=f"{prefix}pts")
     pts_col_name = f"{prefix}pts"
     player_pts_df = player_pts_df.drop(pts_col_name, axis=1)
     player_pts_df.insert(2, pts_col_name, pts_col)
@@ -121,8 +121,6 @@ def create_player_pts_df(
     for c in player_pts_df.columns:
         if c in ("Player", "Team"):
             col_types[c] = "object"
-        elif "Games_Played" in c:
-            col_types[c] = "int64"
         else:
             col_types[c] = "float64"
 
