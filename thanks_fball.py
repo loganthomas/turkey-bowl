@@ -1,19 +1,23 @@
 """
 Thanksgiving Football module
 """
+# Standard libraries
+from pathlib import Path
+
 # Third-party libraries
 import pandas as pd
 
 # Local libraries
-import api
-import draft
+import aggregate
 import utils
+from draft import Draft
+from leader_board import LeaderBoard
+from scrape import Scraper
 
 
 def main():
     """
     TODO:
-        - Consider making a draft class so isn't call each time?
         - Consider making a leader board class with an updated method?
     """
     # Set option for nice DataFrame display
@@ -21,61 +25,71 @@ def main():
 
     # Establish current year
     year = utils.get_current_year()
+    print(f"\n{'-'*5} {year} Turkey Bowl {'-'*5}")
 
-    # Create output directory as current year
-    output_dir = utils.create_output_dir(str(year))
+    # Instantiate Draft
+    draft = Draft(year)
+    draft.setup()
 
-    # Create a path to the draft file
-    draft_file_path = draft.create_draft_file_path(year, output_dir)
-
-    # Check if the draft file exists, if not create a blank draft file
-    draft.check_draft_file_exists(draft_file_path)
-
+    # May need a check function here to ensure draft is complete
     # Load drafted teams
-    participant_teams = draft.get_draft_data(draft_file_path)
+    participant_teams = draft.load()
 
-    # Create a random draft order, if it already exists load it
-    draft_order_path, draft_order = draft.make_draft_order(
-        year, output_dir, participant_teams
+    # Instantiate Scraper
+    scraper = Scraper(year)
+
+    # TODO: projected points only need to be pulled once...
+    # check if df exists (these won't change)
+    projected_player_pts = scraper.get_projected_player_pts()
+    actual_player_pts = scraper.get_actual_player_pts()
+
+    # # Update player ids (needs to be done once)
+    scraper.update_player_ids(projected_player_pts)
+
+    # # Create a DataFrame of PROJECTED player pts
+    # #   Create/Save if it doesn't already exist
+    # #   Load if it already exists
+    week = scraper.nfl_thanksgiving_calendar_week
+    projected_player_pts_df = aggregate.create_player_pts_df(
+        year=year,
+        week=week,
+        player_pts=projected_player_pts,
+        savepath=Path(f"archive/{year}/{year}_{week}_projected_player_pts.csv"),
     )
 
-    # Determine week to pull for stats
-    nfl_start_cal_week_num = utils.get_nfl_start_week(year)
-    thanksgiving_cal_week_num = utils.get_thanksgiving_week(year)
+    # Create a DataFrame of ACTUAL player pts
+    # This will be created as multiple points in time.
+    # Note: ``actual_player_pts`` will be none until games start
+    if actual_player_pts:
+        actual_player_pts_df = aggregate.create_player_pts_df(
+            year=year, week=week, player_pts=actual_player_pts, savepath=None
+        )
+    else:
+        actual_player_pts_df = projected_player_pts_df[["Player", "Team"]].copy()
+        actual_player_pts_df["ACTUAL_pts"] = 0.0
 
-    week = utils.calculate_nfl_thanksgiving_week(
-        nfl_start_cal_week_num,
-        thanksgiving_cal_week_num,
+    # Merge points to teams
+    participant_teams = aggregate.merge_points(
+        participant_teams, projected_player_pts_df
     )
+    participant_teams = aggregate.merge_points(participant_teams, actual_player_pts_df)
 
-    # Collect prior weeks player data (notice week - 1)
-    prior_players_df_path = api.create_prior_players_file_path(
-        year, week - 1, output_dir
-    )
+    # Sort robust columns so actual is next to projected
+    participant_teams = aggregate.sort_robust_cols(participant_teams)
 
-    # Check if prior week players data exists, if not create it (notice week - 1)
-    prior_players_df = api.check_prior_players_file_exists(
-        year, week - 1, prior_players_df_path
-    )
-
-    # Merge prior week players data to drafted teams (this will be prior weeks data)
-    participant_teams = utils.merge_points(participant_teams, prior_players_df)
-
-    # Update projected points to current week (currently week prior projections)
-    participant_teams = api.update_pts(
+    # Write robust scores to excel for reviewing if desired
+    aggregate.write_robust_participant_team_scores(
         year=year,
         week=week,
         participant_teams=participant_teams,
-        stats_type="projected",
+        savepath=Path(
+            f"archive/{year}/{year}_{week}_robust_participant_player_pts.xlsx"
+        ),
     )
 
-    # Update actual points to current week (currently week prior actuals)
-    # Can call both below multiple times when launched from IPython console
-    participant_teams = api.update_pts(
-        year=year, week=week, participant_teams=participant_teams, stats_type="actual"
-    )
-
-    utils.create_leader_board(year, output_dir, participant_teams)
+    board = LeaderBoard(year, participant_teams)
+    board.display()
+    board.save()
 
 
 if __name__ == "__main__":

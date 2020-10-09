@@ -2,109 +2,117 @@
 Draft functions
 """
 # Standard libraries
+import json
 import random
-import shutil
+from pathlib import Path
+from typing import Dict
 
 # Third-party libraries
 import pandas as pd
 
 
-def create_draft_file_path(year, output_dir):
-    """
-    Creates a path to the draft excel workbook.
-    """
-    draft_file_name = f"{year}_draft_sheet.xlsx"
-    draft_file_path = output_dir.joinpath(draft_file_name)
+class Draft:
+    def __init__(self, year: int) -> None:
+        self.year = year
+        self.output_dir = Path(f"archive/{self.year}")
 
-    return draft_file_path
+    def __repr__(self):
+        return f"Draft({self.year})"
 
+    def __str__(self):
+        return f"Turkey Bowl Draft: {self.year}"
 
-def check_draft_file_exists(draft_file_path):
-    """
-    Checks whether the file located at draft_file_path exists.
-    If not, create a copy of the blank draft_sheet.xlsx file
-    located at root directory (to be filled in).
-    """
-    if not draft_file_path.is_file():
-        shutil.copyfile("draft_sheet.xlsx", draft_file_path)
-        print(f"Creating blank draft sheet at {draft_file_path}")
-    else:
-        print(f"Draft file already exists at {draft_file_path}")
+    def setup(self) -> None:
+        """ Instantiate draft with attributes, files, and directories. """
+        self.draft_order_path = self.output_dir.joinpath(
+            f"{self.year}_draft_order.json"
+        )
 
+        self.draft_sheet_path = self.output_dir.joinpath(
+            f"{self.year}_draft_sheet.xlsx"
+        )
 
-def get_draft_data(draft_file_path):
-    """
-    Parses an excel spreadsheet into participant teams.
+        if not self.output_dir.exists():
+            self.output_dir.mkdir()
 
-    The drafted teams should be collected within one excel spreadsheet
-    in which each participant is a separate sheet. The sheet names
-    correspond to the names of the participants and each sheet should have
-    a 'Position' column, a 'Player', and a 'Team' column. For the time being,
-    the draft-able positions are as follows:
-        'QB', 'RB_1', 'RB_2', 'WR_1', 'WR_2', 'TE',
-        'Flex (RB/WR)', 'K', 'Defense (Team Name)', 'Bench (RB/WR)'.
+        if not self.draft_order_path.exists():
+            participant_list = input(
+                "\nPlease enter the participants separated by a comma: "
+            ).split(",")
 
-    Args:
-        draft_file_path (pathlib.Path): Path to excel spreadsheet. Ideally, each year will
-            have its own directory and the excel spreadsheet would be named
-            'draft_sheet_{year}.xlsx'. For example, in the year 2018,
-            xlsx_path = '2018/draft_sheet_2018.xlsx'.
+            self.participant_list = [*map(str.strip, participant_list)]
 
-    Returns:
-        participant_teams (dict): A dictionary of participant (str),
-        team (pandas DataFrame) key, value pairs.
-        (i.e., each participants drafted team as a DF housed in a dict).
-    """
-    # Load excel sheet
-    xlsx = pd.ExcelFile(draft_file_path)
+            self.draft_order = random.sample(
+                self.participant_list, len(self.participant_list)
+            )
 
-    # Get each participant's drafted players
-    participant_teams = {p: xlsx.parse(p) for p in xlsx.sheet_names}
+            draft_order_dict = {p: i for i, p in enumerate(self.draft_order, 1)}
 
-    return participant_teams
+            print(f"\n\tDraft Order: {self.draft_order}")
 
+            with open(self.draft_order_path, "w") as draft_order_file:
+                json.dump(draft_order_dict, draft_order_file)
 
-def make_draft_order(year, output_dir, participant_teams):
-    """
-    Creates a random draft order by shuffling participants.
+            print(f"\tSaved draft order to {self.draft_order_path}")
 
-    Given a dictionary of participants and their corresponding teams,
-    this function returns a list of randomly shuffled participants
-    that can be used for a random draft order.
+        else:
+            print(f"\nDraft order already exists at {self.draft_order_path}")
+            with open(self.draft_order_path, "r") as draft_order_file:
+                draft_order_dict = json.load(draft_order_file)
 
-    Args:
-        participant_teams (dict): A dictionary of participant (str),
-            team (pandas DataFrame) key, value pairs.
+            self.participant_list = list(draft_order_dict.keys())
+            self.draft_order = list(draft_order_dict.keys())
 
-    Returns:
-        draft_order (list of str): A random draft order of participants.
-    """
-    draft_order_path = output_dir.joinpath(f"{year}_draft_order.csv")
+            print(f"\n\tDraft Order: {self.draft_order}")
 
-    if draft_order_path.is_file():
-        print(f"\nDraft order already exists at {draft_order_path}")
-        print(f"\nLoading pre-existing draft order...")
+        if not self.draft_sheet_path.exists():
+            draft_info = {
+                "Position": [
+                    "QB",
+                    "RB_1",
+                    "RB_2",
+                    "WR_1",
+                    "WR_2",
+                    "TE",
+                    "Flex (RB/WR/TE)",
+                    "K",
+                    "Defense (Team Name)",
+                    "Bench (RB/WR/TE)",
+                ],
+                "Player": [" "] * 10,  # intentional space so strip works in load
+                "Team": [" "] * 10,  # intentional space so strip works in load
+            }
+            draft_df = pd.DataFrame(draft_info)
 
-        draft_df = pd.read_csv(draft_order_path)
-        draft_order = draft_df["Participant"].tolist()
+            with pd.ExcelWriter(self.draft_sheet_path) as writer:
+                for participant in self.draft_order:
+                    draft_df.to_excel(
+                        writer, sheet_name=participant.title(), index=False
+                    )
 
-        print("\nDraft Oder:\n")
-        print(f"\t{draft_order}\n")
+    def load(self) -> Dict[str, pd.DataFrame]:
+        """
+        Loads draft data by parsing excel spreadsheet.
 
-    else:
-        # Gather list of participants
-        draft_order = list(participant_teams.keys())
+        The drafted teams should be collected within one excel
+        spreadsheet in which each participant is a separate sheet.
 
-        # Create random list of participants
-        random.shuffle(draft_order)
+        The sheet names correspond to the names of the participants and
+        each sheet should have a 'Position' column, a 'Player', and a
+        'Team' column.
 
-        # Convert to dataframe and save
-        draft_df = pd.DataFrame([(p, i) for i, p in enumerate(draft_order, 1)])
-        draft_df.columns = ["Participant", "Slot"]
+        For the time being, the draft-able positions are as follows:
+            'QB', 'RB_1', 'RB_2', 'WR_1', 'WR_2', 'TE',
+            'Flex (RB/WR/TE)', 'K', 'Defense (Team Name)',
+            'Bench (RB/WR/TE)'.
+        """
+        participant_teams = pd.read_excel(self.draft_sheet_path, sheet_name=None)
 
-        draft_df.to_csv(draft_order_path, index=False)
-        print("\nDraft Oder:\n")
-        print(f"\t{draft_order}\n")
-        print(f"\tSaved draft order to {draft_order_path}")
+        # Strip all whitespace
+        # All columns are string values so can be apply across DataFrame
+        for participant, participant_team in participant_teams.items():
+            participant_teams[participant] = participant_team.apply(
+                lambda x: x.str.strip()
+            )
 
-    return draft_order_path, draft_order
+        return participant_teams
