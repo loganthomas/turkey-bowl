@@ -235,9 +235,9 @@ class Scraper:
 
     def get_actual_player_pts(self) -> Dict[str, Any]:
         """
-        Collect players and their corresponding PROJECTED points.
+        Collect players and their corresponding ACTUAL points.
 
-        A GET request is sent to the  projected_pts_url. The returned
+        A GET request is sent to the  actual_pts_url. The returned
         json is parsed to only get relevant player points.
         """
         # This is a unique identifier NOT truly a GAME identifier
