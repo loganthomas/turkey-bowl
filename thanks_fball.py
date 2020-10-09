@@ -16,35 +16,52 @@ from scrape import Scraper
 
 
 def main():
-    """
-    TODO:
-        - Consider making a leader board class with an updated method?
-    """
+
     # Set option for nice DataFrame display
     pd.options.display.width = None
 
-    # Establish current year
     year = utils.get_current_year()
     print(f"\n{'-'*5} {year} Turkey Bowl {'-'*5}")
 
-    # Instantiate Draft
     draft = Draft(year)
     draft.setup()
 
-    # May need a check function here to ensure draft is complete
-    # Load drafted teams
     participant_teams = draft.load()
 
-    # Instantiate Scraper
+    # Do we actually need the drafted players?
+    # I'd like to see all the projected points and all the player ids since
+    # the player ids show injury. If we want to draft one player but he is injured
+    # it's easy to see who to swap for if we store all the data.
+    # Similarly, it would be nice to save all the projected points for future referees...
+    # I think the check_players_have_been_drafted should include what this below
+    # function does...
+    # Also... this should probably be a draft method... not utils
+    drafted_players = utils.collect_drafted_players(participant_teams)
+
+    # If all teams are blank, exit
+    if not utils.check_players_have_been_drafted(drafted_players):
+        print(
+            f"\nNo players have been drafted yet! Please complete the draft for {year}."
+        )
+        exit()
+
     scraper = Scraper(year)
 
-    # TODO: projected points only need to be pulled once...
-    # check if df exists (these won't change)
+    # Pull ALL player projected points (takes ~ 5 minutes)
+    # Used to associate player id with player name of drafted players.
+    # Useful for determining which players are eligible for draft.
+    # (see injury status in player_ids.json)
+    # This will be done once and only once.
     projected_player_pts = scraper.get_projected_player_pts()
-    actual_player_pts = scraper.get_actual_player_pts()
-
-    # # Update player ids (needs to be done once)
     scraper.update_player_ids(projected_player_pts)
+
+    # Update needed here....
+    # Check if projected_player_pts.csv exists...
+    # If not, pull get_projected_players_pts, update_player_ids, create
+    # If exists, load projected_player_pts...
+
+    # This is fast... and merge is fast as well, so no need to limit here...
+    actual_player_pts = scraper.get_actual_player_pts()
 
     # # Create a DataFrame of PROJECTED player pts
     # #   Create/Save if it doesn't already exist
