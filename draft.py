@@ -91,6 +91,11 @@ class Draft:
                         writer, sheet_name=participant.title(), index=False
                     )
 
+                    # Ensure Position text is correct spacing length
+                    worksheet = writer.sheets[participant.title()]
+                    max_len = max(map(len, draft_info["Position"]))
+                    worksheet.set_column(0, 0, max_len)
+
     def load(self) -> Dict[str, pd.DataFrame]:
         """
         Loads draft data by parsing excel spreadsheet.
