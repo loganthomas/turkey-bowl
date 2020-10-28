@@ -212,9 +212,9 @@ class Scraper:
 
         if verbose:
             if response.status_code == requests.codes.ok:
-                print(f"Successful API response obtained for: {query_url}")
+                print(f"\tSuccessful API response obtained for: {query_url}")
             else:
-                print(f"WARNING: API response unsuccessful for: {query_url}")
+                print(f"\tWARNING: API response unsuccessful for: {query_url}")
 
         return response.json()
 
@@ -288,8 +288,7 @@ class Scraper:
             pulled_player_ids.insert(0, "year")
             pulled_player_data = {pid: {} for pid in pulled_player_ids}  # type: ignore[var-annotated]
 
-            print()
-            for pid in tqdm(pulled_player_ids, desc="Updating player ids", ncols=75):
+            for pid in tqdm(pulled_player_ids, desc="\tUpdating player ids", ncols=75):
                 if pid == "year":
                     pulled_player_data[pid] = self.year  # type: ignore[assignment]
 
