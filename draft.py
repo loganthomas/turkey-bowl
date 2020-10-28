@@ -2,6 +2,7 @@
 Draft functions
 """
 # Standard libraries
+import itertools
 import json
 import random
 from pathlib import Path
@@ -116,3 +117,25 @@ class Draft:
             )
 
         return participant_teams
+
+    @staticmethod
+    def check_players_have_been_drafted(
+        participant_teams: Dict[str, pd.DataFrame]
+    ) -> bool:
+        """
+        Helper function to determine if early stopping should occur.
+        If all players are equal to "" within the participant teams,
+        then no players have been drafted and the process should end.
+        """
+        drafted_players = [
+            participant_team["Player"].tolist()
+            for participant_team in participant_teams.values()
+        ]
+
+        drafted_players = [
+            player for player in itertools.chain.from_iterable(drafted_players)
+        ]
+
+        players_have_been_drafted = all(player != "" for player in drafted_players)
+
+        return players_have_been_drafted
