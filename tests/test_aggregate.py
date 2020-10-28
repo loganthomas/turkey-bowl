@@ -328,7 +328,7 @@ def test_check_projected_player_pts_pulled_true(tmp_path, capsys):
     captured = capsys.readouterr()
     assert (
         captured.out
-        == f"Projected player data already exists at: {tmp_projected_player_pts_path}\n"
+        == f"\nProjected player data already exists at {tmp_projected_player_pts_path}\n"
     )
 
     # Cleanup - none necessary
@@ -481,7 +481,7 @@ def test_create_player_pts_df_projected_doesnt_exists(tmp_path, capsys):
     captured = capsys.readouterr()
     assert (
         captured.out
-        == f"\nWriting projected player stats to: {tmp_projected_player_pts_path}...\n"
+        == f"\tWriting projected player stats to: {tmp_projected_player_pts_path}...\n"
     )
 
     # Cleanup - none necessary
@@ -868,7 +868,7 @@ def test_merge_points(mock_participant_teams):
     pts_df["drop_me"] = 0.0
 
     # Exercise
-    participant_teams = aggregate.merge_points(participant_teams, pts_df)
+    participant_teams = aggregate.merge_points(participant_teams, pts_df, verbose=False)
 
     # Verify
     assert participant_teams["Dodd"]["ACTUAL_pts"].equals(pts_df[:10]["ACTUAL_pts"])
@@ -908,13 +908,13 @@ def test_merge_points_prints_warning_if_player_not_found(
     pts_df["drop_me"] = 0.0
 
     expected_warning = (
-        "WARNING: Dodd has missing players: ['Josh Alle']\n"
-        + "WARNING: Becca has missing players: ['Dak Prescot']\n"
-        + "WARNING: Logan has missing players: ['Matt Rya']\n"
+        "\n\tWARNING: Dodd has missing players: ['Josh Alle']\n\n"
+        + "\n\tWARNING: Becca has missing players: ['Dak Prescot']\n\n"
+        + "\n\tWARNING: Logan has missing players: ['Matt Rya']\n\n"
     )
 
     # Exercise
-    participant_teams = aggregate.merge_points(participant_teams, pts_df)
+    participant_teams = aggregate.merge_points(participant_teams, pts_df, verbose=True)
 
     # Verify
     captured = capsys.readouterr()
@@ -993,7 +993,7 @@ def test_write_robust_pariticipant_team_scores(
         participant_team["ACTUAL_Z"] = 0.0
 
     expected_out = (
-        "\nWriting robust player points summary to: "
+        "\tWriting robust player points summary to: "
         + f"{tmp_robust_participant_player_pts_path}...\n"
     )
 
