@@ -50,7 +50,7 @@ def check_projected_player_pts_pulled(year: int, week: int, savepath: Path) -> b
     Helper function to check if projected points have been pulled.
     """
     if savepath.exists():
-        print(f"Projected player data already exists at: {savepath}")
+        print(f"\nProjected player data already exists at {savepath}")
         return True
 
     return False
@@ -135,14 +135,14 @@ def create_player_pts_df(
     # Write projected players to csv so only done once
     if stats_type == "projectedStats":
 
-        print(f"\nWriting projected player stats to: {savepath}...")
+        print(f"\tWriting projected player stats to: {savepath}...")
         player_pts_df.to_csv(savepath)
 
     return player_pts_df
 
 
 def merge_points(
-    participant_teams: Dict[str, pd.DataFrame], pts_df: pd.DataFrame
+    participant_teams: Dict[str, pd.DataFrame], pts_df: pd.DataFrame, verbose: bool
 ) -> Dict[str, pd.DataFrame]:
     """
     Merge participant team with collected player points.
@@ -161,13 +161,14 @@ def merge_points(
         ]
         merged = merged.drop(columns=cols_to_drop)
 
-        # Check that all players are found (ignore bench)
-        # Assumes bench player is last row
-        not_found_mask = merged[:-1].isnull().any(axis=1)
+        if verbose:
+            # Check that all players are found (ignore bench)
+            # Assumes bench player is last row
+            not_found_mask = merged[:-1].isnull().any(axis=1)
 
-        if sum(not_found_mask) > 0:
-            missing = merged[:-1]["Player"][not_found_mask].tolist()
-            print(f"WARNING: {participant} has missing players: {missing}")
+            if sum(not_found_mask) > 0:
+                missing = merged[:-1]["Player"][not_found_mask].tolist()
+                print(f"\n\tWARNING: {participant} has missing players: {missing}\n")
 
         # Fill remaining nan with 0.0 (if they exist)
         merged = merged.fillna(0.0)
@@ -214,7 +215,7 @@ def write_robust_participant_team_scores(
     """
     Writes the total points to an excel file that can be reviewed.
     """
-    print(f"\nWriting robust player points summary to: {savepath}...")
+    print(f"\tWriting robust player points summary to: {savepath}...")
 
     with pd.ExcelWriter(savepath) as writer:
         for participant, participant_team in participant_teams.items():
