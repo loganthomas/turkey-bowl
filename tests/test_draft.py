@@ -385,3 +385,41 @@ def test_Draft_load_stripping_whitespace(tmp_path, monkeypatch):
     for participant, participant_team in result.items():
         assert participant_team["Player"].tolist() == expected_players
         assert participant_team["Team"].tolist() == expected_teams
+
+
+def test_Draft_check_players_have_been_drafted_false():
+    # Setup
+    mock_player_data = {"Player": ["", "", ""]}
+    mock_participant_teams = {
+        "Logan": pd.DataFrame(mock_player_data),
+        "Dodd": pd.DataFrame(mock_player_data),
+        "Becca": pd.DataFrame(mock_player_data),
+    }
+
+    # Exercise
+    draft = Draft(2020)
+    result = draft.check_players_have_been_drafted(mock_participant_teams)
+
+    # Verify
+    assert result is False
+
+    # Cleanup - none necessary
+
+
+def test_Draft_check_players_have_been_drafted_true():
+    # Setup
+    mock_player_data = {"Player": ["Matt Ryan", "Tom Brady", "Trogdor"]}
+    mock_participant_teams = {
+        "Logan": pd.DataFrame(mock_player_data),
+        "Dodd": pd.DataFrame(mock_player_data),
+        "Becca": pd.DataFrame(mock_player_data),
+    }
+
+    # Exercise
+    draft = Draft(2020)
+    result = draft.check_players_have_been_drafted(mock_participant_teams)
+
+    # Verify
+    assert result is True
+
+    # Cleanup - none necessary
