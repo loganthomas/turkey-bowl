@@ -45,6 +45,17 @@ def _unpack_player_pts(
     return points_dict
 
 
+def check_projected_player_pts_pulled(year: int, week: int, savepath: Path) -> bool:
+    """
+    Helper function to check if projected points have been pulled.
+    """
+    if savepath.exists():
+        print(f"Projected player data already exists at: {savepath}")
+        return True
+
+    return False
+
+
 def create_player_pts_df(
     year: int, week: int, player_pts: Dict[str, Any], savepath: Optional[Path] = None
 ) -> pd.DataFrame:
@@ -52,12 +63,12 @@ def create_player_pts_df(
     Create a DataFrame to house all player projected and actual points.
     The ``player_pts`` argument can be ``projected_player_pts`` or
     ``actual_player_pts``.
+
+    Actual points will need to be pulled multiple times throughout as
+    more games are played/completed. Projected points should be pulled
+    once and only once.
     """
-    # Determine whether provided projected ('projectedStats') or
-    # actual player points ('stats'). Actual points will need to
-    # be pulled multiple times throughout as more games are
-    # played/completed. Projected points should be pulled once and
-    # only once.
+    # Determine projected ('projectedStats') or actual points ('stats').
     stats_type = _get_player_pts_stat_type(player_pts)
 
     if stats_type == "projectedStats":
@@ -69,12 +80,6 @@ def create_player_pts_df(
                 "When creating a projected player points dataframe, "
                 + "``savepath`` must be specified."
             )
-
-        if savepath.exists():
-            print(f"Projected player data already exists at: {savepath}")
-            player_pts_df = pd.read_csv(savepath, index_col=0)
-
-            return player_pts_df
 
     # _get_player_pts_stat_type handles check and raises error if not
     # projectedStats or stats
