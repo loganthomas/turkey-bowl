@@ -318,7 +318,9 @@ def test_Scraper_scrape_url_bad_status_code(capsys):
 
     # Verify
     assert result == expected_json
-    assert captured.out == "WARNING: API response unsuccessful for: https://test.com\n"
+    assert (
+        captured.out == "\tWARNING: API response unsuccessful for: https://test.com\n"
+    )
 
     # Cleanup - none necessary
 
@@ -337,7 +339,7 @@ def test_Scraper_scrape_url_good_status_code(capsys):
 
     # Verify
     assert result == expected_json
-    assert captured.out == "Successful API response obtained for: https://test.com\n"
+    assert captured.out == "\tSuccessful API response obtained for: https://test.com\n"
 
     # Cleanup - none necessary
 
@@ -432,7 +434,7 @@ def test_Scraper_get_projected_player_pts(capsys):
 
     expected_out = "\nCollecting projected player points...\n"
     expected_out += (
-        f"Successful API response obtained for: {scraper.projected_pts_url}\n"
+        f"\tSuccessful API response obtained for: {scraper.projected_pts_url}\n"
     )
     # Exercise
 
@@ -532,7 +534,9 @@ def test_Scraper_get_actual_player_pts(capsys):
     }
 
     expected_out = "\nCollecting actual player points...\n"
-    expected_out += f"Successful API response obtained for: {scraper.actual_pts_url}\n"
+    expected_out += (
+        f"\tSuccessful API response obtained for: {scraper.actual_pts_url}\n"
+    )
     # Exercise
 
     result = scraper.get_actual_player_pts()
