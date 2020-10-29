@@ -16,6 +16,12 @@ class Draft:
     def __init__(self, year: int) -> None:
         self.year = year
         self.output_dir = Path(f"archive/{self.year}")
+        self.draft_order_path = self.output_dir.joinpath(
+            f"{self.year}_draft_order.json"
+        )
+        self.draft_sheet_path = self.output_dir.joinpath(
+            f"{self.year}_draft_sheet.xlsx"
+        )
 
     def __repr__(self):
         return f"Draft({self.year})"
@@ -25,14 +31,6 @@ class Draft:
 
     def setup(self) -> None:
         """ Instantiate draft with attributes, files, and directories. """
-        self.draft_order_path = self.output_dir.joinpath(
-            f"{self.year}_draft_order.json"
-        )
-
-        self.draft_sheet_path = self.output_dir.joinpath(
-            f"{self.year}_draft_sheet.xlsx"
-        )
-
         if not self.output_dir.exists():
             self.output_dir.mkdir()
 

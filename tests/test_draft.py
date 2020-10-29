@@ -21,6 +21,8 @@ def test_Draft_instantiation():
     # Verify
     assert draft.year == 2020
     assert draft.output_dir.as_posix() == "archive/2020"
+    assert draft.draft_order_path.as_posix() == "archive/2020/2020_draft_order.json"
+    assert draft.draft_sheet_path.as_posix() == "archive/2020/2020_draft_sheet.xlsx"
 
     assert draft.__repr__() == "Draft(2020)"
     assert draft.__str__() == "Turkey Bowl Draft: 2020"
@@ -28,7 +30,7 @@ def test_Draft_instantiation():
     # Cleanup - none necessary
 
 
-def test_Draft_setup_nothing_exists(tmp_path, monkeypatch):
+def test_Draft_setup_nothing_exists(tmp_path, monkeypatch, capsys):
     """ Test Draft.setup() when no directories exist in root. """
     # Setup - create temp archive dir (assumed to always exist)
     tmp_archive_dir = tmp_path.joinpath("archive")
@@ -45,8 +47,10 @@ def test_Draft_setup_nothing_exists(tmp_path, monkeypatch):
     # Override input() func to always return same list of participants
     monkeypatch.setattr("builtins.input", lambda _: "logan, becca, dodd")
 
-    # Override output dir to temp path created for testing
-    monkeypatch.setattr(draft, "output_dir", tmp_archive_dir.joinpath("2020"))
+    # Override output dirs to temp path created for testing
+    draft.output_dir = tmp_archive_dir.joinpath("2020")
+    draft.draft_order_path = tmp_archive_dir.joinpath("2020/2020_draft_order.json")
+    draft.draft_sheet_path = tmp_archive_dir.joinpath("2020/2020_draft_sheet.xlsx")
 
     # Set random seed for draft order consistency in testing
     random.seed(42)
@@ -73,6 +77,7 @@ def test_Draft_setup_nothing_exists(tmp_path, monkeypatch):
         tmp_archive_dir.joinpath("2020/2020_draft_order.json"), "r"
     ) as written_json:
         loaded_json = json.load(written_json)
+
     assert list(loaded_json.keys()) == ["dodd", "logan", "becca"]
 
     draft_sheet_data = pd.read_excel(
@@ -80,6 +85,7 @@ def test_Draft_setup_nothing_exists(tmp_path, monkeypatch):
         sheet_name=None,
         engine="xlrd",
     )
+
     assert list(draft_sheet_data) == ["Dodd", "Logan", "Becca"]
 
     for participant_draft_info in draft_sheet_data.values():
@@ -101,10 +107,15 @@ def test_Draft_setup_nothing_exists(tmp_path, monkeypatch):
             )
         )
 
+    captured = capsys.readouterr()
+    assert captured.out == (
+        "\n\tDraft Order: ['dodd', 'logan', 'becca']\n"
+        + f"\tSaved draft order to {tmp_archive_dir.joinpath('2020/2020_draft_order.json')}\n"
+    )
     # Cleanup - none necessary
 
 
-def test_Draft_setup_already_exists(tmp_path, monkeypatch):
+def test_Draft_setup_already_exists(tmp_path, capsys):
     """ Test Draft.setup() when files exist in root. """
     # Setup
     tmp_archive_dir = tmp_path.joinpath("archive")
@@ -139,8 +150,8 @@ def test_Draft_setup_already_exists(tmp_path, monkeypatch):
             "Defense (Team Name)",
             "Bench (RB/WR/TE)",
         ],
-        "Player": [""] * 10,
-        "Team": [""] * 10,
+        "Player": [" "] * 10,
+        "Team": [" "] * 10,
     }
     draft_df = pd.DataFrame(draft_info)
 
@@ -156,8 +167,11 @@ def test_Draft_setup_already_exists(tmp_path, monkeypatch):
     # Exercise
     draft = Draft(2020)
 
-    # Override output dir to temp path crated for testing
-    monkeypatch.setattr(draft, "output_dir", tmp_year_dir)
+    # Override output dirs to temp path crated for testing
+    draft.output_dir = tmp_archive_dir.joinpath("2020")
+    draft.draft_order_path = tmp_archive_dir.joinpath("2020/2020_draft_order.json")
+    draft.draft_sheet_path = tmp_archive_dir.joinpath("2020/2020_draft_sheet.xlsx")
+
     draft.setup()
 
     # Verify
@@ -181,10 +195,16 @@ def test_Draft_setup_already_exists(tmp_path, monkeypatch):
     assert draft.participant_list == existing_draft_order
     assert draft.draft_order == existing_draft_order
 
+    captured = capsys.readouterr()
+    assert captured.out == (
+        f"\nDraft order already exists at {tmp_archive_dir.joinpath('2020/2020_draft_order.json')}\n"
+        + f"\n\tDraft Order: {existing_draft_order}\n"
+    )
+
     # Cleanup - none necessary
 
 
-def test_Draft_load(tmp_path, monkeypatch):
+def test_Draft_load(tmp_path):
     # Setup
     tmp_archive_dir = tmp_path.joinpath("archive")
     tmp_archive_dir.mkdir()
@@ -235,8 +255,11 @@ def test_Draft_load(tmp_path, monkeypatch):
     # Exercise
     draft = Draft(2005)
 
-    # Override output dir to temp path crated for testing
-    monkeypatch.setattr(draft, "output_dir", tmp_year_dir)
+    # Override output dirs to temp path crated for testing
+    draft.output_dir = tmp_archive_dir.joinpath("2005")
+    draft.draft_order_path = tmp_archive_dir.joinpath("2005/2005_draft_order.json")
+    draft.draft_sheet_path = tmp_archive_dir.joinpath("2005/2005_draft_sheet.xlsx")
+
     draft.setup()
     result = draft.load()
 
@@ -273,7 +296,7 @@ def test_Draft_load(tmp_path, monkeypatch):
     # Cleanup - none necessary
 
 
-def test_Draft_load_stripping_whitespace(tmp_path, monkeypatch):
+def test_Draft_load_stripping_whitespace(tmp_path):
     # Setup
     expected_players = [
         "QB with spaces",
@@ -367,8 +390,11 @@ def test_Draft_load_stripping_whitespace(tmp_path, monkeypatch):
     # Exercise
     draft = Draft(2005)
 
-    # Override output dir to temp path crated for testing
-    monkeypatch.setattr(draft, "output_dir", tmp_year_dir)
+    # Override output dirs to temp path crated for testing
+    draft.output_dir = tmp_archive_dir.joinpath("2005")
+    draft.draft_order_path = tmp_archive_dir.joinpath("2005/2005_draft_order.json")
+    draft.draft_sheet_path = tmp_archive_dir.joinpath("2005/2005_draft_sheet.xlsx")
+
     draft.setup()
     result = draft.load()
 
