@@ -696,7 +696,7 @@ def test_Scraper_update_player_ids_exist(tmp_path, monkeypatch, capsys):
 
     projected_player_pts = {}  # placeholder (not used)
 
-    expected_out = f"\nPlayer ids are up to date at: {tmp_player_ids_json_path}\n"
+    expected_out = f"\tPlayer ids are up to date at {tmp_player_ids_json_path}\n"
 
     # Exercise
     scraper = Scraper(2020)
