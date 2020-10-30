@@ -1,52 +1,35 @@
 """
-Unit Tests
-pytest --cov-report term-missing --cov=.
+Unit tests for utils.py
 """
 # Standard libraries
-import calendar
-import datetime
+import json
+from pathlib import Path
 
 # Third-party libraries
-import numpy as np
 import pytest
 
 # Local libraries
 import utils
 
-# NFL starts week of first Monday of September on Thursday
-nfl_start_dates = [
-    (2010, datetime.datetime(2010, 9, 9)),
-    (2011, datetime.datetime(2011, 9, 8)),
-    (2012, datetime.datetime(2012, 9, 5)),  # Wednesday this year
-    (2013, datetime.datetime(2013, 9, 5)),
-    (2014, datetime.datetime(2014, 9, 4)),
-    (2015, datetime.datetime(2015, 9, 10)),
-    (2016, datetime.datetime(2016, 9, 8)),
-    (2017, datetime.datetime(2017, 9, 7)),
-    (2018, datetime.datetime(2018, 9, 6)),
-    (2019, datetime.datetime(2019, 9, 5)),
-]
 
-
-@pytest.mark.parametrize("year,expected", nfl_start_dates)
-def test_get_nfl_start_week(year, expected):
+@pytest.mark.freeze_time
+@pytest.mark.parametrize(
+    "frozen_date, expected",
+    [
+        ("2010-09-09", 2010),
+        ("2011-09-08", 2011),
+        ("2012-09-05", 2012),
+        ("2018-09-06", 2018),
+        ("2019-09-05", 2019),
+    ],
+)
+def test_get_current_year(freezer, frozen_date, expected):
+    """ Use pytest-freezegun to freeze dates and check year."""
     # Setup
-    calendar.setfirstweekday(calendar.SUNDAY)
-    jan = np.array(calendar.monthcalendar(year, 1))
-    jan_thursdays = jan[:, 4]
-    first_thur_in_jan = [thur for thur in jan_thursdays if thur != 0][0]
-    first_thur_in_jan_date = datetime.datetime(year, 1, first_thur_in_jan)
-
-    expected = expected
+    freezer.move_to(frozen_date)
 
     # Exercise
-    nfl_start_cal_week_num = utils.get_nfl_start_week(year)
-    week_delta = nfl_start_cal_week_num - 1  # 1-indexed not 0-indexed
-    result = first_thur_in_jan_date + datetime.timedelta(weeks=week_delta)
-
-    # 2012 started on a wednesday
-    if year == 2012:
-        result -= datetime.timedelta(days=1)
+    result = utils.get_current_year()
 
     # Verify
     assert result == expected
@@ -54,37 +37,92 @@ def test_get_nfl_start_week(year, expected):
     # Cleanup - none necessary
 
 
-thanksgiving_dates = [
-    (2010, datetime.datetime(2010, 11, 25)),
-    (2011, datetime.datetime(2011, 11, 24)),
-    (2012, datetime.datetime(2012, 11, 22)),
-    (2013, datetime.datetime(2013, 11, 28)),
-    (2014, datetime.datetime(2014, 11, 27)),
-    (2015, datetime.datetime(2015, 11, 26)),
-    (2016, datetime.datetime(2016, 11, 24)),
-    (2017, datetime.datetime(2017, 11, 23)),
-    (2018, datetime.datetime(2018, 11, 22)),
-    (2019, datetime.datetime(2019, 11, 28)),
-]
-
-
-@pytest.mark.parametrize("year,expected", thanksgiving_dates)
-def test_get_thanksgiving_week(year, expected):
+def test_write_to_json(tmp_path):
     # Setup
-    calendar.setfirstweekday(calendar.SUNDAY)
-    jan = np.array(calendar.monthcalendar(year, 1))
-    jan_thursdays = jan[:, 4]
-    first_thur_in_jan = [thur for thur in jan_thursdays if thur != 0][0]
-    first_thur_in_jan_date = datetime.datetime(year, 1, first_thur_in_jan)
-
-    expected = expected
+    tmp_file_path = tmp_path.joinpath("test.json")
+    json_data = {"test": "test", "test2": "test2"}
 
     # Exercise
-    thanksgiving_cal_week_num = utils.get_thanksgiving_week(year)
-    week_delta = thanksgiving_cal_week_num - 1  # 1-indexed not 0-indexed
-    result = first_thur_in_jan_date + datetime.timedelta(weeks=week_delta)
+    assert tmp_file_path.exists() is False  # non-existent prior to write
+    utils.write_to_json(json_data, tmp_file_path)
 
     # Verify
-    assert result == expected
+    assert tmp_file_path.exists() is True
+    with open(tmp_file_path, "r") as written_file:
+        result = json.load(written_file)
+
+    assert result == json_data
+
+    # Cleanup - none necessary
+
+
+def test_load_from_json(tmp_path):
+    # Setup
+    tmp_file_path = tmp_path.joinpath("test.json")
+    json_data = {"test": "test", "test2": "test2"}
+
+    with open(tmp_file_path, "w") as written_file:
+        json.dump(json_data, written_file)
+
+    # Exercise
+    assert tmp_file_path.exists() is True  # existent prior to load
+    result = utils.load_from_json(tmp_file_path)
+
+    # Verify
+    assert result == json_data
+
+    # Cleanup - none necessary
+
+
+def test_write_to_and_load_from(tmp_path):
+    # Setup
+    tmp_file_path = tmp_path.joinpath("test.json")
+    json_data = {"test": "test", "test2": "test2"}
+
+    # Exercise
+    assert tmp_file_path.exists() is False  # non-existent prior to write
+    utils.write_to_json(json_data, tmp_file_path)
+    result = utils.load_from_json(tmp_file_path)
+
+    # Verify
+    assert tmp_file_path.exists() is True
+    assert result == json_data
+
+    # Cleanup - none necessary
+
+
+def test_load_stat_ids():
+    # Setup
+    file_loc = Path(__file__)
+    stat_ids_json_path = file_loc.parent.parent.joinpath("assets/stat_ids.json")
+
+    # Exercise
+    result = utils.load_from_json(stat_ids_json_path)
+
+    # Verify
+    assert len(result) == 91
+
+    for k, v in result.items():
+        assert int(k) == v["id"]
+        assert list(v.keys()) == ["id", "abbr", "name", "shortName"]
+
+    # Cleanup - none necessary
+
+
+def test_load_player_ids():
+    # Setup
+    file_loc = Path(__file__)
+    stat_ids_json_path = file_loc.parent.parent.joinpath("assets/player_ids.json")
+
+    # Exercise
+    result = utils.load_from_json(stat_ids_json_path)
+
+    # Verify
+    assert "year" in result
+    for k, v in result.items():
+        if k == "year":
+            assert isinstance(v, int)
+        else:
+            assert list(v.keys()) == ["name", "position", "team", "injury"]
 
     # Cleanup - none necessary
