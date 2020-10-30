@@ -20,7 +20,7 @@ def mock_participant_teams():
 
     # Ensure indexes are equivalent to pandas DataFrame style RangeIndex
     # use pandas.util.testing.assert_frame_equal for detailed diffs
-    for p, df in participant_teams.items():
+    for p in participant_teams.keys():
         participant_teams[p].index = range(0, 10)
 
     return participant_teams
@@ -59,7 +59,7 @@ def mock_participant_teams_robust_sort():
 
     # Ensure indexes are equivalent to pandas DataFrame style RangeIndex
     # use pandas.util.testing.assert_frame_equal for detailed diffs
-    for p, df in participant_teams.items():
+    for p in participant_teams.keys():
         participant_teams[p].index = range(0, 10)
 
     return participant_teams
