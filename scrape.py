@@ -309,4 +309,4 @@ class Scraper:
             )
 
         else:
-            print(f"\nPlayer ids are up to date at: {self.player_ids_json_path}")
+            print(f"\tPlayer ids are up to date at {self.player_ids_json_path}")
