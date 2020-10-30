@@ -97,7 +97,7 @@ def create_player_pts_df(
     player_pts_df = pd.DataFrame(points, index=index)
 
     # Get definition of each point attribute
-    stat_ids_json_path = Path("./stat_ids.json")
+    stat_ids_json_path = Path("assets/stat_ids.json")
     stat_ids_dict = utils.load_from_json(stat_ids_json_path)
     stat_defns = {k: v["name"].replace(" ", "_") for k, v in stat_ids_dict.items()}
     player_pts_df = player_pts_df.rename(columns=stat_defns)
@@ -106,7 +106,7 @@ def create_player_pts_df(
     player_pts_df = player_pts_df.reset_index().rename(columns={"index": "Player"})
 
     # Get definition of each player team and name based on player id
-    player_ids_json_path = Path("./player_ids.json")
+    player_ids_json_path = Path("assets/player_ids.json")
     player_ids = utils.load_from_json(player_ids_json_path)
     team = player_pts_df["Player"].apply(lambda x: player_ids[x]["team"])
     player_pts_df.insert(1, "Team", team)

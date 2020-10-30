@@ -94,7 +94,7 @@ def test_write_to_and_load_from(tmp_path):
 def test_load_stat_ids():
     # Setup
     file_loc = Path(__file__)
-    stat_ids_json_path = file_loc.parent.parent.joinpath("stat_ids.json")
+    stat_ids_json_path = file_loc.parent.parent.joinpath("assets/stat_ids.json")
 
     # Exercise
     result = utils.load_from_json(stat_ids_json_path)
@@ -112,7 +112,7 @@ def test_load_stat_ids():
 def test_load_player_ids():
     # Setup
     file_loc = Path(__file__)
-    stat_ids_json_path = file_loc.parent.parent.joinpath("player_ids.json")
+    stat_ids_json_path = file_loc.parent.parent.joinpath("assets/player_ids.json")
 
     # Exercise
     result = utils.load_from_json(stat_ids_json_path)

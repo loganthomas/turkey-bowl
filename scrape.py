@@ -35,7 +35,7 @@ import utils
 class Scraper:
     def __init__(self, year: int) -> None:
         self.year = year
-        self.player_ids_json_path = Path("./player_ids.json")
+        self.player_ids_json_path = Path("assets/player_ids.json")
         self.nfl_thanksgiving_calendar_week = self.get_nfl_thanksgiving_calendar_week()
 
     def __repr__(self):

@@ -23,7 +23,7 @@ def test_Scraper_instantiation():
 
     # Verify
     assert scraper.year == 2020
-    assert scraper.player_ids_json_path.as_posix() == "player_ids.json"
+    assert scraper.player_ids_json_path.as_posix() == "assets/player_ids.json"
 
     assert scraper.__repr__() == "Scraper(2020)"
     assert scraper.__str__() == "Turkey Bowl Scraper (Year: 2020 NFL Week: 12)"
