@@ -2,6 +2,7 @@
 Draft functions
 """
 # Standard libraries
+import itertools
 import json
 import random
 from pathlib import Path
@@ -15,6 +16,12 @@ class Draft:
     def __init__(self, year: int) -> None:
         self.year = year
         self.output_dir = Path(f"archive/{self.year}")
+        self.draft_order_path = self.output_dir.joinpath(
+            f"{self.year}_draft_order.json"
+        )
+        self.draft_sheet_path = self.output_dir.joinpath(
+            f"{self.year}_draft_sheet.xlsx"
+        )
 
     def __repr__(self):
         return f"Draft({self.year})"
@@ -24,14 +31,6 @@ class Draft:
 
     def setup(self) -> None:
         """ Instantiate draft with attributes, files, and directories. """
-        self.draft_order_path = self.output_dir.joinpath(
-            f"{self.year}_draft_order.json"
-        )
-
-        self.draft_sheet_path = self.output_dir.joinpath(
-            f"{self.year}_draft_sheet.xlsx"
-        )
-
         if not self.output_dir.exists():
             self.output_dir.mkdir()
 
@@ -90,6 +89,11 @@ class Draft:
                         writer, sheet_name=participant.title(), index=False
                     )
 
+                    # Ensure Position text is correct spacing length
+                    worksheet = writer.sheets[participant.title()]
+                    max_len = max(map(len, draft_info["Position"]))
+                    worksheet.set_column(0, 0, max_len)
+
     def load(self) -> Dict[str, pd.DataFrame]:
         """
         Loads draft data by parsing excel spreadsheet.
@@ -116,3 +120,25 @@ class Draft:
             )
 
         return participant_teams
+
+    @staticmethod
+    def check_players_have_been_drafted(
+        participant_teams: Dict[str, pd.DataFrame]
+    ) -> bool:
+        """
+        Helper function to determine if early stopping should occur.
+        If all players are equal to "" within the participant teams,
+        then no players have been drafted and the process should end.
+        """
+        drafted_players = [
+            participant_team["Player"].tolist()
+            for participant_team in participant_teams.values()
+        ]
+
+        drafted_players = [
+            player for player in itertools.chain.from_iterable(drafted_players)
+        ]
+
+        players_have_been_drafted = all(player != "" for player in drafted_players)
+
+        return players_have_been_drafted

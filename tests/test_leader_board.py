@@ -1131,9 +1131,6 @@ def test_LeaderBoard_instantiation(mock_participant_teams):
     assert board.year == 2020
     assert board.participant_teams == participant_teams
     assert board.filter_cols == ["Position", "Player", "Team", "ACTUAL_pts", "PROJ_pts"]
-    assert (
-        board.output_file_path.as_posix() == f"archive/{year}/{year}_leader_board.xlsx"
-    )
 
     assert board.__repr__() == "LeaderBoard(2020, participant_teams={})"
     assert board.__str__() == "Turkey Bowl Leader Board: 2020"
@@ -1413,7 +1410,7 @@ def test_LeaderBoard_display_with_actual_pts(mock_participant_teams, capsys):
     assert captured.out == textwrap.dedent(expected_out)
 
 
-def test_LeaderBoard_save(mock_participant_teams, tmp_path, monkeypatch, capsys):
+def test_LeaderBoard_save(mock_participant_teams, tmp_path, capsys):
     # Setup
     year = 2020
     participant_teams = mock_participant_teams
@@ -1471,12 +1468,11 @@ def test_LeaderBoard_save(mock_participant_teams, tmp_path, monkeypatch, capsys)
 
     expected_board_data_df = pd.DataFrame(expected_data)
 
-    expected_out = f"Saving LeaderBoard to: {tmp_leader_board_path}...\n"
+    expected_out = f"Saving LeaderBoard to {tmp_leader_board_path}...\n"
     # Exercise
     assert tmp_leader_board_path.exists() is False
     board = LeaderBoard(year, participant_teams)
-    monkeypatch.setattr(board, "output_file_path", tmp_leader_board_path)
-    board.save()
+    board.save(tmp_leader_board_path)
 
     # Verify
     assert tmp_leader_board_path.exists()

@@ -35,7 +35,7 @@ import utils
 class Scraper:
     def __init__(self, year: int) -> None:
         self.year = year
-        self.player_ids_json_path = Path("./player_ids.json")
+        self.player_ids_json_path = Path("assets/player_ids.json")
         self.nfl_thanksgiving_calendar_week = self.get_nfl_thanksgiving_calendar_week()
 
     def __repr__(self):
@@ -212,9 +212,9 @@ class Scraper:
 
         if verbose:
             if response.status_code == requests.codes.ok:
-                print(f"Successful API response obtained for: {query_url}")
+                print(f"\tSuccessful API response obtained for: {query_url}")
             else:
-                print(f"WARNING: API response unsuccessful for: {query_url}")
+                print(f"\tWARNING: API response unsuccessful for: {query_url}")
 
         return response.json()
 
@@ -235,9 +235,9 @@ class Scraper:
 
     def get_actual_player_pts(self) -> Dict[str, Any]:
         """
-        Collect players and their corresponding PROJECTED points.
+        Collect players and their corresponding ACTUAL points.
 
-        A GET request is sent to the  projected_pts_url. The returned
+        A GET request is sent to the  actual_pts_url. The returned
         json is parsed to only get relevant player points.
         """
         # This is a unique identifier NOT truly a GAME identifier
@@ -288,8 +288,7 @@ class Scraper:
             pulled_player_ids.insert(0, "year")
             pulled_player_data = {pid: {} for pid in pulled_player_ids}  # type: ignore[var-annotated]
 
-            print()
-            for pid in tqdm(pulled_player_ids, desc="Updating player ids", ncols=75):
+            for pid in tqdm(pulled_player_ids, desc="\tUpdating player ids", ncols=75):
                 if pid == "year":
                     pulled_player_data[pid] = self.year  # type: ignore[assignment]
 
@@ -310,4 +309,4 @@ class Scraper:
             )
 
         else:
-            print(f"\nPlayer ids are up to date at: {self.player_ids_json_path}")
+            print(f"\tPlayer ids are up to date at {self.player_ids_json_path}")

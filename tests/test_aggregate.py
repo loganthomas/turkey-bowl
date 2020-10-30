@@ -256,7 +256,7 @@ def test_create_player_pts_df_raises_error_when_projected_and_no_savepath():
     # Cleanup - none necessary
 
 
-def test_create_player_pts_df_projected_already_exists(tmp_path, capsys):
+def test_check_projected_player_pts_pulled_true(tmp_path, capsys):
     # Setup
     year = 2020
     week = 12
@@ -270,12 +270,6 @@ def test_create_player_pts_df_projected_already_exists(tmp_path, capsys):
     tmp_projected_player_pts_path = tmp_path.joinpath(
         f"{year}_{week}_projected_player_pts.csv"
     )
-
-    player_pts = {
-        "252": {"projectedStats": {}},
-        "310": {"projectedStats": {}},
-        "382": {"projectedStats": {}},
-    }
 
     player_pts_df_data = {
         "Player": {0: "Chad Henne", 1: "Matt Ryan", 2: "Joe Flacco"},
@@ -322,63 +316,47 @@ def test_create_player_pts_df_projected_already_exists(tmp_path, capsys):
     player_pts_df = player_pts_df.fillna(0.0)
     player_pts_df.to_csv(tmp_projected_player_pts_path)
 
-    expected_dtypes = {
-        "Player": np.dtype("O"),
-        "Team": np.dtype("O"),
-        "PROJ_pts": np.dtype("float64"),
-        "PROJ_Games_Played": np.dtype("int64"),
-        "PROJ_Passing_Yards": np.dtype("float64"),
-        "PROJ_Passing_Touchdowns": np.dtype("float64"),
-        "PROJ_Interceptions_Thrown": np.dtype("float64"),
-        "PROJ_Rushing_Yards": np.dtype("float64"),
-        "PROJ_Fumbles_Lost": np.dtype("float64"),
-        "PROJ_2-Point_Conversions": np.dtype("float64"),
-        "PROJ_Rushing_Touchdowns": np.dtype("float64"),
-        "PROJ_Tackle": np.dtype("float64"),
-        "PROJ_Assisted_Tackles": np.dtype("float64"),
-        "PROJ_Sack": np.dtype("float64"),
-        "PROJ_Defense_Interception": np.dtype("float64"),
-        "PROJ_Forced_Fumble": np.dtype("float64"),
-        "PROJ_Fumbles_Recovery": np.dtype("float64"),
-        "PROJ_Blocked_Kick_(punt,_FG,_PAT)": np.dtype("float64"),
-        "PROJ_Pass_Defended": np.dtype("float64"),
-        "PROJ_Receptions": np.dtype("float64"),
-        "PROJ_Receiving_Yards": np.dtype("float64"),
-        "PROJ_Receiving_Touchdowns": np.dtype("float64"),
-        "PROJ_PAT_Made": np.dtype("float64"),
-        "PROJ_FG_Made_0-19": np.dtype("float64"),
-        "PROJ_FG_Made_20-29": np.dtype("float64"),
-        "PROJ_FG_Made_30-39": np.dtype("float64"),
-        "PROJ_FG_Made_40-49": np.dtype("float64"),
-        "PROJ_FG_Missed_50+": np.dtype("float64"),
-        "PROJ_Sacks": np.dtype("float64"),
-        "PROJ_Interceptions": np.dtype("float64"),
-        "PROJ_Fumbles_Recovered": np.dtype("float64"),
-        "PROJ_Safeties": np.dtype("float64"),
-        "PROJ_Touchdowns": np.dtype("float64"),
-        "PROJ_Blocked_Kicks": np.dtype("float64"),
-        "PROJ_Kickoff_and_Punt_Return_Touchdowns": np.dtype("float64"),
-        "PROJ_Points_Allowed": np.dtype("float64"),
-        "PROJ_Safety": np.dtype("float64"),
-        "PROJ_Kickoff_and_Punt_Return_Touchdowns.1": np.dtype("float64"),
-    }
-
     # Exercise
     assert tmp_projected_player_pts_path.exists() is True
-    result = aggregate.create_player_pts_df(
-        year, week, player_pts, tmp_projected_player_pts_path
+    result = aggregate.check_projected_player_pts_pulled(
+        year, week, tmp_projected_player_pts_path
     )
 
     # Verify
-    assert result.equals(player_pts_df)
-    assert result.isnull().sum().sum() == 0
-    assert result.dtypes.to_dict() == expected_dtypes
+    assert result is True
 
     captured = capsys.readouterr()
     assert (
         captured.out
-        == f"Projected player data already exists at: {tmp_projected_player_pts_path}\n"
+        == f"\nProjected player data already exists at {tmp_projected_player_pts_path}\n"
     )
+
+    # Cleanup - none necessary
+
+
+def test_check_projected_player_pts_pulled_false(tmp_path):
+    # Setup
+    year = 2020
+    week = 12
+
+    tmp_archive_dir = tmp_path.joinpath("archive")
+    tmp_archive_dir.mkdir()
+
+    tmp_year_dir = tmp_archive_dir.joinpath(str(year))
+    tmp_year_dir.mkdir()
+
+    tmp_projected_player_pts_path = tmp_path.joinpath(
+        f"{year}_{week}_projected_player_pts.csv"
+    )
+
+    # Exercise
+    assert tmp_projected_player_pts_path.exists() is False
+    result = aggregate.check_projected_player_pts_pulled(
+        year, week, tmp_projected_player_pts_path
+    )
+
+    # Verify
+    assert result is False
 
     # Cleanup - none necessary
 
@@ -503,7 +481,7 @@ def test_create_player_pts_df_projected_doesnt_exists(tmp_path, capsys):
     captured = capsys.readouterr()
     assert (
         captured.out
-        == f"\nWriting projected player stats to: {tmp_projected_player_pts_path}...\n"
+        == f"\tWriting projected player stats to {tmp_projected_player_pts_path}...\n"
     )
 
     # Cleanup - none necessary
@@ -890,7 +868,7 @@ def test_merge_points(mock_participant_teams):
     pts_df["drop_me"] = 0.0
 
     # Exercise
-    participant_teams = aggregate.merge_points(participant_teams, pts_df)
+    participant_teams = aggregate.merge_points(participant_teams, pts_df, verbose=False)
 
     # Verify
     assert participant_teams["Dodd"]["ACTUAL_pts"].equals(pts_df[:10]["ACTUAL_pts"])
@@ -930,13 +908,13 @@ def test_merge_points_prints_warning_if_player_not_found(
     pts_df["drop_me"] = 0.0
 
     expected_warning = (
-        "WARNING: Dodd has missing players: ['Josh Alle']\n"
-        + "WARNING: Becca has missing players: ['Dak Prescot']\n"
-        + "WARNING: Logan has missing players: ['Matt Rya']\n"
+        "\n\tWARNING: Dodd has missing players: ['Josh Alle']\n\n"
+        + "\n\tWARNING: Becca has missing players: ['Dak Prescot']\n\n"
+        + "\n\tWARNING: Logan has missing players: ['Matt Rya']\n\n"
     )
 
     # Exercise
-    participant_teams = aggregate.merge_points(participant_teams, pts_df)
+    participant_teams = aggregate.merge_points(participant_teams, pts_df, verbose=True)
 
     # Verify
     captured = capsys.readouterr()
@@ -1015,14 +993,14 @@ def test_write_robust_pariticipant_team_scores(
         participant_team["ACTUAL_Z"] = 0.0
 
     expected_out = (
-        "\nWriting robust player points summary to: "
+        "\tWriting robust player points summary to "
         + f"{tmp_robust_participant_player_pts_path}...\n"
     )
 
     # Exercise
     assert tmp_robust_participant_player_pts_path.exists() is False
     aggregate.write_robust_participant_team_scores(
-        year, week, participant_teams, tmp_robust_participant_player_pts_path
+        participant_teams, tmp_robust_participant_player_pts_path
     )
 
     # Verify

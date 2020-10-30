@@ -45,6 +45,17 @@ def _unpack_player_pts(
     return points_dict
 
 
+def check_projected_player_pts_pulled(year: int, week: int, savepath: Path) -> bool:
+    """
+    Helper function to check if projected points have been pulled.
+    """
+    if savepath.exists():
+        print(f"\nProjected player data already exists at {savepath}")
+        return True
+
+    return False
+
+
 def create_player_pts_df(
     year: int, week: int, player_pts: Dict[str, Any], savepath: Optional[Path] = None
 ) -> pd.DataFrame:
@@ -52,12 +63,12 @@ def create_player_pts_df(
     Create a DataFrame to house all player projected and actual points.
     The ``player_pts`` argument can be ``projected_player_pts`` or
     ``actual_player_pts``.
+
+    Actual points will need to be pulled multiple times throughout as
+    more games are played/completed. Projected points should be pulled
+    once and only once.
     """
-    # Determine whether provided projected ('projectedStats') or
-    # actual player points ('stats'). Actual points will need to
-    # be pulled multiple times throughout as more games are
-    # played/completed. Projected points should be pulled once and
-    # only once.
+    # Determine projected ('projectedStats') or actual points ('stats').
     stats_type = _get_player_pts_stat_type(player_pts)
 
     if stats_type == "projectedStats":
@@ -69,12 +80,6 @@ def create_player_pts_df(
                 "When creating a projected player points dataframe, "
                 + "``savepath`` must be specified."
             )
-
-        if savepath.exists():
-            print(f"Projected player data already exists at: {savepath}")
-            player_pts_df = pd.read_csv(savepath, index_col=0)
-
-            return player_pts_df
 
     # _get_player_pts_stat_type handles check and raises error if not
     # projectedStats or stats
@@ -92,7 +97,7 @@ def create_player_pts_df(
     player_pts_df = pd.DataFrame(points, index=index)
 
     # Get definition of each point attribute
-    stat_ids_json_path = Path("./stat_ids.json")
+    stat_ids_json_path = Path("assets/stat_ids.json")
     stat_ids_dict = utils.load_from_json(stat_ids_json_path)
     stat_defns = {k: v["name"].replace(" ", "_") for k, v in stat_ids_dict.items()}
     player_pts_df = player_pts_df.rename(columns=stat_defns)
@@ -101,7 +106,7 @@ def create_player_pts_df(
     player_pts_df = player_pts_df.reset_index().rename(columns={"index": "Player"})
 
     # Get definition of each player team and name based on player id
-    player_ids_json_path = Path("./player_ids.json")
+    player_ids_json_path = Path("assets/player_ids.json")
     player_ids = utils.load_from_json(player_ids_json_path)
     team = player_pts_df["Player"].apply(lambda x: player_ids[x]["team"])
     player_pts_df.insert(1, "Team", team)
@@ -130,14 +135,14 @@ def create_player_pts_df(
     # Write projected players to csv so only done once
     if stats_type == "projectedStats":
 
-        print(f"\nWriting projected player stats to: {savepath}...")
+        print(f"\tWriting projected player stats to {savepath}...")
         player_pts_df.to_csv(savepath)
 
     return player_pts_df
 
 
 def merge_points(
-    participant_teams: Dict[str, pd.DataFrame], pts_df: pd.DataFrame
+    participant_teams: Dict[str, pd.DataFrame], pts_df: pd.DataFrame, verbose: bool
 ) -> Dict[str, pd.DataFrame]:
     """
     Merge participant team with collected player points.
@@ -156,13 +161,14 @@ def merge_points(
         ]
         merged = merged.drop(columns=cols_to_drop)
 
-        # Check that all players are found (ignore bench)
-        # Assumes bench player is last row
-        not_found_mask = merged[:-1].isnull().any(axis=1)
+        if verbose:
+            # Check that all players are found (ignore bench)
+            # Assumes bench player is last row
+            not_found_mask = merged[:-1].isnull().any(axis=1)
 
-        if sum(not_found_mask) > 0:
-            missing = merged[:-1]["Player"][not_found_mask].tolist()
-            print(f"WARNING: {participant} has missing players: {missing}")
+            if sum(not_found_mask) > 0:
+                missing = merged[:-1]["Player"][not_found_mask].tolist()
+                print(f"\n\tWARNING: {participant} has missing players: {missing}\n")
 
         # Fill remaining nan with 0.0 (if they exist)
         merged = merged.fillna(0.0)
@@ -204,12 +210,12 @@ def sort_robust_cols(
 
 
 def write_robust_participant_team_scores(
-    year: int, week: int, participant_teams: Dict[str, pd.DataFrame], savepath: Path
+    participant_teams: Dict[str, pd.DataFrame], savepath: Path
 ) -> None:
     """
     Writes the total points to an excel file that can be reviewed.
     """
-    print(f"\nWriting robust player points summary to: {savepath}...")
+    print(f"\tWriting robust player points summary to {savepath}...")
 
     with pd.ExcelWriter(savepath) as writer:
         for participant, participant_team in participant_teams.items():
