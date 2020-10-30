@@ -14,9 +14,6 @@ class LeaderBoard:
         self.year = year
         self.participant_teams = participant_teams
         self.filter_cols = ["Position", "Player", "Team", "ACTUAL_pts", "PROJ_pts"]
-        self.output_file_path = Path(
-            f"archive/{self.year}/{self.year}_leader_board.xlsx"
-        )
 
     def __repr__(self):
         return f"LeaderBoard({self.year}, participant_teams={{}})"
@@ -64,10 +61,10 @@ class LeaderBoard:
         print(self.data)
         print("\n")
 
-    def save(self) -> None:
-        print(f"Saving LeaderBoard to: {self.output_file_path}...")
+    def save(self, savepath: Path) -> None:
+        print(f"Saving LeaderBoard to {savepath}...")
 
-        with pd.ExcelWriter(self.output_file_path) as writer:
+        with pd.ExcelWriter(savepath) as writer:
 
             # Center columns
             workbook = writer.book
