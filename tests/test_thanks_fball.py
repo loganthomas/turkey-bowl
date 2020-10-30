@@ -1,7 +1,6 @@
 # Standard libraries
 import json
 import random
-from unittest import mock
 
 # Third-party libraries
 import pandas as pd
@@ -349,14 +348,16 @@ def test_MockDraft(
     # Exercise
     main()
 
-    # Verify
+    # Verify pandas display
     assert pd.options.display.width is None
 
+    # Verify draft order
     assert tmp_archive_year_path.joinpath("2005_draft_order.json").exists()
     with open(tmp_archive_year_path.joinpath("2005_draft_order.json"), "r") as f:
         written_draft_order = json.load(f)
     assert written_draft_order == mock_draft_order
 
+    # Verify draft sheet
     assert tmp_archive_year_path.joinpath("2005_draft_sheet.xlsx").exists()
     written_participant_teams = pd.read_excel(
         tmp_archive_year_path.joinpath("2005_draft_sheet.xlsx"), sheet_name=None
@@ -365,12 +366,14 @@ def test_MockDraft(
     for p, df in written_participant_teams.items():
         assert df.equals(participant_teams[p])
 
+    # Verify projected player points
     assert tmp_archive_year_path.joinpath("2005_12_projected_player_pts.csv").exists()
     written_projected_player_pts = pd.read_csv(
         tmp_archive_year_path.joinpath("2005_12_projected_player_pts.csv"), index_col=0
     )
     assert written_projected_player_pts.equals(projected_player_pts_df)
 
+    # Verify robust participant player points
     assert tmp_archive_year_path.joinpath(
         "2005_12_robust_participant_player_pts.xlsx"
     ).exists()
@@ -393,12 +396,16 @@ def test_MockDraft(
 
         if not actual_pts_exist:
             drop_cols = [c for c in participant_teams_robust_sorted[p] if "ACTUAL" in c]
+
             participant_teams_robust_sorted[p] = participant_teams_robust_sorted[
                 p
             ].drop(drop_cols, axis=1)
+
             participant_teams_robust_sorted[p].insert(3, "ACTUAL_pts", 0.0)
+
         assert df.equals(participant_teams_robust_sorted[p])
 
+    # Verify Leader Board
     assert tmp_archive_year_path.joinpath("2005_leader_board.xlsx").exists()
     written_leader_board = pd.read_excel(
         tmp_archive_year_path.joinpath("2005_leader_board.xlsx"), sheet_name=None
