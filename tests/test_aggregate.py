@@ -481,7 +481,7 @@ def test_create_player_pts_df_projected_doesnt_exists(tmp_path, capsys):
     captured = capsys.readouterr()
     assert (
         captured.out
-        == f"\tWriting projected player stats to: {tmp_projected_player_pts_path}...\n"
+        == f"\tWriting projected player stats to {tmp_projected_player_pts_path}...\n"
     )
 
     # Cleanup - none necessary
@@ -993,14 +993,14 @@ def test_write_robust_pariticipant_team_scores(
         participant_team["ACTUAL_Z"] = 0.0
 
     expected_out = (
-        "\tWriting robust player points summary to: "
+        "\tWriting robust player points summary to "
         + f"{tmp_robust_participant_player_pts_path}...\n"
     )
 
     # Exercise
     assert tmp_robust_participant_player_pts_path.exists() is False
     aggregate.write_robust_participant_team_scores(
-        year, week, participant_teams, tmp_robust_participant_player_pts_path
+        participant_teams, tmp_robust_participant_player_pts_path
     )
 
     # Verify
