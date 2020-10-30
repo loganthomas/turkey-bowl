@@ -8,7 +8,7 @@ import pytest
 
 # Local libraries
 import aggregate
-from thanks_fball import main
+from turkey_bowl_runner import main
 
 
 @pytest.fixture
