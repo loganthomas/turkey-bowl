@@ -135,7 +135,7 @@ def create_player_pts_df(
     # Write projected players to csv so only done once
     if stats_type == "projectedStats":
 
-        print(f"\tWriting projected player stats to: {savepath}...")
+        print(f"\tWriting projected player stats to {savepath}...")
         player_pts_df.to_csv(savepath)
 
     return player_pts_df
@@ -210,12 +210,12 @@ def sort_robust_cols(
 
 
 def write_robust_participant_team_scores(
-    year: int, week: int, participant_teams: Dict[str, pd.DataFrame], savepath: Path
+    participant_teams: Dict[str, pd.DataFrame], savepath: Path
 ) -> None:
     """
     Writes the total points to an excel file that can be reviewed.
     """
-    print(f"\tWriting robust player points summary to: {savepath}...")
+    print(f"\tWriting robust player points summary to {savepath}...")
 
     with pd.ExcelWriter(savepath) as writer:
         for participant, participant_team in participant_teams.items():
