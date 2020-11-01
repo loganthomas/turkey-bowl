@@ -9,7 +9,7 @@ import random
 import pandas as pd
 
 # Local libraries
-from draft import Draft
+from turkey_bowl.draft import Draft
 
 
 def test_Draft_instantiation():

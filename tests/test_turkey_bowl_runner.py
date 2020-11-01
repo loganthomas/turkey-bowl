@@ -7,8 +7,8 @@ import pandas as pd
 import pytest
 
 # Local libraries
-import aggregate
-from turkey_bowl_runner import main
+from turkey_bowl import aggregate
+from turkey_bowl.turkey_bowl_runner import main
 
 
 @pytest.fixture
@@ -123,7 +123,7 @@ def test_MockDraft_projected_exists_not_all_players_drafted(
         self.draft_order_path = tmp_archive_year_path.joinpath("2005_draft_order.json")
         self.draft_sheet_path = tmp_archive_year_path.joinpath("2005_draft_sheet.xlsx")
 
-    monkeypatch.setattr("draft.Draft.__init__", mock_init)
+    monkeypatch.setattr("turkey_bowl.draft.Draft.__init__", mock_init)
 
     # Override input() func to always return same list of participants
     monkeypatch.setattr("builtins.input", lambda _: "logan, becca, dodd")
@@ -180,7 +180,7 @@ def test_MockDraft_projected_dont_exists_not_all_players_drafted(
         self.draft_order_path = tmp_archive_year_path.joinpath("2005_draft_order.json")
         self.draft_sheet_path = tmp_archive_year_path.joinpath("2005_draft_sheet.xlsx")
 
-    monkeypatch.setattr("draft.Draft.__init__", mock_init)
+    monkeypatch.setattr("turkey_bowl.draft.Draft.__init__", mock_init)
 
     # Override input() func to always return same list of participants
     monkeypatch.setattr("builtins.input", lambda _: "logan, becca, dodd")
@@ -196,13 +196,16 @@ def test_MockDraft_projected_dont_exists_not_all_players_drafted(
         )
 
     monkeypatch.setattr(
-        "scrape.Scraper.get_projected_player_pts", mock_get_projected_player_pts
+        "turkey_bowl.scrape.Scraper.get_projected_player_pts",
+        mock_get_projected_player_pts,
     )
 
     def mock_update_player_ids(self, projected_player_pts):
         print("\tPlayer ids are up to date at player_ids.json")
 
-    monkeypatch.setattr("scrape.Scraper.update_player_ids", mock_update_player_ids)
+    monkeypatch.setattr(
+        "turkey_bowl.scrape.Scraper.update_player_ids", mock_update_player_ids
+    )
 
     # Mock aggregate.create_players_pts_df to return testing dataframe asset
     def mock_create_player_pts_df(year, week, player_pts, savepath):
@@ -212,7 +215,9 @@ def test_MockDraft_projected_dont_exists_not_all_players_drafted(
         projected_player_pts_df = mock_projected_player_pts_df
         return projected_player_pts_df
 
-    monkeypatch.setattr("aggregate.create_player_pts_df", mock_create_player_pts_df)
+    monkeypatch.setattr(
+        "turkey_bowl.aggregate.create_player_pts_df", mock_create_player_pts_df
+    )
 
     # Ensure projected doesn't exist
     assert not tmp_archive_year_path.joinpath(
@@ -305,7 +310,7 @@ def test_MockDraft(
         self.draft_order_path = tmp_archive_year_path.joinpath("2005_draft_order.json")
         self.draft_sheet_path = tmp_archive_year_path.joinpath("2005_draft_sheet.xlsx")
 
-    monkeypatch.setattr("draft.Draft.__init__", mock_init)
+    monkeypatch.setattr("turkey_bowl.draft.Draft.__init__", mock_init)
 
     # Mock scraper methods so no requests call
     # monkeypatch.setattr(
@@ -315,10 +320,13 @@ def test_MockDraft(
 
     if actual_pts_exist:
         monkeypatch.setattr(
-            "scrape.Scraper.get_actual_player_pts", lambda x: {"999": {"stats": {}}}
+            "turkey_bowl.scrape.Scraper.get_actual_player_pts",
+            lambda x: {"999": {"stats": {}}},
         )
     else:
-        monkeypatch.setattr("scrape.Scraper.get_actual_player_pts", lambda _: None)
+        monkeypatch.setattr(
+            "turkey_bowl.scrape.Scraper.get_actual_player_pts", lambda _: None
+        )
 
     # def mock_update_player_ids(self, projected_player_pts):
     #     return None
@@ -343,7 +351,9 @@ def test_MockDraft(
 
         return player_pts_df
 
-    monkeypatch.setattr("aggregate.create_player_pts_df", mock_create_player_pts_df)
+    monkeypatch.setattr(
+        "turkey_bowl.aggregate.create_player_pts_df", mock_create_player_pts_df
+    )
 
     # Exercise
     main()

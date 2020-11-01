@@ -7,7 +7,7 @@ import pandas as pd
 import pytest
 
 # Local libraries
-import aggregate
+from turkey_bowl import aggregate
 
 
 @pytest.fixture

@@ -9,7 +9,7 @@ import pandas as pd
 import pytest
 
 # Local libraries
-from leader_board import LeaderBoard
+from turkey_bowl.leader_board import LeaderBoard
 
 
 @pytest.fixture
