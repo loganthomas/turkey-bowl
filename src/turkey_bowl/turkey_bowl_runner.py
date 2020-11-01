@@ -5,10 +5,8 @@ Thanksgiving Football module
 from pathlib import Path
 
 # Third-party libraries
-import pandas as pd
-
-# Local libraries
 import aggregate
+import pandas as pd
 import utils
 from draft import Draft
 from leader_board import LeaderBoard

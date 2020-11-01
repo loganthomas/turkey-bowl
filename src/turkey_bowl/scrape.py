@@ -26,10 +26,8 @@ from urllib.parse import urlencode
 # Third-party libraries
 import numpy as np
 import requests
-from tqdm import tqdm
-
-# Local libraries
 import utils
+from tqdm import tqdm
 
 
 class Scraper:
