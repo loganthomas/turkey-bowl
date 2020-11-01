@@ -26,8 +26,10 @@ from urllib.parse import urlencode
 # Third-party libraries
 import numpy as np
 import requests
-import utils
 from tqdm import tqdm
+
+# Local libraries
+from turkey_bowl import utils
 
 
 class Scraper:

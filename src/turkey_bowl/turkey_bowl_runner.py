@@ -5,12 +5,13 @@ Thanksgiving Football module
 from pathlib import Path
 
 # Third-party libraries
-import aggregate
 import pandas as pd
-import utils
-from draft import Draft
-from leader_board import LeaderBoard
-from scrape import Scraper
+
+# Local libraries
+from turkey_bowl import aggregate, utils
+from turkey_bowl.draft import Draft
+from turkey_bowl.leader_board import LeaderBoard
+from turkey_bowl.scrape import Scraper
 
 
 def main():

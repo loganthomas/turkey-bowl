@@ -7,7 +7,9 @@ from typing import Any, Dict, Optional
 
 # Third-party libraries
 import pandas as pd
-import utils
+
+# Local libraries
+from turkey_bowl import utils
 
 
 def _get_player_pts_stat_type(player_pts: Dict[str, Any]) -> str:
