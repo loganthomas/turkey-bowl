@@ -1,4 +1,6 @@
 black
+click-spinner
+check-manifest
 codecov
 numpy
 pandas
