@@ -2,6 +2,7 @@
 Thanksgiving Football module
 """
 # Standard libraries
+import sys
 from pathlib import Path
 
 # Third-party libraries
@@ -55,7 +56,7 @@ def main():
         print(
             f"\nNot all players have been drafted yet! Please complete the draft for {year}."
         )
-        exit()
+        sys.exit()
 
     actual_player_pts = scraper.get_actual_player_pts()
 
