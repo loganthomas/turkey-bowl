@@ -1,7 +1,3 @@
 [run]
 omit =
     setup.py
-
-[paths]
-source=
-    src/turkey_bowl
