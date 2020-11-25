@@ -5,10 +5,12 @@ Draft functions
 import itertools
 import json
 import random
+import time
 from pathlib import Path
 from typing import Dict
 
 # Third-party libraries
+import click_spinner
 import pandas as pd
 
 
@@ -45,9 +47,16 @@ class Draft:
                 self.participant_list, len(self.participant_list)
             )
 
-            draft_order_dict = {p: i for i, p in enumerate(self.draft_order, 1)}
+            print()
+            for i, participant in enumerate(self.draft_order, 1):
+                print(f"Drafting in slot {i}...")
+                with click_spinner.spinner():
+                    time.sleep(3)
+                print(f"{participant}\n")
 
             print(f"\n\tDraft Order: {self.draft_order}")
+
+            draft_order_dict = {p: i for i, p in enumerate(self.draft_order, 1)}
 
             with open(self.draft_order_path, "w") as draft_order_file:
                 json.dump(draft_order_dict, draft_order_file)

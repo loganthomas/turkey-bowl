@@ -29,7 +29,7 @@ import requests
 from tqdm import tqdm
 
 # Local libraries
-import utils
+from turkey_bowl import utils
 
 
 class Scraper:

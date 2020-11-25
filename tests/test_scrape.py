@@ -12,7 +12,7 @@ import pytest
 import responses
 
 # Local libraries
-from scrape import Scraper
+from turkey_bowl.scrape import Scraper
 
 
 def test_Scraper_instantiation():

@@ -9,7 +9,7 @@ from pathlib import Path
 import pytest
 
 # Local libraries
-import utils
+from turkey_bowl import utils
 
 
 @pytest.mark.freeze_time

@@ -2,17 +2,17 @@
 Thanksgiving Football module
 """
 # Standard libraries
+import sys
 from pathlib import Path
 
 # Third-party libraries
 import pandas as pd
 
 # Local libraries
-import aggregate
-import utils
-from draft import Draft
-from leader_board import LeaderBoard
-from scrape import Scraper
+from turkey_bowl import aggregate, utils
+from turkey_bowl.draft import Draft
+from turkey_bowl.leader_board import LeaderBoard
+from turkey_bowl.scrape import Scraper
 
 
 def main():
@@ -56,7 +56,7 @@ def main():
         print(
             f"\nNot all players have been drafted yet! Please complete the draft for {year}."
         )
-        exit()
+        sys.exit()
 
     actual_player_pts = scraper.get_actual_player_pts()
 
