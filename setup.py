@@ -17,7 +17,7 @@ setup(
     packages=find_packages("src"),
     package_dir={"": "src"},
     install_requires=[
-        "click_spinner",
+        "click-spinner",
         "numpy~=1.19.3",
         "pandas~=1.1.4",
         "requests~=2.24",

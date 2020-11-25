@@ -1,5 +1,5 @@
 black
-click_spinner
+click-spinner
 check-manifest
 codecov
 numpy
