@@ -14,7 +14,7 @@ install:
 
 # command to run tests (report "this directory" i.e. "dot")
 script:
-  - pytest --cov=src tests/ --cov-report term-missing --color=yes
+  - pytest
 
 env:
   - CODECOV_TOKEN=$CODECOV_TOKEN
