@@ -151,6 +151,9 @@ def test_MockDraft_projected_exists_not_all_players_drafted(
     captured = capsys.readouterr()
     assert captured.out == (
         "\n----- 2005 Turkey Bowl -----\n"
+        + "\nDrafting in slot 1...\ndodd\n"
+        + "\nDrafting in slot 2...\nlogan\n"
+        + "\nDrafting in slot 3...\nbecca\n\n"
         + "\n\tDraft Order: ['dodd', 'logan', 'becca']\n"
         + f"\tSaved draft order to {tmp_archive_year_path.joinpath('2005_draft_order.json')}\n"
         + f"\nProjected player data already exists at {tmp_archive_year_path.joinpath('2005_12_projected_player_pts.csv')}\n"
@@ -238,6 +241,9 @@ def test_MockDraft_projected_dont_exists_not_all_players_drafted(
     captured = capsys.readouterr()
     assert captured.out == (
         "\n----- 2005 Turkey Bowl -----\n"
+        + "\nDrafting in slot 1...\ndodd\n"
+        + "\nDrafting in slot 2...\nlogan\n"
+        + "\nDrafting in slot 3...\nbecca\n\n"
         + "\n\tDraft Order: ['dodd', 'logan', 'becca']\n"
         + f"\tSaved draft order to {tmp_archive_year_path.joinpath('2005_draft_order.json')}\n"
         + "\nCollecting projected player points...\n"

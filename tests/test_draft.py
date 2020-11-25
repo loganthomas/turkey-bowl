@@ -109,7 +109,10 @@ def test_Draft_setup_nothing_exists(tmp_path, monkeypatch, capsys):
 
     captured = capsys.readouterr()
     assert captured.out == (
-        "\n\tDraft Order: ['dodd', 'logan', 'becca']\n"
+        "\nDrafting in slot 1...\ndodd\n"
+        + "\nDrafting in slot 2...\nlogan\n"
+        + "\nDrafting in slot 3...\nbecca\n\n"
+        + "\n\tDraft Order: ['dodd', 'logan', 'becca']\n"
         + f"\tSaved draft order to {tmp_archive_dir.joinpath('2020/2020_draft_order.json')}\n"
     )
 
