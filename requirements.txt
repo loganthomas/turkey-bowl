@@ -1,4 +1,5 @@
 black
+bump2version
 click-spinner
 check-manifest
 codecov
