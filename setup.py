@@ -28,6 +28,7 @@ setup(
     extra_require={
         "dev": [
             "black>=20.8b1",
+            "bump2version>=1.0.1",
             "check-manifest>=0.45",
             "codecov>=2.1.10",
             "pre-commit>=2.8.2",
