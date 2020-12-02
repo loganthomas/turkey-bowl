@@ -60,6 +60,24 @@ def main():
 
     actual_player_pts = scraper.get_actual_player_pts()
 
+    # To get to run for COVID
+    del actual_player_pts["2560762"]
+    del actual_player_pts["2550834"]
+    del actual_player_pts["2563734"]
+    del actual_player_pts["2559141"]
+    del actual_player_pts["2564412"]
+    del actual_player_pts["2562799"]
+    del actual_player_pts["2543650"]
+    del actual_player_pts["2561103"]
+    del actual_player_pts["2560884"]
+    del actual_player_pts["2562591"]
+    del actual_player_pts["2532986"]
+    del actual_player_pts["2562776"]
+    del actual_player_pts["2558191"]
+    del actual_player_pts["2561585"]
+    del actual_player_pts["2557033"]
+    del actual_player_pts["2562957"]
+
     if actual_player_pts:
         actual_player_pts_df = aggregate.create_player_pts_df(
             year=year, week=week, player_pts=actual_player_pts, savepath=None
