@@ -15,6 +15,17 @@ __pycache__/
 # Ignore vim stuff
 *.swp
 
+
+#########################
+# GitHub Pages & Jekyll #
+#########################
+_site
+.sass-cache
+.jekyll-cache
+.jekyll-metadata
+vendor
+
+
 ###################
 # GitHub Defaults #
 ###################
