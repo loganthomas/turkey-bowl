@@ -4,10 +4,8 @@
 
 layout: page
 title: Turkey Bowl
-permalink: /turkey-bowl/
+permalink: /turkey_bowl/
 ---
-
-# Current Champ
 # <center>Congratulations Yeager & Emily!</center>
 # <center>:turkey: :trophy: You are the current Turkey Bowl Champions :trophy: :turkey:</center>
 
