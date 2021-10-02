@@ -35,6 +35,7 @@ setup(
             "bump2version>=1.0.1",
             "check-manifest>=0.45",
             "codecov>=2.1.10",
+            "flake8",
             "pre-commit>=2.8.2",
             "pytest>=6.1.2",
             "pytest-cov>=2.10.1",

@@ -23,7 +23,7 @@ HEADER = "\n{message:-^72}"
 
 @app.command()
 def clean():
-    """Delete current draft output directory and all its conetnts."""
+    """Delete current draft output directory and all its contents."""
     year = utils.get_current_year()
     draft = Draft(year)
     delete = typer.confirm(
@@ -104,7 +104,7 @@ def scrape_actual(
         week = input("Enter dry-run week: ")
         # TODO: use getter and setter to update this
     else:
-        week = scraper.nfl_thanksgiving_calendar_wee
+        week = scraper.nfl_thanksgiving_calendar_week
 
     projected_player_pts_path = Path(
         f"{draft.output_dir}/{year}_{week}_projected_player_pts.csv"

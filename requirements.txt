@@ -3,6 +3,7 @@ bump2version
 click-spinner
 check-manifest
 codecov
+flake8
 numpy
 pandas
 pre-commit
