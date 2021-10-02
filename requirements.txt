@@ -9,8 +9,12 @@ pre-commit
 pytest
 pytest-cov
 pytest-freezegun
+PyQt5
 requests
 responses
 tqdm
+traits
+traitsui
+typer
 XlsxWriter
 xlrd
