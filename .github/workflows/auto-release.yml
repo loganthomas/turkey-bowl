@@ -35,7 +35,8 @@ jobs:
       # Should be dev in most cases; replaces `/` with `-`
       - name: Store current branch
         run: |
-          echo "BRANCH_NAME=$(echo ${GITHUB_REF#refs/heads/} | tr / -)" >> $GITHUB_ENV
+          # echo "BRANCH_NAME=$(echo ${GITHUB_REF#refs/heads/} | tr / -)" >> $GITHUB_ENV
+          echo "BRANCH_NAME=$(echo ${GITHUB_REF#refs/heads/})" >> $GITHUB_ENV
 
       - name: Display current branch
         run: |
