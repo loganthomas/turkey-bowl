@@ -12,5 +12,6 @@ pytest-freezegun
 requests
 responses
 tqdm
+typer
 XlsxWriter
 xlrd
