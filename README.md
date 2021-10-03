@@ -24,3 +24,52 @@ A few things to note:
   - Launch `ipython` and use `%run thanks_fball.py` or import it and copy the `main()`
     function to run each line. This isn't the best option (to be fixed), but will give you
     a lot of meta data to work with.
+
+
+# Developer Notes
+
+## Release CLI Documentation
+For documentation of the full `release` command line interface (CLI),
+please see the [release docs](docs/releases/README.md)
+
+Add a news fragment
+-------------------
+Create a new file with a name like `<pull-request>.<type>.md`, where
+`<pull-request>` is a pull request number, and `<type>` is one of:
+
+- `bug`: fixes something broken
+- `dep`: deprecates something from maintenance or deletes it entirely
+- `doc`: documents something
+- `enh`: adds a new feature
+- `maint`: improves infrastructure maintenance
+
+Then write a short sentence in the file that describes the changes for the
+end users. Be sure to include the pull request number at the end of the sentence,
+e.g. in `123.maint.md`:
+
+```
+New command line interface (CLI) utility for creating news fragments created. (#123)
+```
+
+Alternatively, you can use either of the following commands, and answer the questions:
+
+```
+# From the project's scripts directory
+$ python -m release create-news-fragment
+
+# From the project's root directory
+$ python -m scripts.release create-news-fragment
+````
+
+Updating & Building the CHANGELOG
+---------------------------------
+Updating and building the `CHANGELOG.md` from the news fragments can be
+accomplished by executing either of the below commands:
+
+```
+# From the project's scripts directory
+$ python -m release build-changelog RELEASE_VERSION
+
+# From the project's root directory
+$ python -m scripts.release build-changelog RELEASE_VERSION
+```
