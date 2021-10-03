@@ -14,7 +14,7 @@ from turkey_bowl.utils import setup_logger
 logger = logging.getLogger("release")  # can be __name__ here as well
 
 
-class FragmentOption(str, Enum):
+class FragmentOptions(str, Enum):
     """Defines possible enumeration types for new fragments."""
 
     bug = "bug"
@@ -34,34 +34,40 @@ class Release:
 
     Attributes
     ----------
-    changelog_path : pathlib.Path
-        The path to the CHANGELOG file that will be updated for the
-        upcoming release.
     changelog_mapping : dict
         A dictionary of available news fragment mappings.
         Currently, one of FragmentOptions:
         `bug`, `dep`, `doc`, `enh`, or `maint`.
+    changelog_path : pathlib.Path
+        The path to the CHANGELOG file that will be updated for the
+        upcoming release.
     dry_run : bool
         Whether or not to treat the release as a dry-run or real.
     news_fragment_path : pathlib.Path
         The path to the directory that stores news fragments for the
         upcoming release.
+    root: pathlib.Path
+        The root directory of the project.
 
     Methods
     -------
-    build_change_log()
+    build_change_log(release_version, clean=False, dry_run=False)
+        Build CHANGELOG file from all news fragments since last release.
     create_news_fragment()
         Create a single news fragment for the upcoming release.
-
     """
 
     def __init__(self, dry_run=False):
-        self.changelog_path = Path("../CHANGELOG.md").resolve()
+        self.root = Path(__file__).parent.parent
+        self.changelog_path = self.root.joinpath("CHANGELOG.md").resolve()
         self.dry_run = dry_run
-        self.news_fragment_path = Path("../docs/releases/upcoming/").resolve()
+        self.news_fragment_path = self.root.joinpath(
+            "docs/releases/upcoming/"
+        ).resolve()
 
     @property
     def changelog_mapping(self):
+        """A mapping from FragmentOptions to CHANGELOG titles."""
         return {
             "type_to_description": {
                 "bug": "Fixes",
@@ -73,7 +79,19 @@ class Release:
         }
 
     def build_changelog(self, release_version, clean=False, dry_run=False):
-        """Build CHANGELOG file from all news fragments since last release."""
+        """Build CHANGELOG file from all news fragments since last release.
+
+        Parameters
+        ----------
+        release_version : str
+            The new release version that will be included at the top of the
+            CHANGELOG.
+        clean : bool, default=False
+            Whether or not to delete news fragments once moved to CHANGELOG.
+        dry_run : bool, default=False
+            Whether or not to treat the update as a dry run and only print
+            changes rather than making them.
+        """
         logger.info(f"Building '{self.changelog_path}' for {release_version}...")
 
         HEADER = "# Release Notes"
@@ -137,10 +155,10 @@ class Release:
 
     def create_news_fragment(self):
         """Create a news fragment for a PR."""
-        choices = [option.value for option in FragmentOption]
+        choices = [option.value for option in FragmentOptions]
         pr_number = typer.prompt("Please enter the PR number", type=int)
         fragment_type = typer.prompt(
-            f"Choose a fragment type {choices}", type=FragmentOption
+            f"Choose a fragment type {choices}", type=FragmentOptions
         )
 
         filepath = Path(self.news_fragment_path).joinpath(
@@ -164,25 +182,31 @@ class Release:
         logger.info(f"Please commit the file created at: {filepath}")
 
 
-app = typer.Typer()
-
-
-@app.command()
-def create_news_fragment():
-    release = Release()
-    release.create_news_fragment()
-
-
-@app.command()
-def build_changelog(
-    release_version: str,
-    clean: bool = typer.Option(False, "--clean"),
-    dry_run: bool = typer.Option(False, "--dry-run"),
-):
-    release = Release()
-    release.build_changelog(release_version, clean, dry_run)
-
-
 if __name__ == "__main__":
     setup_logger(logging.INFO)
+
+    app = typer.Typer()
+
+    @app.command()
+    def build_changelog(
+        release_version: str,
+        clean: bool = typer.Option(
+            False, "--clean", help="Delete news fragments once CHANGELOG is build."
+        ),
+        dry_run: bool = typer.Option(
+            False,
+            "--dry-run",
+            help="Treat as a dry run and only print changes without committing them.",
+        ),
+    ):
+        """Build CHANGELOG file from all news fragments since last release."""
+        release = Release()
+        release.build_changelog(release_version, clean, dry_run)
+
+    @app.command()
+    def create_news_fragment():
+        """Create a single news fragment for the upcoming release."""
+        release = Release()
+        release.create_news_fragment()
+
     app()
