@@ -26,6 +26,11 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v2
 
+      - name: Display current branch
+        run : |
+          echo ${GITHUB_REF##*/}
+          echo ${{ github.ref }}
+
       - name: Pull latest commits of dev branch
         run: |
           git checkout dev
@@ -34,16 +39,21 @@ jobs:
       - name: Setup Python
         uses: actions/setup-python@v2
 
+      # Install in editable mode (`-e`) so that changes can be made
       - name: Install package
         run: |
+          pip install -r requirements.txt
           pip install -e .
 
+      # Should be included in requirements, but just in case
       - name: Install bump2version
         run: python -m pip install bumpversion # "bumpversion" installs bump2version
 
+      # Get the new version by doing a dry run first
       - name: Dry run bumpversion
         run: |
           bumpversion --dry-run ${{ github.event.inputs.version_name }} --allow-dirty --verbose
+
       # This is lifted directly from the bump2version docs.
       # Version number will be saved in `env` section of each consecutive stage
       - name: Store new version number
@@ -95,5 +105,5 @@ jobs:
       #       token: ${{ secrets.GITHUB_TOKEN }}
       #       tag: v${{ env.version_number}}
 
-      # - name: Ensure complete
-      #   run: echo "Auto-release complete!"
+      - name: Ensure complete
+        run: echo "Auto-release complete!"
