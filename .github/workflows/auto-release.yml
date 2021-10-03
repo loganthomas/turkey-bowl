@@ -35,7 +35,6 @@ jobs:
       # Should be dev in most cases; replaces `/` with `-`
       - name: Store current branch
         run: |
-          # echo "BRANCH_NAME=$(echo ${GITHUB_REF#refs/heads/} | tr / -)" >> $GITHUB_ENV
           echo "BRANCH_NAME=$(echo ${GITHUB_REF#refs/heads/})" >> $GITHUB_ENV
 
       - name: Display current branch
@@ -48,14 +47,6 @@ jobs:
           echo "Pulling latests commits from ${{ env.BRANCH_NAME }}"
           git checkout ${{ env.BRANCH_NAME }}
           git pull
-
-      - name: Pull latest commits of main branch and merge current branch
-        run: |
-          echo "Pulling latests commits from main"
-          git checkout main
-          git pull
-          # git merge ${{ env.BRANCH_NAME }}
-          # git push
 
       - name: Setup Python
         uses: actions/setup-python@v2
@@ -101,6 +92,14 @@ jobs:
       # - name: Run bumpversion
       #   run: bumpversion ${{ github.event.inputs.version_name }} --verbose
 
+      - name: Pull latest commits of main branch and merge current branch
+        run: |
+          echo "Pulling latests commits from main"
+          git checkout main
+          git pull
+          # git merge ${{ env.BRANCH_NAME }}
+          # git push
+
       # - name: Ensure tag creation
       #   run: git tag | grep ${{ env.version_number }}
 
@@ -125,6 +124,8 @@ jobs:
       #       body: "Contribution details can be found in CHANGELOG.md"
       #       token: ${{ secrets.GITHUB_TOKEN }}
       #       tag: v${{ env.version_number}}
+
+      # Make all changes then merge, tag, and push
 
       - name: Ensure complete
         run: echo "Auto-release complete!"
