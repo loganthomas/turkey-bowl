@@ -46,7 +46,7 @@ jobs:
       - name: Pull latest commits of current branch
         run: |
           echo "Pulling latests commits from ${{ env.BRANCH_NAME }}"
-          git checkout {{ env.BRANCH_NAME }}
+          git checkout ${{ env.BRANCH_NAME }}
           git pull
 
       - name: Pull latest commits of main branch and merge current branch
