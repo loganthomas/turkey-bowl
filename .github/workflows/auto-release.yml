@@ -87,7 +87,7 @@ jobs:
 
       - name: Update Changelog
         run: |
-          python -m scripts.release build-changelog v${{ env.version_number }} --dry-run
+          python scripts/release.py build-changelog v${{ env.version_number }} --dry-run
 
       # - name: Commit CHANGELOG updates
       #   run: |
