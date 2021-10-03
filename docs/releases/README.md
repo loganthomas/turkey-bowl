@@ -58,7 +58,7 @@ Commands:
   create-news-fragment  Create a single news fragment for the upcoming release.
 ```
 
-### `python -m scripts.release build-changelog [OPTIONS] RELEASE_VERSION`
+#### `python -m scripts.release build-changelog [OPTIONS] RELEASE_VERSION`
 
 Builds a CHANGELOG.md file from all news fragments since last release.
 
@@ -78,7 +78,7 @@ Options:
   --help     Show this message and exit.
 ```
 
-### `python -m scripts.release create-news-fragment [OPTIONS]`
+#### `python -m scripts.release create-news-fragment [OPTIONS]`
 
 Create a single news fragment for the upcoming release.
 
