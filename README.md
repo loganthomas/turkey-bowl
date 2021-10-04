@@ -3,8 +3,8 @@
 [![codecov](https://codecov.io/gh/loganthomas/turkey-bowl/branch/master/graph/badge.svg)](https://codecov.io/gh/loganthomas/turkey-bowl)
 [![Codacy Badge](https://app.codacy.com/project/badge/Grade/0f1564fd54f74bc081398ae0b982d4fb)](https://www.codacy.com/gh/loganthomas/turkey-bowl/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=loganthomas/turkey-bowl&amp;utm_campaign=Badge_Grade)
 [![Maintainability](https://api.codeclimate.com/v1/badges/08d1578979aeb217b85a/maintainability)](https://codeclimate.com/github/loganthomas/turkey-bowl/maintainability)
-![Test Suite: main](https://github.com/github/docs/actions/workflows/test-suite.yml/badge.svg?branch=main)
-![Test Suite: dev](https://github.com/github/docs/actions/workflows/test-suite.yml/badge.svg?branch=dev)
+![Test Suite: main](https://github.com/loganthomas/turkey-bowl/actions/workflows/test-suite.yml/badge.svg?branch=main)
+![Test Suite: dev](https://github.com/loganthomas/turkey-bowl/actions/workflows/test-suite.yml/badge.svg?branch=dev)
 
 
 This repo contains Turkey Bowl fantasy football draft and scoring code.
