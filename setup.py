@@ -22,6 +22,7 @@ setup(
         "pandas",
         "pyface<7",
         "pytest",
+        "pytest-cov",
         "PyQt5",
         "openpyxl",
         "requests",
