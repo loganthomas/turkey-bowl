@@ -21,6 +21,7 @@ setup(
         "numpy",
         "pandas",
         "pyface<7",
+        "pytest",
         "PyQt5",
         "openpyxl",
         "requests",
