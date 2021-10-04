@@ -31,6 +31,23 @@ jobs:
           git config --global user.email "git@github.com"
           git config --global user.name "GitHub Bot"
 
+      # Used to show which branch the GitHub action was run from
+      # Should be dev in most cases
+      - name: Store current branch
+        run: |
+          echo "BRANCH_NAME=$(echo ${GITHUB_REF#refs/heads/})" >> $GITHUB_ENV
+
+      - name: Display current branch
+        run: |
+          echo "Current branch name: ${{ env.BRANCH_NAME }}"
+
+      # This should be dev in most cases
+      - name: Pull latest commits of current branch
+        run: |
+          echo "Pulling latests commits from ${{ env.BRANCH_NAME }}"
+          git checkout ${{ env.BRANCH_NAME }}
+          git pull
+
       - name: Test push to dev and master
         run: |
           git checkout dev
@@ -47,22 +64,6 @@ jobs:
           git push
           git status
 
-      # # Used to show which branch the GitHub action was run from
-      # # Should be dev in most cases
-      # - name: Store current branch
-      #   run: |
-      #     echo "BRANCH_NAME=$(echo ${GITHUB_REF#refs/heads/})" >> $GITHUB_ENV
-
-      # - name: Display current branch
-      #   run: |
-      #     echo "Current branch name: ${{ env.BRANCH_NAME }}"
-
-      # # This should be dev in most cases
-      # - name: Pull latest commits of current branch
-      #   run: |
-      #     echo "Pulling latests commits from ${{ env.BRANCH_NAME }}"
-      #     git checkout ${{ env.BRANCH_NAME }}
-      #     git pull
 
       # - name: Setup Python
       #   uses: actions/setup-python@v2
