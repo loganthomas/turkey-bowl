@@ -25,6 +25,8 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
+        with:
+          token: ${{ secrets.LOGAN_PERSONAL_TOKEN }}
 
       - name: Setup GitHub Bot configuration
         run: |
@@ -114,8 +116,8 @@ jobs:
       # - name: Merge current branch into main branch
       #     git merge ${{ env.BRANCH_NAME }}
 
-      # # This will commit and tag (see .bumpversion.cfg)
-      # # This is run on main branch so that tag is at the merge
+      # This will commit and tag (see .bumpversion.cfg)
+      # This is run on main branch so that tag is at the merge
       # - name: Run bumpversion
       #   run: bumpversion ${{ github.event.inputs.version_name }} --verbose
 
