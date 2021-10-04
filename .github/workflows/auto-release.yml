@@ -51,113 +51,96 @@ jobs:
           git checkout ${{ env.BRANCH_NAME }}
           git pull
 
-      - name: Test push to dev and master
+      - name: Setup Python
+        uses: actions/setup-python@v2
+
+      # Install in editable mode (`-e`) so that changes can be made
+      - name: Install package
         run: |
-          git checkout dev
-          git status
-          git checkout main
-          git merge dev
-          git rm test_file_from_action.txt
+          pip install -r requirements.txt
+          pip install -e .
+
+      # Should be included in requirements, but just in case
+      # "bumpversion" installs bump2version
+      - name: Install bump2version
+        run: python -m pip install bumpversion
+
+      # Get the new version by doing a dry run first
+      - name: Dry run bumpversion
+        run: |
+          bumpversion --dry-run ${{ github.event.inputs.version_name }} --allow-dirty --verbose
+
+      # This is lifted directly from the bump2version docs.
+      # Version number will be saved in `env` section of each consecutive stage
+      - name: Store new version number
+        run: echo "version_number=`bumpversion --dry-run --list ${{ github.event.inputs.version_name }} | grep new_version | sed -r s,"^.*=",,`" >> $GITHUB_ENV
+
+      - name: Display new version number
+        run: |
+          echo "version_name: ${{ github.event.inputs.version_name }}"
+          echo "version_number: v${{ env.version_number }}"
+
+      - name: Update CHANGELOG
+        run: |
+          python scripts/release.py build-changelog v${{ env.version_number }} --clean
           git add .
-          git commit -m "TST: remove file from GitHub action"
+          git commit -m "Update CHANGELOG for auto-release v${{ env.version_number }}"
           git push
+
+      - name: Ensure repo status is clean for current branch
+        run: git status
+
+      - name: Pull latest commits of main branch
+        run: |
+          git checkout main
+          git pull
           git status
-          git checkout dev
+
+      # No push here as handled later on after tag and build
+      - name: Merge current branch into main branch
+          git merge ${{ env.BRANCH_NAME }}
+
+      # This will commit and tag (see .bumpversion.cfg)
+      # This is run on main branch so that tag is at the merge
+      - name: Run bumpversion
+        run: bumpversion ${{ github.event.inputs.version_name }} --verbose
+
+      - name: Ensure tag creation
+        run: git tag | grep ${{ env.version_number }}
+
+      # - name: Build package
+      #   run: |
+      #     rm -f dist/*
+      #     python setup.py sdist bdist_wheel
+      # - name: Publish package
+      #   uses: pypa/gh-action-pypi-publish@master
+      #   with:
+      #     user: __token__
+      #     password: ${{ secrets.PYPI_API_TOKEN }}
+
+      - name: Push changes with tags
+        run: git push && git push --tags
+
+      # This will create an actual pointer in the "Release" section of the GitHub repo
+      # The intent is to always have "latest" point to <this> release
+      - name: Create release in GitHub repo
+        uses: ncipollo/release-action@v1
+        with:
+            body: "Contribution details can be found in CHANGELOG.md"
+            token: ${{ secrets.GITHUB_TOKEN }}
+            tag: v${{ env.version_number}}
+
+      # In most cases, this should be merging main back into dev
+      - name: Merge main branch into current branch
+        run: |
+          git checkout main
+          git pull
+          git status
+          git checkout ${{ env.BRANCH_NAME }}
+          git pull
           git merge main
           git push
           git status
 
-
-      # - name: Setup Python
-      #   uses: actions/setup-python@v2
-
-      # # Install in editable mode (`-e`) so that changes can be made
-      # - name: Install package
-      #   run: |
-      #     pip install -r requirements.txt
-      #     pip install -e .
-
-      # # Should be included in requirements, but just in case
-      # # "bumpversion" installs bump2version
-      # - name: Install bump2version
-      #   run: python -m pip install bumpversion
-
-      # # Get the new version by doing a dry run first
-      # - name: Dry run bumpversion
-      #   run: |
-      #     bumpversion --dry-run ${{ github.event.inputs.version_name }} --allow-dirty --verbose
-
-      # # This is lifted directly from the bump2version docs.
-      # # Version number will be saved in `env` section of each consecutive stage
-      # - name: Store new version number
-      #   run: echo "version_number=`bumpversion --dry-run --list ${{ github.event.inputs.version_name }} | grep new_version | sed -r s,"^.*=",,`" >> $GITHUB_ENV
-
-      # - name: Display new version number
-      #   run: |
-      #     echo "version_name: ${{ github.event.inputs.version_name }}"
-      #     echo "version_number: v${{ env.version_number }}"
-
-      # - name: Update CHANGELOG
-      #   run: |
-      #     python scripts/release.py build-changelog v${{ env.version_number }} --clean
-      #     git add .
-      #     git commit -m "Update CHANGELOG for auto-release v${{ env.version_number }}"
-      #     git push
-
-      # - name: Ensure repo status is clean for current branch
-      #   run: git status
-
-      # - name: Pull latest commits of main branch
-      #   run: |
-      #     git checkout main
-      #     git pull
-      #     git status
-
-      # # No push here as handled later on after tag and build
-      # - name: Merge current branch into main branch
-      #     git merge ${{ env.BRANCH_NAME }}
-
-      # This will commit and tag (see .bumpversion.cfg)
-      # This is run on main branch so that tag is at the merge
-      # - name: Run bumpversion
-      #   run: bumpversion ${{ github.event.inputs.version_name }} --verbose
-
-      # - name: Ensure tag creation
-      #   run: git tag | grep ${{ env.version_number }}
-
-      # # - name: Build package
-      # #   run: |
-      # #     rm -f dist/*
-      # #     python setup.py sdist bdist_wheel
-      # # - name: Publish package
-      # #   uses: pypa/gh-action-pypi-publish@master
-      # #   with:
-      # #     user: __token__
-      # #     password: ${{ secrets.PYPI_API_TOKEN }}
-
-      # - name: Push changes with tags
-      #   run: git push && git push --tags
-
-      # # This will create an actual pointer in the "Release" section of the GitHub repo
-      # # The intent is to always have "latest" point to <this> release
-      # - name: Create release in GitHub repo
-      #   uses: ncipollo/release-action@v1
-      #   with:
-      #       body: "Contribution details can be found in CHANGELOG.md"
-      #       token: ${{ secrets.GITHUB_TOKEN }}
-      #       tag: v${{ env.version_number}}
-
-      # # In most cases, this should be merging main back into dev
-      # - name: Merge main branch into current branch
-      #   run: |
-      #     git checkout main
-      #     git pull
-      #     git status
-      #     git checkout ${{ env.BRANCH_NAME }}
-      #     git pull
-      #     git merge main
-      #     git push
-      #     git status
-
-      # - name: Ensure complete
-      #   run: echo "auto-release complete!"
+      - name: Ensure complete
+        run: echo "auto-release complete!"
