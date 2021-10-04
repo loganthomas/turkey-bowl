@@ -18,8 +18,8 @@ setup(
     package_dir={"": "src"},
     install_requires=[
         "click-spinner",
-        "numpy",
-        "pandas",
+        "numpy~=1.19.3",  # pin due to openpyxl error
+        "pandas~=1.1.4",  # pin due to openpyxl error
         "requests",
         "tqdm",
         "typer",
