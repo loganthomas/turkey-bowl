@@ -3,9 +3,10 @@
 [![codecov](https://codecov.io/gh/loganthomas/turkey-bowl/branch/master/graph/badge.svg)](https://codecov.io/gh/loganthomas/turkey-bowl)
 [![Codacy Badge](https://app.codacy.com/project/badge/Grade/0f1564fd54f74bc081398ae0b982d4fb)](https://www.codacy.com/gh/loganthomas/turkey-bowl/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=loganthomas/turkey-bowl&amp;utm_campaign=Badge_Grade)
 [![Maintainability](https://api.codeclimate.com/v1/badges/08d1578979aeb217b85a/maintainability)](https://codeclimate.com/github/loganthomas/turkey-bowl/maintainability)
-[![Tests: main](https://github.com/loganthomas/turkey-bowl/actions/workflows/test-suite.yml/badge.svg?branch=main)]((https://github.com/loganthomas/turkey-bowl/actions/workflows/test-suite.yml/badge.svg?branch=main))
-[![Tests: dev](https://github.com/loganthomas/turkey-bowl/actions/workflows/test-suite.yml/badge.svg?branch=dev)]((https://github.com/loganthomas/turkey-bowl/actions/workflows/test-suite.yml/badge.svg?branch=dev))
-[![Auto Release](https://github.com/loganthomas/turkey-bowl/actions/workflows/auto-release.yml/badge.svg)](https://github.com/loganthomas/turkey-bowl/actions/workflows/auto-release.yml/badge.svg)
+[![Tests: main](https://github.com/loganthomas/turkey-bowl/actions/workflows/test-suite.yml)](https://img.shields.io/github/workflow/status/loganthomas/turkey-bowl/test-suite/main?label=tests%3A%20main&logo=GitHub)
+[![Tests: dev](https://github.com/loganthomas/turkey-bowl/actions/workflows/test-suite.yml)](https://img.shields.io/github/workflow/status/loganthomas/turkey-bowl/test-suite/dev?label=tests%3A%20dev&logo=GitHub)
+[![Auto Release](https://github.com/loganthomas/turkey-bowl/actions/workflows/auto-release.yml)](https://img.shields.io/github/workflow/status/loganthomas/turkey-bowl/auto-release?label=auto-release&logo=GitHub)
+
 
 This repo contains Turkey Bowl fantasy football draft and scoring code.
 
