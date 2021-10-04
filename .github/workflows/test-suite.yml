@@ -22,10 +22,10 @@ jobs:
       # Install in non-editable mode (no `-e`)
       # Need to install pyface with PyQt5 dependencies
       # pip install pyface[pyqt5]
+      # pip install -r requirements.txt
       - name: Install package
         run: |
           pip install wheel
-          pip install -r requirements.txt
           pip install .
 
       # See pytest.ini for configs
