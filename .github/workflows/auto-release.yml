@@ -53,6 +53,11 @@ jobs:
 
       - name: Setup Python
         uses: actions/setup-python@v2
+        with:
+          python-version: '3.7'
+
+      - name: Display Python version
+        run: python -c "import sys; print(sys.version)"
 
       # Install in editable mode (`-e`) so that changes can be made
       - name: Install package
