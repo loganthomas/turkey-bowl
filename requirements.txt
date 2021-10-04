@@ -6,6 +6,7 @@ codecov
 numpy
 pandas
 pre-commit
+pyface
 pytest
 pytest-cov
 pytest-freezegun
@@ -15,7 +16,7 @@ requests
 responses
 tqdm
 traits
-# traitsui
+traitsui
 typer
 XlsxWriter
 xlrd
