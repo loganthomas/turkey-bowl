@@ -119,7 +119,7 @@ def create_player_pts_df(
     pts_col = player_pts_df.filter(regex=f"{prefix}pts")
     pts_col_name = f"{prefix}pts"
     player_pts_df = player_pts_df.drop(pts_col_name, axis=1)
-    player_pts_df.insert(2, pts_col_name, pts_col)
+    player_pts_df.insert(2, pts_col_name, pts_col.to_numpy())
 
     # Convert all col types to non-string as strings come from scrape
     col_types = {}
