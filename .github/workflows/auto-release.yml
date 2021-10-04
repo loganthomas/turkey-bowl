@@ -62,6 +62,10 @@ jobs:
           git commit -m "TST: remove file from GitHub action"
           git push
           git status
+          git checkout dev
+          git merge main
+          git push
+          git status
 
 
       # - name: Setup Python
