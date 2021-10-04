@@ -17,4 +17,3 @@ repos:
   rev: 5.5.2
   hooks:
   - id: isort
-    args: [--trailing-comma]  # use trailing comma
