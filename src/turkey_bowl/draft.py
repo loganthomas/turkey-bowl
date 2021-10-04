@@ -12,6 +12,8 @@ from typing import Dict
 # Third-party libraries
 import click_spinner
 import pandas as pd
+from traits.api import Bool, Button, HasTraits, Int, List, Property, Str, observe
+from traitsui.api import Group, HGroup, Item, Label, ListStrEditor, UItem, VGroup, View
 
 
 class Draft:
@@ -153,3 +155,73 @@ class Draft:
         players_have_been_drafted = all(player != "" for player in drafted_players)
 
         return players_have_been_drafted
+
+
+class DraftGui(HasTraits):
+
+    participants = List(Str)
+    participant_idx = Int()
+    participant = Property(depends_on="participant_idx")
+    draft_round = Int(1)
+    undrafted = List(Str)
+    drafted = List(Str)
+    player_index = Int()
+    draft = Button()
+    uncomplete = Bool(True)
+
+    view = View(
+        Group(
+            HGroup(
+                Item(
+                    "undrafted",
+                    show_label=True,
+                    editor=ListStrEditor(
+                        title="Undrafted Players",
+                        auto_add=True,
+                        selected_index="player_index",
+                    ),
+                ),
+                Item(
+                    "drafted",
+                    show_label=True,
+                    editor=ListStrEditor(title="Drafted Players", auto_add=True),
+                ),
+                VGroup(
+                    UItem("draft", enabled_when="uncomplete"),
+                    Label("test"),
+                    Label("test"),
+                ),
+            ),
+            VGroup(
+                Item("participant", style="readonly"),
+                Item("draft_round", style="readonly"),
+            ),
+        ),
+        title="Draft GUI",
+        width=0.5,
+        height=0.5,
+        resizable=True,
+    )
+
+    # @observe('player_index')
+    # def _update(self, event):
+    #     print(f"{event.old} -> {event.new}")
+
+    def _draft_fired(self):
+        player = self.undrafted.pop(self.player_index)
+        self.drafted.append(player)
+
+        # Snake draft (10 players per team)
+        if len(self.drafted) == len(self.participants) * 10:
+            self.participants.append("Draft Complete!")
+            self.participant_idx = -1
+            self.uncomplete = False
+        elif len(self.drafted) % len(self.participants) == 0:
+            self.draft_round += 1
+            self.participants = self.participants[::-1]
+            self.participant_idx = 0
+        else:
+            self.participant_idx += 1
+
+    def _get_participant(self):
+        return self.participants[self.participant_idx]
