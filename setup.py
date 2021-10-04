@@ -25,7 +25,7 @@ setup(
         "requests",
         "tqdm",
         "traits",
-        "traitsui",
+        # "traitsui",
         "typer",
         "XlsxWriter",
         "xlrd",
