@@ -20,9 +20,11 @@ jobs:
         run: python -c "import sys; print(sys.version)"
 
       # Install in non-editable mode (no `-e`)
+      # Need to install pyface with PyQt5 dependencies
       - name: Install package
         run: |
           pip install wheel
+          pip install pyface[pyqt5]
           pip install -r requirements.txt
           pip install .
 
