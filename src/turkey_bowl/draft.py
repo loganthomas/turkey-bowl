@@ -12,8 +12,26 @@ from typing import Dict
 # Third-party libraries
 import click_spinner
 import pandas as pd
-from traits.api import Bool, Button, HasTraits, Int, List, Property, Str, observe
-from traitsui.api import Group, HGroup, Item, Label, ListStrEditor, UItem, VGroup, View
+from traits.api import (
+    Bool,
+    Button,
+    HasTraits,
+    Int,
+    List,
+    Property,
+    Str,
+    observe,
+)
+from traitsui.api import (
+    Group,
+    HGroup,
+    Item,
+    Label,
+    ListStrEditor,
+    UItem,
+    VGroup,
+    View,
+)
 
 
 class Draft:
