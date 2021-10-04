@@ -38,13 +38,15 @@ jobs:
           git add .
           git commit -m "TST: add file from GitHub action"
           git push
-
+          git status
           git checkout master
           git merge dev
           git rm test_file_from_action.txt
           git add .
           git commit -m "TST: remove file from GitHub action"
           git push
+          git status
+
       # # Used to show which branch the GitHub action was run from
       # # Should be dev in most cases
       # - name: Store current branch
