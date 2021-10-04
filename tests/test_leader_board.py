@@ -1483,7 +1483,7 @@ def test_LeaderBoard_save(mock_participant_teams, tmp_path, capsys):
         tmp_leader_board_path,
         sheet_name="Leader Board",
         index_col=0,
-        enengine="openpyxl",
+        engine="openpyxl",
     )
     written_board = written_board.astype("float64")
 
