@@ -20,6 +20,7 @@ setup(
         "click-spinner",
         "numpy",
         "pandas",
+        "openpyxl",
         "requests",
         "tqdm",
         "typer",
