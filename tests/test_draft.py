@@ -83,7 +83,7 @@ def test_Draft_setup_nothing_exists(tmp_path, monkeypatch, capsys):
     draft_sheet_data = pd.read_excel(
         tmp_archive_dir.joinpath("2020/2020_draft_sheet.xlsx"),
         sheet_name=None,
-        engine="xlrd",
+        engine="openpyxl",
     )
 
     assert list(draft_sheet_data) == ["Dodd", "Logan", "Becca"]

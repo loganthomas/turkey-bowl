@@ -9,8 +9,10 @@ pre-commit
 pytest
 pytest-cov
 pytest-freezegun
+openpyxl
 requests
 responses
 tqdm
+typer
 XlsxWriter
 xlrd
