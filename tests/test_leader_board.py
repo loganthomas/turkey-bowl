@@ -1480,17 +1480,26 @@ def test_LeaderBoard_save(mock_participant_teams, tmp_path, capsys):
     participant_dtypes = {"ACTUAL_pts": "float64", "PROJ_pts": "float64"}
 
     written_board = pd.read_excel(
-        tmp_leader_board_path, sheet_name="Leader Board", index_col=0
+        tmp_leader_board_path,
+        sheet_name="Leader Board",
+        index_col=0,
+        enengine="openpyxl",
     )
     written_board = written_board.astype("float64")
 
-    written_dodd = pd.read_excel(tmp_leader_board_path, sheet_name="Dodd")
+    written_dodd = pd.read_excel(
+        tmp_leader_board_path, sheet_name="Dodd", engine="openpyxl"
+    )
     written_dodd = written_dodd.astype(participant_dtypes)
 
-    written_becca = pd.read_excel(tmp_leader_board_path, sheet_name="Becca")
+    written_becca = pd.read_excel(
+        tmp_leader_board_path, sheet_name="Becca", engine="openpyxl"
+    )
     written_becca = written_becca.astype(participant_dtypes)
 
-    written_logan = pd.read_excel(tmp_leader_board_path, sheet_name="Logan")
+    written_logan = pd.read_excel(
+        tmp_leader_board_path, sheet_name="Logan", engine="openpyxl"
+    )
     written_logan = written_logan.astype(participant_dtypes)
 
     assert written_board.equals(expected_board_data_df)

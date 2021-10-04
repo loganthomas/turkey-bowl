@@ -469,7 +469,9 @@ def test_create_player_pts_df_projected_doesnt_exists(tmp_path, capsys):
     result = aggregate.create_player_pts_df(
         year, week, player_pts, tmp_projected_player_pts_path
     )
-    result_written = pd.read_csv(tmp_projected_player_pts_path, index_col=0)
+    result_written = pd.read_csv(
+        tmp_projected_player_pts_path, index_col=0, engine="openpyxl"
+    )
 
     # Verify
     assert result.equals(expected)
