@@ -19,7 +19,7 @@ exclude = '''
 '''
 
 [tool.isort]
-multi_line_output=3
+multi_line_output=5
 import_heading_stdlib='Standard libraries'
 import_heading_thirdparty='Third-party libraries'
 import_heading_firstparty='Local libraries'
