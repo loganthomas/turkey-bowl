@@ -20,12 +20,11 @@ setup(
         "click-spinner",
         "numpy",
         "pandas",
-        "openpyxl",
         "requests",
         "tqdm",
         "typer",
-        "XlsxWriter",
-        "xlrd",
+        "XlsxWriter~=1.3.7",  # pin due to openpyxl error
+        "xlrd~=1.2.0",  # pin due to openpyxl error
     ],
     extra_require={
         "dev": [
