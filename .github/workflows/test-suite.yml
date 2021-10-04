@@ -29,5 +29,11 @@ jobs:
       - name: Run tests
         run: pytest .
 
+      - name: Upload codecov test coverage
+        uses: codecov/codecov-action@v2
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }} # not required for public repos
+          fail_ci_if_error: true  # fail when codecov runs into errors during upload
+
       - name: Ensure complete
         run: echo "test-suite complete!"
