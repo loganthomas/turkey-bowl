@@ -17,4 +17,4 @@ repos:
   rev: 5.5.2
   hooks:
   - id: isort
-    args: [--profile, black]
+    args: [-tc]  # use trailing comma
