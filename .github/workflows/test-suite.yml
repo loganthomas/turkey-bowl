@@ -7,8 +7,9 @@ jobs:
     name: Run test suite via pytest
     runs-on: ${{ matrix.os }}
     strategy:
-      matrix: [ubuntu-latest, macos-latest]
-      python-version: ['3.6', '3.7', '3.8']
+      matrix:
+        os: [ubuntu-latest, macos-latest]
+        python-version: ['3.6', '3.7', '3.8']
 
     steps:
       - name: Checkout repository
