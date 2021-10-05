@@ -12,8 +12,8 @@ from typing import Dict
 # Third-party libraries
 import click_spinner
 import pandas as pd
-from traits.api import Bool, Button, HasTraits, Int, List, Property, Str, observe
-from traitsui.api import Group, HGroup, Item, Label, ListStrEditor, UItem, VGroup, View
+from traits.api import Bool, Button, HasTraits, Int, List, Property, Str
+from traitsui.api import Group, HGroup, Item, ListStrEditor, UItem, VGroup, View
 
 
 class Draft:
@@ -254,6 +254,8 @@ class DraftGui(HasTraits):
                     VGroup(
                         UItem("draft", enabled_when="incomplete"),
                         UItem("undo", enabled_when="len(drafted)>0"),
+                        Item("participant", style="readonly"),
+                        Item("draft_round", style="readonly"),
                     ),
                 ),
                 VGroup(
@@ -313,12 +315,11 @@ class DraftGui(HasTraits):
                             defined_when="len(participants)>=6",
                         ),
                     ),
-                    Item("participant", style="readonly"),
-                    Item("draft_round", style="readonly"),
                 ),
             ),
             title="Draft GUI",
             width=0.75,
             height=0.75,
             resizable=True,
+            buttons=["Ok", "Cancel"],
         )
