@@ -29,7 +29,6 @@ jobs:
       # pip install -r requirements.txt
       - name: Install package
         run: |
-          sudo apt-get install python3-setuptools python3-pyqt5 python3-pyqt4
           pip install .
 
       # See pytest.ini for configs
