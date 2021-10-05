@@ -11,24 +11,11 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v2
 
-      - name: Install Qt dependencies for Linux
-        run: |
-          sudo apt-get update
-          sudo apt-get install qt5-default
-          sudo apt-get install libxkbcommon-x11-0
-          sudo apt-get install libxcb-icccm4
-          sudo apt-get install libxcb-image0
-          sudo apt-get install libxcb-keysyms1
-          sudo apt-get install libxcb-randr0
-          sudo apt-get install libxcb-render-util0
-          sudo apt-get install libxcb-xinerama0
-          sudo apt-get install pulseaudio
-          sudo apt-get install libpulse-mainloop-glib0
-
       - name: Setup Python
         uses: actions/setup-python@v2
         with:
-          python-version: '3.7'
+          python-version: 3.7
+          architecture: x64
 
       - name: Display Python version
         run: python -c "import sys; print(sys.version)"
@@ -45,8 +32,9 @@ jobs:
           pip install .
 
       # See pytest.ini for configs
+      # pytest ./ --cov-report=xml
       - name: Run tests
-        run: pytest ./ --cov-report=xml
+        run: pytest .
 
       - name: Upload codecov test coverage
         uses: codecov/codecov-action@v2
