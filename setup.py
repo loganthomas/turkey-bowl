@@ -20,7 +20,7 @@ setup(
         "click-spinner",
         "numpy",
         "pandas",
-        "pyface",
+        "pyface<7",
         "pytest-cov",
         "PyQt5",
         "openpyxl",
