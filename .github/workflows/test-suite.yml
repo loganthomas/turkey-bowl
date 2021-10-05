@@ -49,7 +49,7 @@ jobs:
       # pip install -r requirements.txt
       - name: Install local package
         run: |
-          pytohn -m pip install .
+          python -m pip install .
 
       # See pytest.ini for configs
       - name: Run tests
