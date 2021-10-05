@@ -157,6 +157,7 @@ class Draft:
         return players_have_been_drafted
 
 
+# TODO: add docstrings!!
 class DraftGui(HasTraits):
 
     undrafted = List(Str)
@@ -321,5 +322,5 @@ class DraftGui(HasTraits):
             width=0.75,
             height=0.75,
             resizable=True,
-            buttons=["Ok", "Cancel"],  # TODO: fix OK button?
+            buttons=["OK", "Cancel"],
         )
