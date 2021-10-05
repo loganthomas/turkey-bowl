@@ -55,7 +55,7 @@ setup(
         "Programming Language :: Python :: 3",
         "Programming Language :: Python :: 3.7",
     ],
-    python_requires=">=3.7",
+    python_requires=">=3.6",
     entry_points={
         "console_scripts": ["turkey_bowl = turkey_bowl.turkey_bowl_runner:main"]
     },
