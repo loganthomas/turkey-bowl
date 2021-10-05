@@ -321,5 +321,5 @@ class DraftGui(HasTraits):
             width=0.75,
             height=0.75,
             resizable=True,
-            buttons=["Ok", "Cancel"],
+            buttons=["Ok", "Cancel"],  # TODO: fix OK button?
         )
