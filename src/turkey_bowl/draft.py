@@ -12,26 +12,8 @@ from typing import Dict
 # Third-party libraries
 import click_spinner
 import pandas as pd
-from traits.api import (
-    Bool,
-    Button,
-    HasTraits,
-    Int,
-    List,
-    Property,
-    Str,
-    observe,
-)
-from traitsui.api import (
-    Group,
-    HGroup,
-    Item,
-    Label,
-    ListStrEditor,
-    UItem,
-    VGroup,
-    View,
-)
+from traits.api import Bool, Button, HasTraits, Int, List, Property, Str, observe
+from traitsui.api import Group, HGroup, Item, Label, ListStrEditor, UItem, VGroup, View
 
 
 class Draft:
@@ -177,69 +159,166 @@ class Draft:
 
 class DraftGui(HasTraits):
 
+    undrafted = List(Str)
+    drafted = List(Str)
+    draft = Button()
+    undo = Button()
+    player_index = Int()
+
     participants = List(Str)
     participant_idx = Int()
     participant = Property(depends_on="participant_idx")
+
+    participant0 = List(Str)
+    participant1 = List(Str)
+    participant2 = List(Str)
+    participant3 = List(Str)
+    participant4 = List(Str)
+    participant5 = List(Str)
+    participant_views = List()
+
     draft_round = Int(1)
-    undrafted = List(Str)
-    drafted = List(Str)
-    player_index = Int()
-    draft = Button()
-    uncomplete = Bool(True)
-
-    view = View(
-        Group(
-            HGroup(
-                Item(
-                    "undrafted",
-                    show_label=True,
-                    editor=ListStrEditor(
-                        title="Undrafted Players",
-                        auto_add=True,
-                        selected_index="player_index",
-                    ),
-                ),
-                Item(
-                    "drafted",
-                    show_label=True,
-                    editor=ListStrEditor(title="Drafted Players", auto_add=True),
-                ),
-                VGroup(
-                    UItem("draft", enabled_when="uncomplete"),
-                    Label("test"),
-                    Label("test"),
-                ),
-            ),
-            VGroup(
-                Item("participant", style="readonly"),
-                Item("draft_round", style="readonly"),
-            ),
-        ),
-        title="Draft GUI",
-        width=0.5,
-        height=0.5,
-        resizable=True,
-    )
-
-    # @observe('player_index')
-    # def _update(self, event):
-    #     print(f"{event.old} -> {event.new}")
+    incomplete = Bool(True)
 
     def _draft_fired(self):
         player = self.undrafted.pop(self.player_index)
         self.drafted.append(player)
+        self.participant_views[self.participant_idx].append(player)
 
         # Snake draft (10 players per team)
         if len(self.drafted) == len(self.participants) * 10:
             self.participants.append("Draft Complete!")
             self.participant_idx = -1
-            self.uncomplete = False
+            self.incomplete = False
         elif len(self.drafted) % len(self.participants) == 0:
             self.draft_round += 1
             self.participants = self.participants[::-1]
+            self.participant_views = self.participant_views[::-1]
             self.participant_idx = 0
         else:
             self.participant_idx += 1
 
+    def _undo_fired(self):
+        if len(self.drafted) == len(self.participant_views) * 10:
+            self.participants.remove("Draft Complete!")
+            self.participant_idx = len(self.participants) - 1
+        elif len(self.drafted) % len(self.participants) == 0:
+            self.draft_round -= 1
+            self.participants = self.participants[::-1]
+            self.participant_views = self.participant_views[::-1]
+            self.participant_idx = len(self.participants) - 1
+        else:
+            self.participant_idx -= 1
+
+        player = self.drafted.pop()
+        self.undrafted.append(player)
+        self.participant_views[self.participant_idx].remove(player)
+        self.incomplete = True
+
     def _get_participant(self):
         return self.participants[self.participant_idx]
+
+    def _participant_views_default(self):
+        """
+        Notes
+        -----
+        There can only be a maximum of 6 participants.
+        Rather than being clever, all participants are created and sliced.
+        """
+        all_views = [
+            self.participant0,
+            self.participant1,
+            self.participant2,
+            self.participant3,
+            self.participant4,
+            self.participant5,
+        ]
+        return all_views[: len(self.participants)]
+
+    def create_view(self):
+        return View(
+            Group(
+                HGroup(
+                    UItem(
+                        "undrafted",
+                        editor=ListStrEditor(
+                            title="Undrafted Players",
+                            auto_add=True,
+                            selected_index="player_index",
+                        ),
+                    ),
+                    UItem(
+                        "drafted",
+                        editor=ListStrEditor(title="Drafted Players", auto_add=True),
+                    ),
+                    VGroup(
+                        UItem("draft", enabled_when="incomplete"),
+                        UItem("undo", enabled_when="len(drafted)>0"),
+                    ),
+                ),
+                VGroup(
+                    HGroup(
+                        Item(
+                            "participant0",
+                            label=self.participants[0]
+                            if len(self.participants) >= 1
+                            else "",
+                            show_label=True,
+                            editor=ListStrEditor(auto_add=True),
+                            defined_when="len(participants)>=1",
+                        ),
+                        Item(
+                            "participant1",
+                            label=self.participants[1]
+                            if len(self.participants) >= 2
+                            else "",
+                            show_label=True,
+                            editor=ListStrEditor(auto_add=True),
+                            defined_when="len(participants)>=2",
+                        ),
+                        Item(
+                            "participant2",
+                            label=self.participants[2]
+                            if len(self.participants) >= 3
+                            else "",
+                            show_label=True,
+                            editor=ListStrEditor(auto_add=True),
+                            defined_when="len(participants)>=3",
+                        ),
+                        Item(
+                            "participant3",
+                            label=self.participants[3]
+                            if len(self.participants) >= 4
+                            else "",
+                            show_label=True,
+                            editor=ListStrEditor(auto_add=True),
+                            defined_when="len(participants)>=4",
+                        ),
+                        Item(
+                            "participant4",
+                            label=self.participants[4]
+                            if len(self.participants) >= 5
+                            else "",
+                            show_label=True,
+                            editor=ListStrEditor(auto_add=True),
+                            defined_when="len(participants)>=5",
+                        ),
+                        Item(
+                            "participant5",
+                            label=self.participants[5]
+                            if len(self.participants) >= 6
+                            else "",
+                            show_label=True,
+                            editor=ListStrEditor(auto_add=True),
+                            defined_when="len(participants)>=6",
+                        ),
+                    ),
+                    Item("participant", style="readonly"),
+                    Item("draft_round", style="readonly"),
+                ),
+            ),
+            title="Draft GUI",
+            width=0.75,
+            height=0.75,
+            resizable=True,
+        )
