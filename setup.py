@@ -20,7 +20,7 @@ setup(
         "click-spinner",
         "numpy",
         "pandas",
-        "pyface<7",
+        "pyface[pyqt5]",
         "pytest",
         "pytest-cov",
         "PyQt5",

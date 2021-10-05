@@ -19,13 +19,15 @@ jobs:
       - name: Display Python version
         run: python -c "import sys; print(sys.version)"
 
+      - name: Ensure pip, setuptools, and wheel are up to date
+        run: python -m pip install --upgrade pip setuptools wheel
+
       # Install in non-editable mode (no `-e`)
       # Need to install pyface with PyQt5 dependencies
       # pip install pyface[pyqt5]
       # pip install -r requirements.txt
       - name: Install package
         run: |
-          pip install wheel
           pip install .
 
       # See pytest.ini for configs
