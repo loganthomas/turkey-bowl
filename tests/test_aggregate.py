@@ -377,7 +377,7 @@ def test_create_player_pts_df_projected_doesnt_exists(tmp_path, capsys):
     )
 
     player_pts = {
-        "252": {
+        "2555260": {
             "projectedStats": {
                 "week": {
                     "2020": {
@@ -414,7 +414,7 @@ def test_create_player_pts_df_projected_doesnt_exists(tmp_path, capsys):
                 }
             }
         },
-        "382": {
+        "2504211": {
             "projectedStats": {
                 "week": {
                     "2020": {
@@ -435,8 +435,8 @@ def test_create_player_pts_df_projected_doesnt_exists(tmp_path, capsys):
     }
 
     player_pts_df_data = {
-        "Player": {0: "Chad Henne", 1: "Matt Ryan", 2: "Joe Flacco"},
-        "Team": {0: "KC", 1: "ATL", 2: "NYJ"},
+        "Player": {0: "Dak Prescott", 1: "Matt Ryan", 2: "Tom Brady"},
+        "Team": {0: "DAL", 1: "ATL", 2: "TB"},
         "PROJ_pts": {0: 0.31, 1: 20.01, 2: 0.84},
         "PROJ_Games_Played": {0: 1.0, 1.0: 1.0, 2: 1.0},
         "PROJ_Passing_Yards": {0: 6.05, 1: 296.77, 2: 16.93},
@@ -503,7 +503,7 @@ def test_create_player_pts_df_actual(tmp_path):
     )
 
     player_pts = {
-        "252": {
+        "2555260": {
             "stats": {
                 "week": {
                     "2020": {
@@ -540,7 +540,7 @@ def test_create_player_pts_df_actual(tmp_path):
                 }
             }
         },
-        "382": {
+        "2504211": {
             "stats": {
                 "week": {
                     "2020": {
@@ -561,8 +561,8 @@ def test_create_player_pts_df_actual(tmp_path):
     }
 
     player_pts_df_data = {
-        "Player": {0: "Chad Henne", 1: "Matt Ryan", 2: "Joe Flacco"},
-        "Team": {0: "KC", 1: "ATL", 2: "NYJ"},
+        "Player": {0: "Dak Prescott", 1: "Matt Ryan", 2: "Tom Brady"},
+        "Team": {0: "DAL", 1: "ATL", 2: "TB"},
         "ACTUAL_pts": {0: 0.31, 1: 20.01, 2: 0.84},
         "ACTUAL_Games_Played": {0: 1.0, 1.0: 1.0, 2: 1.0},
         "ACTUAL_Passing_Yards": {0: 6.05, 1: 296.77, 2: 16.93},
