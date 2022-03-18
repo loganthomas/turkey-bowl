@@ -1,18 +1,18 @@
 """
 Unit tests for scrape.py
 """
-# Standard libraries
 import calendar
 import json
+import logging
 from datetime import datetime, timedelta
 
-# Third-party libraries
 import numpy as np
 import pytest
 import responses
 
-# Local libraries
 from turkey_bowl.scrape import Scraper
+
+logger = logging.getLogger(__name__)
 
 
 def test_Scraper_instantiation():
@@ -211,12 +211,6 @@ def test_Scraper_nfl_thanksgiving_calendar_week_setter(
     # Verify
     assert scraper.nfl_thanksgiving_calendar_week == 5
 
-    # Verify ``None`` changes back to correct
-    scraper.nfl_thanksgiving_calendar_week = None
-    assert (
-        scraper.nfl_thanksgiving_calendar_week
-        == expected_nfl_thanksgiving_calendar_WEEK
-    )
     # Cleanup - none necessary
 
 
@@ -297,8 +291,9 @@ def test_Scraper_actual_pts_url(year, week):
 
 
 @responses.activate
-def test_Scraper_scrape_url_bad_status_code(capsys):
+def test_Scraper_scrape_url_bad_status_code(caplog):
     # Setup
+    caplog.set_level(logging.INFO)
     url = "https://test.com"
     expected_json = {
         "errors": [
@@ -314,20 +309,18 @@ def test_Scraper_scrape_url_bad_status_code(capsys):
     # Exercise
     scraper = Scraper(2020)
     result = scraper.scrape_url(url)
-    captured = capsys.readouterr()
 
     # Verify
     assert result == expected_json
-    assert (
-        captured.out == "\tWARNING: API response unsuccessful for: https://test.com\n"
-    )
+    assert "WARNING: API response unsuccessful for: https://test.com" in caplog.text
 
     # Cleanup - none necessary
 
 
 @responses.activate
-def test_Scraper_scrape_url_good_status_code(capsys):
+def test_Scraper_scrape_url_good_status_code(caplog):
     # Setup
+    caplog.set_level(logging.INFO)
     url = "https://test.com"
     expected_json = {"data": "good"}
     responses.add(method=responses.GET, url=url, json=expected_json, status=200)
@@ -335,18 +328,18 @@ def test_Scraper_scrape_url_good_status_code(capsys):
     # Exercise
     scraper = Scraper(2020)
     result = scraper.scrape_url(url)
-    captured = capsys.readouterr()
 
     # Verify
     assert result == expected_json
-    assert captured.out == "\tSuccessful API response obtained for: https://test.com\n"
+    assert "Successful API response obtained for: https://test.com" in caplog.text
 
     # Cleanup - none necessary
 
 
 @responses.activate
-def test_Scraper_get_projected_player_pts(capsys):
+def test_Scraper_get_projected_player_pts(caplog):
     # Setup
+    caplog.set_level(logging.INFO)
     request_json = {
         "systemConfig": {"currentGameId": "102020"},
         "games": {
@@ -432,25 +425,23 @@ def test_Scraper_get_projected_player_pts(capsys):
         },
     }
 
-    expected_out = "\nCollecting projected player points...\n"
-    expected_out += (
-        f"\tSuccessful API response obtained for: {scraper.projected_pts_url}\n"
-    )
     # Exercise
-
     result = scraper.get_projected_player_pts()
-    captured = capsys.readouterr()
 
     # Verify
     assert result == expected_player_pts
-    assert captured.out == expected_out
-
+    assert "\nCollecting projected player points...\n" in caplog.text
+    assert (
+        f"\tSuccessful API response obtained for: {scraper.projected_pts_url}\n"
+        in caplog.text
+    )
     # Cleanup - none necessary
 
 
 @responses.activate
-def test_Scraper_get_actual_player_pts(capsys):
+def test_Scraper_get_actual_player_pts(caplog):
     # Setup
+    caplog.set_level(logging.INFO)
     request_json = {
         "systemConfig": {"currentGameId": "102020"},
         "games": {
@@ -533,18 +524,16 @@ def test_Scraper_get_actual_player_pts(capsys):
         },
     }
 
-    expected_out = "\nCollecting actual player points...\n"
-    expected_out += (
-        f"\tSuccessful API response obtained for: {scraper.actual_pts_url}\n"
-    )
     # Exercise
-
     result = scraper.get_actual_player_pts()
-    captured = capsys.readouterr()
 
     # Verify
     assert result == expected_player_pts
-    assert captured.out == expected_out
+    assert "\nCollecting actual player points...\n" in caplog.text
+    assert (
+        f"\tSuccessful API response obtained for: {scraper.actual_pts_url}\n"
+        in caplog.text
+    )
 
     # Cleanup - none necessary
 
@@ -675,8 +664,9 @@ def test_Scraper__get_player_metadata():
     # Cleanup - none necessary
 
 
-def test_Scraper_update_player_ids_exist(tmp_path, monkeypatch, capsys):
+def test_Scraper_update_player_ids_exist(tmp_path, monkeypatch, caplog):
     # Setup
+    caplog.set_level(logging.INFO)
     tmp_player_ids_json_path = tmp_path.joinpath("player_ids.json")
 
     player_ids = {
@@ -704,8 +694,7 @@ def test_Scraper_update_player_ids_exist(tmp_path, monkeypatch, capsys):
     scraper.update_player_ids(projected_player_pts)
 
     # Verify
-    captured = capsys.readouterr()
-    assert captured.out == expected_out
+    assert expected_out in caplog.text
 
 
 @responses.activate

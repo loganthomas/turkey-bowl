@@ -17,6 +17,7 @@ Notes:
 """
 
 import calendar
+import logging
 from datetime import datetime
 from pathlib import Path
 from typing import Any, Dict, Optional
@@ -28,12 +29,16 @@ from tqdm import tqdm
 
 from turkey_bowl import utils
 
+logger = logging.getLogger(__name__)
+
 
 class Scraper:
     def __init__(self, year: int) -> None:
         self.year = year
         self.player_ids_json_path = Path("assets/player_ids.json")
-        self.nfl_thanksgiving_calendar_week = self.get_nfl_thanksgiving_calendar_week()
+        self.week_delta = (
+            self.thanksgiving_calendar_week_start - self.nfl_calendar_week_start
+        )
 
     def __repr__(self):
         return f"Scraper({self.year})"
@@ -109,7 +114,8 @@ class Scraper:
 
         return thanksgiving_calendar_week_start
 
-    def get_nfl_thanksgiving_calendar_week(self) -> int:
+    @property
+    def nfl_thanksgiving_calendar_week(self) -> int:
         """
         Calculate the NFL week that corresponds to Thanksgiving.
 
@@ -118,48 +124,26 @@ class Scraper:
         For example, if the NFL Week 1 is calendar week 35 and
         Thanksgiving is during calendar week 47, the week to pull (i.e.
         the NFL Thanksgiving calendar week) is week 12 (47 - 35 = 12).
+
+        Add one since indexed at 1 (first week is considered Week 1 not Week 0)
         """
-        # Find delta between NFL week 1 and Thanksgiving Week
-        delta = self.thanksgiving_calendar_week_start - self.nfl_calendar_week_start
-
-        # Add one since indexed at 1
-        # (first week is considered Week 1 not Week 0)
-        nfl_thanksgiving_calendar_week = delta + 1
-
-        return nfl_thanksgiving_calendar_week
-
-    @property
-    def nfl_thanksgiving_calendar_week(self):
-        return self._nfl_thanksgiving_calendar_week
+        return self.week_delta + 1
 
     @nfl_thanksgiving_calendar_week.setter
-    def nfl_thanksgiving_calendar_week(self, week: Optional[int] = None) -> None:
+    def nfl_thanksgiving_calendar_week(self, week) -> None:
         """
-        Setter for pull week. If ``None`` provided, then revert back to
-        original (correct) nfl_thanksgiving_calendar_week.
+        Sets the "pull" week for scraping NFL scores.
+        Original Thanksgiving calendar week and NFL calendar week
+        are preserved.
 
-        Example usage:
-            from scrape import Scraper
-            scraper = Scraper(2019)
-            scraper.nfl_thanksgiving_calendar_week  # 13
-            scraper.nfl_thanksgiving_calendar_week = 2
-            scraper.nfl_thanksgiving_calendar_week  # 2
-            scraper.nfl_thanksgiving_calendar_week = None
-            scraper.nfl_thanksgiving_calendar_week # 13
-
-        Notes:
-            - This makes testing easier as the NFL Thanksgiving calendar
-              week is really the pull week used to gather player data.
-              By having a setter, a user can change this week to a
-              different week for testing purposes (like the week prior
-              to Thanksgiving to ensure everything is working correctly)
+        By having a setter, a user can change this week to a
+        different week for testing purposes (like the week prior
+        to Thanksgiving to ensure everything is working correctly).
         """
-        if week:
-            self._nfl_thanksgiving_calendar_week = week
-        else:
-            self._nfl_thanksgiving_calendar_week = (
-                self.get_nfl_thanksgiving_calendar_week()
-            )
+        logger.info(
+            f"Updating NFL Thanksgiving Calendar week from {self.nfl_thanksgiving_calendar_week} to {week}..."
+        )
+        self.week_delta = week - 1
 
     def _encode_url_params(self, url: str) -> str:
         """
@@ -209,9 +193,9 @@ class Scraper:
 
         if verbose:
             if response.status_code == requests.codes.ok:
-                print(f"\tSuccessful API response obtained for: {query_url}")
+                logger.info(f"\tSuccessful API response obtained for: {query_url}")
             else:
-                print(f"\tWARNING: API response unsuccessful for: {query_url}")
+                logger.info(f"\tWARNING: API response unsuccessful for: {query_url}")
 
         return response.json()
 
@@ -223,7 +207,7 @@ class Scraper:
         json is parsed to only get relevant player points.
         """
         # This is a unique identifier NOT truly a GAME identifier
-        print("\nCollecting projected player points...")
+        logger.info("\nCollecting projected player points...")
         response_json = self.scrape_url(self.projected_pts_url)
         system_config = response_json["systemConfig"].get("currentGameId")
         projected_player_pts = response_json["games"][system_config].get("players")
@@ -238,7 +222,7 @@ class Scraper:
         json is parsed to only get relevant player points.
         """
         # This is a unique identifier NOT truly a GAME identifier
-        print("\nCollecting actual player points...")
+        logger.info("\nCollecting actual player points...")
         response_json = self.scrape_url(self.actual_pts_url)
         system_config = response_json["systemConfig"].get("currentGameId")
         actual_player_pts = response_json["games"][system_config].get("players")
@@ -306,4 +290,4 @@ class Scraper:
             )
 
         else:
-            print(f"\tPlayer ids are up to date at {self.player_ids_json_path}")
+            logger.info(f"\tPlayer ids are up to date at {self.player_ids_json_path}")
