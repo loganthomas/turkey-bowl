@@ -33,9 +33,9 @@ logger = logging.getLogger(__name__)
 
 
 class Scraper:
-    def __init__(self, year: int) -> None:
+    def __init__(self, year: int, root: Optional[str] = None) -> None:
+        self.dir_config = utils.load_dir_config(root)
         self.year = year
-        self.player_ids_json_path = Path("assets/player_ids.json")
         self.week_delta = (
             self.thanksgiving_calendar_week_start - self.nfl_calendar_week_start
         )
@@ -235,8 +235,10 @@ class Scraper:
         If it does, player ids need to be updated only if ``year`` does
         not match THIS year.
         """
-        if self.player_ids_json_path.exists():
-            player_ids_loaded = utils.load_from_json(self.player_ids_json_path)
+        if self.dir_config.player_ids_json_path.exists():
+            player_ids_loaded = utils.load_from_json(
+                self.dir_config.player_ids_json_path
+            )
 
             if player_ids_loaded.get("year") == self.year:
                 return False
@@ -286,8 +288,11 @@ class Scraper:
                     )
 
             utils.write_to_json(
-                json_dict=pulled_player_data, filename=self.player_ids_json_path
+                json_dict=pulled_player_data,
+                filename=self.dir_config.player_ids_json_path,
             )
 
         else:
-            logger.info(f"\tPlayer ids are up to date at {self.player_ids_json_path}")
+            logger.info(
+                f"\tPlayer ids are up to date at {self.dir_config.player_ids_json_path}"
+            )

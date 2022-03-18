@@ -5,6 +5,7 @@ import calendar
 import json
 import logging
 from datetime import datetime, timedelta
+from pathlib import Path
 
 import numpy as np
 import pytest
@@ -17,13 +18,16 @@ logger = logging.getLogger(__name__)
 
 def test_Scraper_instantiation():
     # Setup - none necessary
+    here = Path.cwd()
 
     # Exercise
-    scraper = Scraper(2020)
+    scraper = Scraper(2020, root=here)
 
     # Verify
     assert scraper.year == 2020
-    assert scraper.player_ids_json_path.as_posix() == "assets/player_ids.json"
+    assert scraper.dir_config.player_ids_json_path == here.joinpath(
+        "assets/player_ids.json"
+    )
 
     assert scraper.__repr__() == "Scraper(2020)"
     assert scraper.__str__() == "Turkey Bowl Scraper (Year: 2020 NFL Week: 12)"
@@ -538,9 +542,11 @@ def test_Scraper_get_actual_player_pts(caplog):
     # Cleanup - none necessary
 
 
-def test_Scraper__check_player_ids_need_update_exists_same_year(tmp_path, monkeypatch):
+def test_Scraper__check_player_ids_need_update_exists_same_year(tmp_path):
     # Setup
-    tmp_player_ids_json_path = tmp_path.joinpath("player_ids.json")
+    tmp_dir = tmp_path.joinpath("assets")
+    tmp_dir.mkdir()
+    tmp_player_ids_json_path = tmp_dir.joinpath("player_ids.json")
 
     player_ids = {
         "year": 2020,
@@ -558,8 +564,7 @@ def test_Scraper__check_player_ids_need_update_exists_same_year(tmp_path, monkey
         json.dump(player_ids, tmp_file)
 
     # Exercise
-    scraper = Scraper(2020)
-    monkeypatch.setattr(scraper, "player_ids_json_path", tmp_player_ids_json_path)
+    scraper = Scraper(2020, root=tmp_path)
     result = scraper._check_player_ids_need_update()
 
     # Verify
@@ -568,9 +573,11 @@ def test_Scraper__check_player_ids_need_update_exists_same_year(tmp_path, monkey
     # Cleanup - none necessary
 
 
-def test_Scraper__check_player_ids_need_update_exists_diff_year(tmp_path, monkeypatch):
+def test_Scraper__check_player_ids_need_update_exists_diff_year(tmp_path):
     # Setup
-    tmp_player_ids_json_path = tmp_path.joinpath("player_ids.json")
+    tmp_dir = tmp_path.joinpath("assets")
+    tmp_dir.mkdir()
+    tmp_player_ids_json_path = tmp_dir.joinpath("player_ids.json")
 
     player_ids = {
         "year": 2019,
@@ -588,8 +595,7 @@ def test_Scraper__check_player_ids_need_update_exists_diff_year(tmp_path, monkey
         json.dump(player_ids, tmp_file)
 
     # Exercise
-    scraper = Scraper(2020)
-    monkeypatch.setattr(scraper, "player_ids_json_path", tmp_player_ids_json_path)
+    scraper = Scraper(2020, root=tmp_path)
     result = scraper._check_player_ids_need_update()
 
     # Verify
@@ -598,13 +604,14 @@ def test_Scraper__check_player_ids_need_update_exists_diff_year(tmp_path, monkey
     # Cleanup - none necessary
 
 
-def test_Scraper__check_player_ids_need_update_doesnt_exist(tmp_path, monkeypatch):
+def test_Scraper__check_player_ids_need_update_doesnt_exist(tmp_path):
     # Setup
-    tmp_player_ids_json_path = tmp_path.joinpath("player_ids.json")
+    tmp_dir = tmp_path.joinpath("assets")
+    tmp_dir.mkdir()
+    tmp_player_ids_json_path = tmp_dir.joinpath("player_ids.json")
 
     # Exercise
     scraper = Scraper(2020)
-    monkeypatch.setattr(scraper, "player_ids_json_path", tmp_player_ids_json_path)
     result = scraper._check_player_ids_need_update()
 
     # Verify
@@ -664,10 +671,12 @@ def test_Scraper__get_player_metadata():
     # Cleanup - none necessary
 
 
-def test_Scraper_update_player_ids_exist(tmp_path, monkeypatch, caplog):
+def test_Scraper_update_player_ids_exist(tmp_path, caplog):
     # Setup
     caplog.set_level(logging.INFO)
-    tmp_player_ids_json_path = tmp_path.joinpath("player_ids.json")
+    tmp_dir = tmp_path.joinpath("assets")
+    tmp_dir.mkdir()
+    tmp_player_ids_json_path = tmp_dir.joinpath("player_ids.json")
 
     player_ids = {
         "year": 2020,
@@ -689,8 +698,7 @@ def test_Scraper_update_player_ids_exist(tmp_path, monkeypatch, caplog):
     expected_out = f"\tPlayer ids are up to date at {tmp_player_ids_json_path}\n"
 
     # Exercise
-    scraper = Scraper(2020)
-    monkeypatch.setattr(scraper, "player_ids_json_path", tmp_player_ids_json_path)
+    scraper = Scraper(2020, root=tmp_path)
     scraper.update_player_ids(projected_player_pts)
 
     # Verify
@@ -700,7 +708,9 @@ def test_Scraper_update_player_ids_exist(tmp_path, monkeypatch, caplog):
 @responses.activate
 def test_Scraper_update_player_ids_dont_exist(tmp_path, monkeypatch):
     # Setup
-    tmp_player_ids_json_path = tmp_path.joinpath("player_ids.json")
+    tmp_dir = tmp_path.joinpath("assets")
+    tmp_dir.mkdir()
+    tmp_player_ids_json_path = tmp_dir.joinpath("player_ids.json")
 
     request_jsons = {
         "252": {
@@ -841,8 +851,7 @@ def test_Scraper_update_player_ids_dont_exist(tmp_path, monkeypatch):
     # Exercise
     assert tmp_player_ids_json_path.exists() is False
 
-    scraper = Scraper(2020)
-    monkeypatch.setattr(scraper, "player_ids_json_path", tmp_player_ids_json_path)
+    scraper = Scraper(2020, root=tmp_path)
 
     for player_id in ("252", "310", "382"):
         responses.add(
