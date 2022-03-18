@@ -1,12 +1,9 @@
-# Standard libraries
 import shutil
 from pathlib import Path
 
-# Third-party libraries
 import pandas as pd
 import typer
 
-# Local libraries
 from turkey_bowl import aggregate, utils
 from turkey_bowl.draft import Draft
 from turkey_bowl.leader_board import LeaderBoard

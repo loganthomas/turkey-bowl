@@ -37,6 +37,7 @@ setup(
             "check-manifest",
             "codecov",
             "flake8",
+            "mypy",
             "pre-commit",
             "pytest",
             "pytest-cov",

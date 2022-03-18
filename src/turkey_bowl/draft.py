@@ -1,7 +1,6 @@
 """
 Draft functions
 """
-# Standard libraries
 import itertools
 import json
 import random
@@ -9,7 +8,6 @@ import time
 from pathlib import Path
 from typing import Dict
 
-# Third-party libraries
 import click_spinner
 import pandas as pd
 
@@ -32,7 +30,7 @@ class Draft:
         return f"Turkey Bowl Draft: {self.year}"
 
     def setup(self) -> None:
-        """ Instantiate draft with attributes, files, and directories. """
+        """Instantiate draft with attributes, files, and directories."""
         if not self.output_dir.exists():
             self.output_dir.mkdir()
 

@@ -16,19 +16,16 @@ Notes:
     https://api.fantasy.nfl.com/v2/docs/service?serviceName=gameStats
 """
 
-# Standard libraries
 import calendar
 from datetime import datetime
 from pathlib import Path
 from typing import Any, Dict, Optional
 from urllib.parse import urlencode
 
-# Third-party libraries
 import numpy as np
 import requests
 from tqdm import tqdm
 
-# Local libraries
 from turkey_bowl import utils
 
 

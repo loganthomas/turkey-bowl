@@ -32,7 +32,7 @@ def test_Scraper_instantiation():
 
 
 def _get_date_of_first_thur_in_year(year: int) -> datetime:
-    """ Helper function for finding the first Thursday in the year."""
+    """Helper function for finding the first Thursday in the year."""
     calendar.setfirstweekday(calendar.SUNDAY)
     jan = np.array(calendar.monthcalendar(year, 1))
     jan_thursdays = jan[:, 4]

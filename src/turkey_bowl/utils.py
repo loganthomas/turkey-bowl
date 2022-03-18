@@ -1,7 +1,6 @@
 """
 Utility functions
 """
-# Standard libraries
 import json
 import logging
 from datetime import datetime
@@ -23,7 +22,7 @@ def load_from_json(filename: Path) -> Dict[str, Any]:
 
 
 def setup_logger(level=logging.INFO):
-    """ Set up logger with standard formatting and handlers. """
+    """Set up logger with standard formatting and handlers."""
 
     PREFIX = "%(asctime)s %(levelname).4s %(name)s - "
     DATE_FMT = "%Y-%m-%d %H:%M:%S"
