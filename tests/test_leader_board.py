@@ -1,14 +1,11 @@
 """
 Unit tests for leader_board.py
 """
-# Standard libraries
 import textwrap
 
-# Third-party libraries
 import pandas as pd
 import pytest
 
-# Local libraries
 from turkey_bowl.leader_board import LeaderBoard
 
 
