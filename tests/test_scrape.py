@@ -608,7 +608,6 @@ def test_Scraper__check_player_ids_need_update_doesnt_exist(tmp_path):
     # Setup
     tmp_dir = tmp_path.joinpath("assets")
     tmp_dir.mkdir()
-    tmp_player_ids_json_path = tmp_dir.joinpath("player_ids.json")
 
     # Exercise
     scraper = Scraper(2020)
