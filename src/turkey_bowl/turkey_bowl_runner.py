@@ -1,14 +1,11 @@
 """
 Thanksgiving Football module
 """
-# Standard libraries
 import sys
 from pathlib import Path
 
-# Third-party libraries
 import pandas as pd
 
-# Local libraries
 from turkey_bowl import aggregate, utils
 from turkey_bowl.draft import Draft
 from turkey_bowl.leader_board import LeaderBoard

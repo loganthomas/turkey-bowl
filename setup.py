@@ -13,16 +13,19 @@ setup(
     long_description_content_type="text/markdown",
     author="Logan Thomas",
     author_email="logan.thomas005@gmail.com",
-    url="https://github.com/loganthomas/turkey-bowl",
+    url="https://loganthomas.dev/turkey_bowl/",
     packages=find_packages("src"),
     package_dir={"": "src"},
     install_requires=[
         "click-spinner",
         "numpy",
-        "pandas",
         "openpyxl",
+        "pandas",
+        "PyQt5",
         "requests",
         "tqdm",
+        "traits",
+        "traitsui",
         "typer",
         "XlsxWriter",
         "xlrd",
@@ -33,12 +36,14 @@ setup(
             "bump2version",
             "check-manifest",
             "codecov",
+            "flake8",
+            "mypy",
             "pre-commit",
             "pytest",
             "pytest-cov",
             "pytest-freezegun",
             "responses",
-        ]
+        ],
     },
     classifiers=[
         "Development Status :: 3 - Alpha",
@@ -50,7 +55,5 @@ setup(
         "Programming Language :: Python :: 3.7",
     ],
     python_requires=">=3.7",
-    entry_points={
-        "console_scripts": ["turkey_bowl = turkey_bowl.turkey_bowl_runner:main"]
-    },
+    entry_points={"console_scripts": ["turkey-bowl = turkey_bowl.cli:app"]},
 )

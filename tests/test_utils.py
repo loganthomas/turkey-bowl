@@ -24,7 +24,7 @@ from turkey_bowl import utils
     ],
 )
 def test_get_current_year(freezer, frozen_date, expected):
-    """ Use pytest-freezegun to freeze dates and check year."""
+    """Use pytest-freezegun to freeze dates and check year."""
     # Setup
     freezer.move_to(frozen_date)
 

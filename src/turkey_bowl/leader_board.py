@@ -1,11 +1,9 @@
 """
 Leader board methods
 """
-# Standard libraries
 from pathlib import Path
 from typing import Dict
 
-# Third-party libraries
 import pandas as pd
 
 

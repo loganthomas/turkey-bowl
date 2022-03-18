@@ -1,14 +1,11 @@
 """
 Data aggregation functions
 """
-# Standard libraries
 from pathlib import Path
 from typing import Any, Dict, Optional
 
-# Third-party libraries
 import pandas as pd
 
-# Local libraries
 from turkey_bowl import utils
 
 

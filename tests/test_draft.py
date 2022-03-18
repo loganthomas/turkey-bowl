@@ -31,7 +31,7 @@ def test_Draft_instantiation():
 
 
 def test_Draft_setup_nothing_exists(tmp_path, monkeypatch, capsys):
-    """ Test Draft.setup() when no directories exist in root. """
+    """Test Draft.setup() when no directories exist in root."""
     # Setup - create temp archive dir (assumed to always exist)
     tmp_archive_dir = tmp_path.joinpath("archive")
     tmp_archive_dir.mkdir()
@@ -120,7 +120,7 @@ def test_Draft_setup_nothing_exists(tmp_path, monkeypatch, capsys):
 
 
 def test_Draft_setup_already_exists(tmp_path, capsys):
-    """ Test Draft.setup() when files exist in root. """
+    """Test Draft.setup() when files exist in root."""
     # Setup
     tmp_archive_dir = tmp_path.joinpath("archive")
     tmp_archive_dir.mkdir()
