@@ -706,7 +706,7 @@ def test_Scraper_update_player_ids_exist(tmp_path, caplog):
 
 
 @responses.activate
-def test_Scraper_update_player_ids_dont_exist(tmp_path, monkeypatch):
+def test_Scraper_update_player_ids_dont_exist(tmp_path):
     # Setup
     tmp_dir = tmp_path.joinpath("assets")
     tmp_dir.mkdir()

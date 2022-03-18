@@ -34,7 +34,7 @@ logger = logging.getLogger(__name__)
 
 class Scraper:
     def __init__(self, year: int, root: Optional[str] = None) -> None:
-        self.dir_config = utils.load_dir_config(root)
+        self.dir_config = utils.load_dir_config(year, root)
         self.year = year
         self.week_delta = (
             self.thanksgiving_calendar_week_start - self.nfl_calendar_week_start

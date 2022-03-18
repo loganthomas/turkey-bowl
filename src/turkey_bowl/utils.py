@@ -15,9 +15,7 @@ def get_current_year() -> int:
     return datetime.now().year
 
 
-def load_dir_config(root: Optional[str] = None) -> SimpleNamespace:
-    year = get_current_year()
-
+def load_dir_config(year: int, root: Optional[str] = None) -> SimpleNamespace:
     # 3 levels up (zero indexed)
     root = Path(__file__).parents[2] if root is None else Path(root)
 
