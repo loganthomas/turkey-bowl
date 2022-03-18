@@ -5,13 +5,33 @@ import json
 import logging
 from datetime import datetime
 from pathlib import Path
-from typing import Any, Dict
+from types import SimpleNamespace
+from typing import Any, Dict, Optional
 
 logger = logging.getLogger(__name__)
 
 
 def get_current_year() -> int:
     return datetime.now().year
+
+
+def load_dir_config(year: int, root: Optional[str] = None) -> SimpleNamespace:
+    # 3 levels up (zero indexed)
+    root = Path(__file__).parents[2] if root is None else Path(root)
+
+    output_dir = root.joinpath(f"archive/{year}")
+    draft_order_path = output_dir.joinpath(f"{year}_draft_order.json")
+    draft_sheet_path = output_dir.joinpath(f"{year}_draft_sheet.xlsx")
+    player_ids_json_path = root.joinpath("assets/player_ids.json")
+
+    dir_config = SimpleNamespace(
+        output_dir=output_dir.resolve(),
+        draft_order_path=draft_order_path.resolve(),
+        draft_sheet_path=draft_sheet_path.resolve(),
+        player_ids_json_path=player_ids_json_path.resolve(),
+    )
+
+    return dir_config
 
 
 def load_from_json(filename: Path) -> Dict[str, Any]:

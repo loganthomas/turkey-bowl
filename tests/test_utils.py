@@ -1,14 +1,11 @@
 """
 Unit tests for utils.py
 """
-# Standard libraries
 import json
 from pathlib import Path
 
-# Third-party libraries
 import pytest
 
-# Local libraries
 from turkey_bowl import utils
 
 

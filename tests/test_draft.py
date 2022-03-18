@@ -1,28 +1,31 @@
 """
 Unit tests for draft.py
 """
-# Standard libraries
 import json
 import random
+from pathlib import Path
 
-# Third-party libraries
 import pandas as pd
 
-# Local libraries
 from turkey_bowl.draft import Draft
 
 
 def test_Draft_instantiation():
     # Setup - none necessary
+    here = Path().cwd()
 
     # Exercise
-    draft = Draft(2020)
+    draft = Draft(2020, root=here)
 
     # Verify
     assert draft.year == 2020
-    assert draft.output_dir.as_posix() == "archive/2020"
-    assert draft.draft_order_path.as_posix() == "archive/2020/2020_draft_order.json"
-    assert draft.draft_sheet_path.as_posix() == "archive/2020/2020_draft_sheet.xlsx"
+    assert draft.dir_config.output_dir == here.joinpath("archive/2020")
+    assert draft.dir_config.draft_order_path == here.joinpath(
+        "archive/2020/2020_draft_order.json"
+    )
+    assert draft.dir_config.draft_sheet_path == here.joinpath(
+        "archive/2020/2020_draft_sheet.xlsx"
+    )
 
     assert draft.__repr__() == "Draft(2020)"
     assert draft.__str__() == "Turkey Bowl Draft: 2020"
@@ -42,15 +45,19 @@ def test_Draft_setup_nothing_exists(tmp_path, monkeypatch, capsys):
     assert tmp_archive_dir.joinpath("2020/2020_draft_sheet.xlsx").exists() is False
 
     # Exercise
-    draft = Draft(2020)
+    draft = Draft(2020, root=tmp_path)
 
     # Override input() func to always return same list of participants
     monkeypatch.setattr("builtins.input", lambda _: "logan, becca, dodd")
 
     # Override output dirs to temp path created for testing
-    draft.output_dir = tmp_archive_dir.joinpath("2020")
-    draft.draft_order_path = tmp_archive_dir.joinpath("2020/2020_draft_order.json")
-    draft.draft_sheet_path = tmp_archive_dir.joinpath("2020/2020_draft_sheet.xlsx")
+    draft.dir_config.output_dir = tmp_archive_dir.joinpath("2020")
+    draft.dir_config.draft_order_path = tmp_archive_dir.joinpath(
+        "2020/2020_draft_order.json"
+    )
+    draft.dir_config.draft_sheet_path = tmp_archive_dir.joinpath(
+        "2020/2020_draft_sheet.xlsx"
+    )
 
     # Set random seed for draft order consistency in testing
     random.seed(42)
@@ -58,11 +65,11 @@ def test_Draft_setup_nothing_exists(tmp_path, monkeypatch, capsys):
 
     # Verify
     assert draft.year == 2020
-    assert draft.output_dir == tmp_archive_dir.joinpath("2020")
-    assert draft.draft_order_path == tmp_archive_dir.joinpath(
+    assert draft.dir_config.output_dir == tmp_archive_dir.joinpath("2020")
+    assert draft.dir_config.draft_order_path == tmp_archive_dir.joinpath(
         "2020/2020_draft_order.json"
     )
-    assert draft.draft_sheet_path == tmp_archive_dir.joinpath(
+    assert draft.dir_config.draft_sheet_path == tmp_archive_dir.joinpath(
         "2020/2020_draft_sheet.xlsx"
     )
 
@@ -169,26 +176,30 @@ def test_Draft_setup_already_exists(tmp_path, capsys):
     assert tmp_archive_dir.joinpath("2020/2020_draft_sheet.xlsx").exists() is True
 
     # Exercise
-    draft = Draft(2020)
+    draft = Draft(2020, root=tmp_path)
 
     # Override output dirs to temp path crated for testing
-    draft.output_dir = tmp_archive_dir.joinpath("2020")
-    draft.draft_order_path = tmp_archive_dir.joinpath("2020/2020_draft_order.json")
-    draft.draft_sheet_path = tmp_archive_dir.joinpath("2020/2020_draft_sheet.xlsx")
+    draft.dir_config.output_dir = tmp_archive_dir.joinpath("2020")
+    draft.dir_config.draft_order_path = tmp_archive_dir.joinpath(
+        "2020/2020_draft_order.json"
+    )
+    draft.dir_config.draft_sheet_path = tmp_archive_dir.joinpath(
+        "2020/2020_draft_sheet.xlsx"
+    )
 
     draft.setup()
 
     # Verify
     assert draft.year == 2020
-    assert draft.output_dir == tmp_archive_dir.joinpath("2020")
+    assert draft.dir_config.output_dir == tmp_archive_dir.joinpath("2020")
 
     assert draft.__repr__() == "Draft(2020)"
     assert draft.__str__() == "Turkey Bowl Draft: 2020"
 
-    assert draft.draft_order_path == tmp_archive_dir.joinpath(
+    assert draft.dir_config.draft_order_path == tmp_archive_dir.joinpath(
         "2020/2020_draft_order.json"
     )
-    assert draft.draft_sheet_path == tmp_archive_dir.joinpath(
+    assert draft.dir_config.draft_sheet_path == tmp_archive_dir.joinpath(
         "2020/2020_draft_sheet.xlsx"
     )
 
@@ -257,12 +268,16 @@ def test_Draft_load(tmp_path):
     assert tmp_archive_dir.joinpath("2005/2005_draft_sheet.xlsx").exists() is True
 
     # Exercise
-    draft = Draft(2005)
+    draft = Draft(2005, root=tmp_path)
 
     # Override output dirs to temp path crated for testing
-    draft.output_dir = tmp_archive_dir.joinpath("2005")
-    draft.draft_order_path = tmp_archive_dir.joinpath("2005/2005_draft_order.json")
-    draft.draft_sheet_path = tmp_archive_dir.joinpath("2005/2005_draft_sheet.xlsx")
+    draft.dir_config.output_dir = tmp_archive_dir.joinpath("2005")
+    draft.dir_config.draft_order_path = tmp_archive_dir.joinpath(
+        "2005/2005_draft_order.json"
+    )
+    draft.dir_config.draft_sheet_path = tmp_archive_dir.joinpath(
+        "2005/2005_draft_sheet.xlsx"
+    )
 
     draft.setup()
     result = draft.load()
@@ -278,15 +293,15 @@ def test_Draft_load(tmp_path):
     ]
 
     assert draft.year == 2005
-    assert draft.output_dir == tmp_archive_dir.joinpath("2005")
+    assert draft.dir_config.output_dir == tmp_archive_dir.joinpath("2005")
 
     assert draft.__repr__() == "Draft(2005)"
     assert draft.__str__() == "Turkey Bowl Draft: 2005"
 
-    assert draft.draft_order_path == tmp_archive_dir.joinpath(
+    assert draft.dir_config.draft_order_path == tmp_archive_dir.joinpath(
         "2005/2005_draft_order.json"
     )
-    assert draft.draft_sheet_path == tmp_archive_dir.joinpath(
+    assert draft.dir_config.draft_sheet_path == tmp_archive_dir.joinpath(
         "2005/2005_draft_sheet.xlsx"
     )
 
@@ -392,12 +407,16 @@ def test_Draft_load_stripping_whitespace(tmp_path):
             draft_df.to_excel(writer, sheet_name=participant.title(), index=False)
 
     # Exercise
-    draft = Draft(2005)
+    draft = Draft(2005, root=tmp_path)
 
     # Override output dirs to temp path crated for testing
-    draft.output_dir = tmp_archive_dir.joinpath("2005")
-    draft.draft_order_path = tmp_archive_dir.joinpath("2005/2005_draft_order.json")
-    draft.draft_sheet_path = tmp_archive_dir.joinpath("2005/2005_draft_sheet.xlsx")
+    draft.dir_config.output_dir = tmp_archive_dir.joinpath("2005")
+    draft.dir_config.draft_order_path = tmp_archive_dir.joinpath(
+        "2005/2005_draft_order.json"
+    )
+    draft.dir_config.draft_sheet_path = tmp_archive_dir.joinpath(
+        "2005/2005_draft_sheet.xlsx"
+    )
 
     draft.setup()
     result = draft.load()

@@ -29,7 +29,7 @@ def main():
     week = scraper.nfl_thanksgiving_calendar_week
 
     projected_player_pts_path = Path(
-        f"{draft.output_dir}/{year}_{week}_projected_player_pts.csv"
+        f"{draft.dir_config.output_dir}/{year}_{week}_projected_player_pts.csv"
     )
     if aggregate.check_projected_player_pts_pulled(
         year, week, savepath=projected_player_pts_path
@@ -81,13 +81,13 @@ def main():
     aggregate.write_robust_participant_team_scores(
         participant_teams=participant_teams,
         savepath=Path(
-            f"{draft.output_dir}/{year}_{week}_robust_participant_player_pts.xlsx"
+            f"{draft.dir_config.output_dir}/{year}_{week}_robust_participant_player_pts.xlsx"
         ),
     )
 
     board = LeaderBoard(year, participant_teams)
     board.display()
-    board.save(f"{draft.output_dir}/{year}_leader_board.xlsx")
+    board.save(f"{draft.dir_config.output_dir}/{year}_leader_board.xlsx")
 
 
 if __name__ == "__main__":

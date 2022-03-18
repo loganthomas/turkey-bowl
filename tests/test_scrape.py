@@ -1,29 +1,33 @@
 """
 Unit tests for scrape.py
 """
-# Standard libraries
 import calendar
 import json
+import logging
 from datetime import datetime, timedelta
+from pathlib import Path
 
-# Third-party libraries
 import numpy as np
 import pytest
 import responses
 
-# Local libraries
 from turkey_bowl.scrape import Scraper
+
+logger = logging.getLogger(__name__)
 
 
 def test_Scraper_instantiation():
     # Setup - none necessary
+    here = Path.cwd()
 
     # Exercise
-    scraper = Scraper(2020)
+    scraper = Scraper(2020, root=here)
 
     # Verify
     assert scraper.year == 2020
-    assert scraper.player_ids_json_path.as_posix() == "assets/player_ids.json"
+    assert scraper.dir_config.player_ids_json_path == here.joinpath(
+        "assets/player_ids.json"
+    )
 
     assert scraper.__repr__() == "Scraper(2020)"
     assert scraper.__str__() == "Turkey Bowl Scraper (Year: 2020 NFL Week: 12)"
@@ -211,12 +215,6 @@ def test_Scraper_nfl_thanksgiving_calendar_week_setter(
     # Verify
     assert scraper.nfl_thanksgiving_calendar_week == 5
 
-    # Verify ``None`` changes back to correct
-    scraper.nfl_thanksgiving_calendar_week = None
-    assert (
-        scraper.nfl_thanksgiving_calendar_week
-        == expected_nfl_thanksgiving_calendar_WEEK
-    )
     # Cleanup - none necessary
 
 
@@ -297,8 +295,9 @@ def test_Scraper_actual_pts_url(year, week):
 
 
 @responses.activate
-def test_Scraper_scrape_url_bad_status_code(capsys):
+def test_Scraper_scrape_url_bad_status_code(caplog):
     # Setup
+    caplog.set_level(logging.INFO)
     url = "https://test.com"
     expected_json = {
         "errors": [
@@ -314,20 +313,18 @@ def test_Scraper_scrape_url_bad_status_code(capsys):
     # Exercise
     scraper = Scraper(2020)
     result = scraper.scrape_url(url)
-    captured = capsys.readouterr()
 
     # Verify
     assert result == expected_json
-    assert (
-        captured.out == "\tWARNING: API response unsuccessful for: https://test.com\n"
-    )
+    assert "WARNING: API response unsuccessful for: https://test.com" in caplog.text
 
     # Cleanup - none necessary
 
 
 @responses.activate
-def test_Scraper_scrape_url_good_status_code(capsys):
+def test_Scraper_scrape_url_good_status_code(caplog):
     # Setup
+    caplog.set_level(logging.INFO)
     url = "https://test.com"
     expected_json = {"data": "good"}
     responses.add(method=responses.GET, url=url, json=expected_json, status=200)
@@ -335,18 +332,18 @@ def test_Scraper_scrape_url_good_status_code(capsys):
     # Exercise
     scraper = Scraper(2020)
     result = scraper.scrape_url(url)
-    captured = capsys.readouterr()
 
     # Verify
     assert result == expected_json
-    assert captured.out == "\tSuccessful API response obtained for: https://test.com\n"
+    assert "Successful API response obtained for: https://test.com" in caplog.text
 
     # Cleanup - none necessary
 
 
 @responses.activate
-def test_Scraper_get_projected_player_pts(capsys):
+def test_Scraper_get_projected_player_pts(caplog):
     # Setup
+    caplog.set_level(logging.INFO)
     request_json = {
         "systemConfig": {"currentGameId": "102020"},
         "games": {
@@ -432,25 +429,23 @@ def test_Scraper_get_projected_player_pts(capsys):
         },
     }
 
-    expected_out = "\nCollecting projected player points...\n"
-    expected_out += (
-        f"\tSuccessful API response obtained for: {scraper.projected_pts_url}\n"
-    )
     # Exercise
-
     result = scraper.get_projected_player_pts()
-    captured = capsys.readouterr()
 
     # Verify
     assert result == expected_player_pts
-    assert captured.out == expected_out
-
+    assert "\nCollecting projected player points...\n" in caplog.text
+    assert (
+        f"\tSuccessful API response obtained for: {scraper.projected_pts_url}\n"
+        in caplog.text
+    )
     # Cleanup - none necessary
 
 
 @responses.activate
-def test_Scraper_get_actual_player_pts(capsys):
+def test_Scraper_get_actual_player_pts(caplog):
     # Setup
+    caplog.set_level(logging.INFO)
     request_json = {
         "systemConfig": {"currentGameId": "102020"},
         "games": {
@@ -533,25 +528,25 @@ def test_Scraper_get_actual_player_pts(capsys):
         },
     }
 
-    expected_out = "\nCollecting actual player points...\n"
-    expected_out += (
-        f"\tSuccessful API response obtained for: {scraper.actual_pts_url}\n"
-    )
     # Exercise
-
     result = scraper.get_actual_player_pts()
-    captured = capsys.readouterr()
 
     # Verify
     assert result == expected_player_pts
-    assert captured.out == expected_out
+    assert "\nCollecting actual player points...\n" in caplog.text
+    assert (
+        f"\tSuccessful API response obtained for: {scraper.actual_pts_url}\n"
+        in caplog.text
+    )
 
     # Cleanup - none necessary
 
 
-def test_Scraper__check_player_ids_need_update_exists_same_year(tmp_path, monkeypatch):
+def test_Scraper__check_player_ids_need_update_exists_same_year(tmp_path):
     # Setup
-    tmp_player_ids_json_path = tmp_path.joinpath("player_ids.json")
+    tmp_dir = tmp_path.joinpath("assets")
+    tmp_dir.mkdir()
+    tmp_player_ids_json_path = tmp_dir.joinpath("player_ids.json")
 
     player_ids = {
         "year": 2020,
@@ -569,8 +564,7 @@ def test_Scraper__check_player_ids_need_update_exists_same_year(tmp_path, monkey
         json.dump(player_ids, tmp_file)
 
     # Exercise
-    scraper = Scraper(2020)
-    monkeypatch.setattr(scraper, "player_ids_json_path", tmp_player_ids_json_path)
+    scraper = Scraper(2020, root=tmp_path)
     result = scraper._check_player_ids_need_update()
 
     # Verify
@@ -579,9 +573,11 @@ def test_Scraper__check_player_ids_need_update_exists_same_year(tmp_path, monkey
     # Cleanup - none necessary
 
 
-def test_Scraper__check_player_ids_need_update_exists_diff_year(tmp_path, monkeypatch):
+def test_Scraper__check_player_ids_need_update_exists_diff_year(tmp_path):
     # Setup
-    tmp_player_ids_json_path = tmp_path.joinpath("player_ids.json")
+    tmp_dir = tmp_path.joinpath("assets")
+    tmp_dir.mkdir()
+    tmp_player_ids_json_path = tmp_dir.joinpath("player_ids.json")
 
     player_ids = {
         "year": 2019,
@@ -599,8 +595,7 @@ def test_Scraper__check_player_ids_need_update_exists_diff_year(tmp_path, monkey
         json.dump(player_ids, tmp_file)
 
     # Exercise
-    scraper = Scraper(2020)
-    monkeypatch.setattr(scraper, "player_ids_json_path", tmp_player_ids_json_path)
+    scraper = Scraper(2020, root=tmp_path)
     result = scraper._check_player_ids_need_update()
 
     # Verify
@@ -609,13 +604,13 @@ def test_Scraper__check_player_ids_need_update_exists_diff_year(tmp_path, monkey
     # Cleanup - none necessary
 
 
-def test_Scraper__check_player_ids_need_update_doesnt_exist(tmp_path, monkeypatch):
+def test_Scraper__check_player_ids_need_update_doesnt_exist(tmp_path):
     # Setup
-    tmp_player_ids_json_path = tmp_path.joinpath("player_ids.json")
+    tmp_dir = tmp_path.joinpath("assets")
+    tmp_dir.mkdir()
 
     # Exercise
     scraper = Scraper(2020)
-    monkeypatch.setattr(scraper, "player_ids_json_path", tmp_player_ids_json_path)
     result = scraper._check_player_ids_need_update()
 
     # Verify
@@ -675,9 +670,12 @@ def test_Scraper__get_player_metadata():
     # Cleanup - none necessary
 
 
-def test_Scraper_update_player_ids_exist(tmp_path, monkeypatch, capsys):
+def test_Scraper_update_player_ids_exist(tmp_path, caplog):
     # Setup
-    tmp_player_ids_json_path = tmp_path.joinpath("player_ids.json")
+    caplog.set_level(logging.INFO)
+    tmp_dir = tmp_path.joinpath("assets")
+    tmp_dir.mkdir()
+    tmp_player_ids_json_path = tmp_dir.joinpath("player_ids.json")
 
     player_ids = {
         "year": 2020,
@@ -699,19 +697,19 @@ def test_Scraper_update_player_ids_exist(tmp_path, monkeypatch, capsys):
     expected_out = f"\tPlayer ids are up to date at {tmp_player_ids_json_path}\n"
 
     # Exercise
-    scraper = Scraper(2020)
-    monkeypatch.setattr(scraper, "player_ids_json_path", tmp_player_ids_json_path)
+    scraper = Scraper(2020, root=tmp_path)
     scraper.update_player_ids(projected_player_pts)
 
     # Verify
-    captured = capsys.readouterr()
-    assert captured.out == expected_out
+    assert expected_out in caplog.text
 
 
 @responses.activate
-def test_Scraper_update_player_ids_dont_exist(tmp_path, monkeypatch):
+def test_Scraper_update_player_ids_dont_exist(tmp_path):
     # Setup
-    tmp_player_ids_json_path = tmp_path.joinpath("player_ids.json")
+    tmp_dir = tmp_path.joinpath("assets")
+    tmp_dir.mkdir()
+    tmp_player_ids_json_path = tmp_dir.joinpath("player_ids.json")
 
     request_jsons = {
         "252": {
@@ -852,8 +850,7 @@ def test_Scraper_update_player_ids_dont_exist(tmp_path, monkeypatch):
     # Exercise
     assert tmp_player_ids_json_path.exists() is False
 
-    scraper = Scraper(2020)
-    monkeypatch.setattr(scraper, "player_ids_json_path", tmp_player_ids_json_path)
+    scraper = Scraper(2020, root=tmp_path)
 
     for player_id in ("252", "310", "382"):
         responses.add(

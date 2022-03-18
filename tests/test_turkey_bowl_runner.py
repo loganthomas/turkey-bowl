@@ -1,12 +1,10 @@
-# Standard libraries
 import json
 import random
+from types import SimpleNamespace
 
-# Third-party libraries
 import pandas as pd
 import pytest
 
-# Local libraries
 from turkey_bowl import aggregate
 from turkey_bowl.turkey_bowl_runner import main
 
@@ -119,9 +117,11 @@ def test_MockDraft_projected_exists_not_all_players_drafted(
     # Mock Draft.__init__ so data saved to tmp_path
     def mock_init(self, year):
         self.year = year
-        self.output_dir = tmp_archive_year_path
-        self.draft_order_path = tmp_archive_year_path.joinpath("2005_draft_order.json")
-        self.draft_sheet_path = tmp_archive_year_path.joinpath("2005_draft_sheet.xlsx")
+        self.dir_config = SimpleNamespace(
+            output_dir=tmp_archive_year_path,
+            draft_order_path=tmp_archive_year_path.joinpath("2005_draft_order.json"),
+            draft_sheet_path=tmp_archive_year_path.joinpath("2005_draft_sheet.xlsx"),
+        )
 
     monkeypatch.setattr("turkey_bowl.draft.Draft.__init__", mock_init)
 
@@ -179,9 +179,11 @@ def test_MockDraft_projected_dont_exists_not_all_players_drafted(
     # Mock Draft.__init__ so data saved to tmp_path
     def mock_init(self, year):
         self.year = year
-        self.output_dir = tmp_archive_year_path
-        self.draft_order_path = tmp_archive_year_path.joinpath("2005_draft_order.json")
-        self.draft_sheet_path = tmp_archive_year_path.joinpath("2005_draft_sheet.xlsx")
+        self.dir_config = SimpleNamespace(
+            output_dir=tmp_archive_year_path,
+            draft_order_path=tmp_archive_year_path.joinpath("2005_draft_order.json"),
+            draft_sheet_path=tmp_archive_year_path.joinpath("2005_draft_sheet.xlsx"),
+        )
 
     monkeypatch.setattr("turkey_bowl.draft.Draft.__init__", mock_init)
 
@@ -312,9 +314,11 @@ def test_MockDraft(
     # Mock Draft.__init__ so data saved to tmp_path
     def mock_init(self, year):
         self.year = year
-        self.output_dir = tmp_archive_year_path
-        self.draft_order_path = tmp_archive_year_path.joinpath("2005_draft_order.json")
-        self.draft_sheet_path = tmp_archive_year_path.joinpath("2005_draft_sheet.xlsx")
+        self.dir_config = SimpleNamespace(
+            output_dir=tmp_archive_year_path,
+            draft_order_path=tmp_archive_year_path.joinpath("2005_draft_order.json"),
+            draft_sheet_path=tmp_archive_year_path.joinpath("2005_draft_sheet.xlsx"),
+        )
 
     monkeypatch.setattr("turkey_bowl.draft.Draft.__init__", mock_init)
 

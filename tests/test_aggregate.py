@@ -1,12 +1,10 @@
 """
 Unit tests for aggregate.py
 """
-# Third-party libraries
 import numpy as np
 import pandas as pd
 import pytest
 
-# Local libraries
 from turkey_bowl import aggregate
 
 

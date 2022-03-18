@@ -6,22 +6,18 @@ import json
 import random
 import time
 from pathlib import Path
-from typing import Dict
+from typing import Dict, Optional
 
 import click_spinner
 import pandas as pd
 
+from turkey_bowl import utils
+
 
 class Draft:
-    def __init__(self, year: int) -> None:
+    def __init__(self, year: int, root: Optional[str] = None) -> None:
+        self.dir_config = utils.load_dir_config(year, root)
         self.year = year
-        self.output_dir = Path(f"archive/{self.year}")
-        self.draft_order_path = self.output_dir.joinpath(
-            f"{self.year}_draft_order.json"
-        )
-        self.draft_sheet_path = self.output_dir.joinpath(
-            f"{self.year}_draft_sheet.xlsx"
-        )
 
     def __repr__(self):
         return f"Draft({self.year})"
@@ -31,10 +27,10 @@ class Draft:
 
     def setup(self) -> None:
         """Instantiate draft with attributes, files, and directories."""
-        if not self.output_dir.exists():
-            self.output_dir.mkdir()
+        if not self.dir_config.output_dir.exists():
+            self.dir_config.output_dir.mkdir()
 
-        if not self.draft_order_path.exists():
+        if not self.dir_config.draft_order_path.exists():
             participant_list = input(
                 "\nPlease enter the participants separated by a comma: "
             ).split(",")
@@ -56,14 +52,14 @@ class Draft:
 
             draft_order_dict = {p: i for i, p in enumerate(self.draft_order, 1)}
 
-            with open(self.draft_order_path, "w") as draft_order_file:
+            with open(self.dir_config.draft_order_path, "w") as draft_order_file:
                 json.dump(draft_order_dict, draft_order_file)
 
-            print(f"\tSaved draft order to {self.draft_order_path}")
+            print(f"\tSaved draft order to {self.dir_config.draft_order_path}")
 
         else:
-            print(f"\nDraft order already exists at {self.draft_order_path}")
-            with open(self.draft_order_path, "r") as draft_order_file:
+            print(f"\nDraft order already exists at {self.dir_config.draft_order_path}")
+            with open(self.dir_config.draft_order_path, "r") as draft_order_file:
                 draft_order_dict = json.load(draft_order_file)
 
             self.participant_list = list(draft_order_dict.keys())
@@ -71,7 +67,7 @@ class Draft:
 
             print(f"\n\tDraft Order: {self.draft_order}")
 
-        if not self.draft_sheet_path.exists():
+        if not self.dir_config.draft_sheet_path.exists():
             draft_info = {
                 "Position": [
                     "QB",
@@ -90,7 +86,7 @@ class Draft:
             }
             draft_df = pd.DataFrame(draft_info)
 
-            with pd.ExcelWriter(self.draft_sheet_path) as writer:
+            with pd.ExcelWriter(self.dir_config.draft_sheet_path) as writer:
                 for participant in self.draft_order:
                     draft_df.to_excel(
                         writer, sheet_name=participant.title(), index=False
@@ -118,7 +114,7 @@ class Draft:
             'Bench (RB/WR/TE)'.
         """
         participant_teams = pd.read_excel(
-            self.draft_sheet_path, sheet_name=None, engine="openpyxl"
+            self.dir_config.draft_sheet_path, sheet_name=None, engine="openpyxl"
         )
 
         # Strip all whitespace
