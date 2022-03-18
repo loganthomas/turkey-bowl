@@ -5,6 +5,7 @@ check-manifest
 codecov
 flake8
 numpy
+openpyxl
 pandas
 pre-commit
 pytest

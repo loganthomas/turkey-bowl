@@ -41,7 +41,7 @@ setup(
             "pytest-cov>=2.10.1",
             "pytest-freezegun>=0.4.2",
             "responses>=0.12.0",
-        ]
+        ],
     },
     classifiers=[
         "Development Status :: 3 - Alpha",

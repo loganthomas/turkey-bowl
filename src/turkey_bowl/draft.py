@@ -119,7 +119,9 @@ class Draft:
             'Flex (RB/WR/TE)', 'K', 'Defense (Team Name)',
             'Bench (RB/WR/TE)'.
         """
-        participant_teams = pd.read_excel(self.draft_sheet_path, sheet_name=None)
+        participant_teams = pd.read_excel(
+            self.draft_sheet_path, sheet_name=None, engine="openpyxl"
+        )
 
         # Strip all whitespace
         # All columns are string values so can be apply across DataFrame

@@ -1,0 +1,39 @@
+name: test-suite
+
+on: [push, pull_request]
+
+jobs:
+  test-suite:
+    name: Run test suite via pytest
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Setup Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.7'
+
+      - name: Display Python version
+        run: python -c "import sys; print(sys.version)"
+
+      # Install in non-editable mode (no `-e`)
+      - name: Install package
+        run: |
+          pip install -r requirements.txt
+          pip install .
+
+      # See pytest.ini for configs
+      - name: Run tests
+        run: pytest ./ --cov-report=xml
+
+      - name: Upload codecov test coverage
+        uses: codecov/codecov-action@v2
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }} # not required for public repos
+          fail_ci_if_error: true  # fail when codecov runs into errors during upload
+
+      - name: Ensure complete
+        run: echo "test-suite complete!"

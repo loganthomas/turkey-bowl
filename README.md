@@ -1,8 +1,10 @@
 # Turkey Bowl
-[![Build Status](https://img.shields.io/travis/loganthomas/turkey-bowl/master.svg?logo=travis)](https://travis-ci.com/loganthomas/turkey-bowl)
+[![Tests: main](https://img.shields.io/github/workflow/status/loganthomas/turkey-bowl/test-suite/main?label=tests%3A%20main&logo=GitHub)](https://github.com/loganthomas/turkey-bowl/actions/workflows/test-suite.yml)
+[![Tests: dev](https://img.shields.io/github/workflow/status/loganthomas/turkey-bowl/test-suite/dev?label=tests%3A%20dev&logo=GitHub)](https://github.com/loganthomas/turkey-bowl/actions/workflows/test-suite.yml)
 [![codecov](https://codecov.io/gh/loganthomas/turkey-bowl/branch/master/graph/badge.svg)](https://codecov.io/gh/loganthomas/turkey-bowl)
 [![Codacy Badge](https://app.codacy.com/project/badge/Grade/0f1564fd54f74bc081398ae0b982d4fb)](https://www.codacy.com/gh/loganthomas/turkey-bowl/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=loganthomas/turkey-bowl&amp;utm_campaign=Badge_Grade)
 [![Maintainability](https://api.codeclimate.com/v1/badges/08d1578979aeb217b85a/maintainability)](https://codeclimate.com/github/loganthomas/turkey-bowl/maintainability)
+[![Auto Release](https://img.shields.io/github/workflow/status/loganthomas/turkey-bowl/auto-release?label=auto-release&logo=GitHub)](https://github.com/loganthomas/turkey-bowl/actions/workflows/auto-release.yml)
 
 
 This repo contains Turkey Bowl fantasy football draft and scoring code.
@@ -24,3 +26,52 @@ A few things to note:
   - Launch `ipython` and use `%run thanks_fball.py` or import it and copy the `main()`
     function to run each line. This isn't the best option (to be fixed), but will give you
     a lot of meta data to work with.
+
+
+# Developer Notes
+
+## Release CLI Documentation
+For documentation of the full `release` command line interface (CLI),
+please see the [release docs](docs/releases/README.md)
+
+Add a news fragment
+-------------------
+Create a new file with a name like `<pull-request>.<type>.md`, where
+`<pull-request>` is a pull request number, and `<type>` is one of:
+
+- `bug`: fixes something broken
+- `dep`: deprecates something from maintenance or deletes it entirely
+- `doc`: documents something
+- `enh`: adds a new feature
+- `maint`: improves infrastructure maintenance
+
+Then write a short sentence in the file that describes the changes for the
+end users. Be sure to include the pull request number at the end of the sentence,
+e.g. in `123.maint.md`:
+
+```
+New command line interface (CLI) utility for creating news fragments created. (#123)
+```
+
+Alternatively, you can use either of the following commands, and answer the questions:
+
+```
+# From the project's scripts directory
+$ python -m release create-news-fragment
+
+# From the project's root directory
+$ python -m scripts.release create-news-fragment
+````
+
+Updating & Building the CHANGELOG
+---------------------------------
+Updating and building the `CHANGELOG.md` from the news fragments can be
+accomplished by executing either of the below commands:
+
+```
+# From the project's scripts directory
+$ python -m release build-changelog RELEASE_VERSION
+
+# From the project's root directory
+$ python -m scripts.release build-changelog RELEASE_VERSION
+```

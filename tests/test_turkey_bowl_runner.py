@@ -376,7 +376,9 @@ def test_MockDraft(
     # Verify draft sheet
     assert tmp_archive_year_path.joinpath("2005_draft_sheet.xlsx").exists()
     written_participant_teams = pd.read_excel(
-        tmp_archive_year_path.joinpath("2005_draft_sheet.xlsx"), sheet_name=None
+        tmp_archive_year_path.joinpath("2005_draft_sheet.xlsx"),
+        sheet_name=None,
+        engine="openpyxl",
     )
     assert list(written_participant_teams.keys()) == list(participant_teams)
     for p, df in written_participant_teams.items():
@@ -396,6 +398,7 @@ def test_MockDraft(
     written_robust_participant_player_pts = pd.read_excel(
         tmp_archive_year_path.joinpath("2005_12_robust_participant_player_pts.xlsx"),
         sheet_name=None,
+        engine="openpyxl",
     )
     for p, df in written_robust_participant_player_pts.items():
         col_types = {}
