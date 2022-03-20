@@ -20,8 +20,6 @@ HEADER = "\n{message:-^72}"
 
 
 logger = logging.getLogger(__name__)
-
-# configures logger running via turkey-bowl cli
 utils.setup_logger()
 
 
@@ -150,7 +148,4 @@ def scrape_actual(
 
 
 if __name__ == "__main__":
-    # configures logger running via python src/turkey_bowl/cli.py
-    # utils.setup_logger()
-
     app()
