@@ -3,6 +3,7 @@ Draft functions
 """
 import itertools
 import json
+import logging
 import random
 import time
 from pathlib import Path
@@ -12,6 +13,8 @@ import click_spinner
 import pandas as pd
 
 from turkey_bowl import utils
+
+logger = logging.getLogger(__name__)
 
 
 class Draft:
@@ -41,31 +44,32 @@ class Draft:
                 self.participant_list, len(self.participant_list)
             )
 
-            print()
             for i, participant in enumerate(self.draft_order, 1):
-                print(f"Drafting in slot {i}...")
+                logger.info(f"Drafting in slot {i}...")
                 with click_spinner.spinner():
                     time.sleep(3)
-                print(f"{participant}\n")
+                logger.info(f"{participant}\n")
 
-            print(f"\n\tDraft Order: {self.draft_order}")
+            logger.info(f"\n\tDraft Order: {self.draft_order}")
 
             draft_order_dict = {p: i for i, p in enumerate(self.draft_order, 1)}
 
             with open(self.dir_config.draft_order_path, "w") as draft_order_file:
                 json.dump(draft_order_dict, draft_order_file)
 
-            print(f"\tSaved draft order to {self.dir_config.draft_order_path}")
+            logger.info(f"\tSaved draft order to {self.dir_config.draft_order_path}")
 
         else:
-            print(f"\nDraft order already exists at {self.dir_config.draft_order_path}")
+            logger.info(
+                f"\nDraft order already exists at {self.dir_config.draft_order_path}"
+            )
             with open(self.dir_config.draft_order_path, "r") as draft_order_file:
                 draft_order_dict = json.load(draft_order_file)
 
             self.participant_list = list(draft_order_dict.keys())
             self.draft_order = list(draft_order_dict.keys())
 
-            print(f"\n\tDraft Order: {self.draft_order}")
+            logger.info(f"\n\tDraft Order: {self.draft_order}")
 
         if not self.dir_config.draft_sheet_path.exists():
             draft_info = {

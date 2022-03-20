@@ -1,3 +1,4 @@
+import logging
 import shutil
 from pathlib import Path
 
@@ -18,17 +19,23 @@ pd.options.display.width = None
 HEADER = "\n{message:-^72}"
 
 
+logger = logging.getLogger(__name__)
+
+# configures logger running via turkey-bowl cli
+utils.setup_logger()
+
+
 @app.command()
 def clean():
     """Delete current draft output directory and all its contents."""
     year = utils.get_current_year()
     draft = Draft(year)
     delete = typer.confirm(
-        f"Are you sure you want to delete {draft.output_dir}?", abort=True
+        f"Are you sure you want to delete {draft.dir_config.output_dir}?", abort=True
     )
     if delete:
         typer.echo("Deleting...")
-        shutil.rmtree(draft.output_dir.resolve())
+        shutil.rmtree(draft.dir_config.output_dir.resolve())
 
 
 @app.command()
@@ -143,4 +150,7 @@ def scrape_actual(
 
 
 if __name__ == "__main__":
+    # configures logger running via python src/turkey_bowl/cli.py
+    # utils.setup_logger()
+
     app()
