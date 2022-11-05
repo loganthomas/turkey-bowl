@@ -652,6 +652,59 @@ def test_Scraper__get_player_metadata():
     # Cleanup - none necessary
 
 
+@responses.activate
+def test_Scraper__update_single_player_id():
+    # Setup
+    pulled_player_id_data = {}
+    player_id = "2504211"
+    url = f"https://api.fantasy.nfl.com/v2/player/ngs-content?playerId={player_id}"
+
+    request_json = {
+        "games": {
+            "102022": {
+                "players": {
+                    "2504211": {
+                        "playerId": "2504211",
+                        "nflGlobalEntityId": "32004252-4137-1156-7ed0-8b9e44948f13",
+                        "esbId": "BRA371156",
+                        "name": "Tom Brady",
+                        "firstName": "Tom",
+                        "lastName": "Brady",
+                        "position": "QB",
+                        "nflTeamAbbr": "TB",
+                        "nflTeamId": "31",
+                        "injuryGameStatus": None,
+                        "imageUrl": "https://static.www.nfl.com/image/private/w_200,h_200,c_fill/league/q7dpdlxyu5rs05rgh1le",
+                        "smallImageUrl": "https://static.www.nfl.com/image/private/w_65,h_90,c_fill/league/q7dpdlxyu5rs05rgh1le",
+                        "largeImageUrl": "https://static.www.nfl.com/image/private/w_1400,h_1000,c_fill/league/q7dpdlxyu5rs05rgh1le",
+                        "byeWeek": "11",
+                        "cancelledWeeks": [],
+                        "archetypes": [],
+                        "isUndroppable": False,
+                        "isReserveStatus": False,
+                        "lastVideoTimestamp": "1969-12-31T16:00:00-08:00",
+                    }
+                }
+            }
+        }
+    }
+
+    responses.add(method=responses.GET, url=url, json=request_json, status=200)
+
+    # Exercise
+    scraper = Scraper(2020)
+    scraper._update_single_player_id(player_id, pulled_player_id_data)
+    expected = pulled_player_id_data.get(player_id)
+
+    # Verify
+    assert expected.get("name") == "Tom Brady"
+    assert expected.get("position") == "QB"
+    assert expected.get("team") == "TB"
+    assert expected.get("injury") is None
+
+    # Cleanup - none necessary
+
+
 def test_Scraper_update_player_ids_exist(tmp_path, caplog):
     # Setup
     caplog.set_level(logging.INFO)

@@ -275,12 +275,11 @@ class Scraper:
 
             # Add a year reference (for checking)
             pulled_player_ids.insert(0, "year")
-            pulled_player_id_data = {pid: {} for pid in pulled_player_ids}  # type: ignore[var-annotated]
+            pulled_player_id_data: Dict[str, Dict[str, Optional[str]]] = {}
 
             for pid in tqdm(pulled_player_ids, desc="\tUpdating player ids", ncols=75):
                 if pid == "year":
                     pulled_player_id_data[pid] = self.year  # type: ignore[assignment]
-
                 else:
                     self._update_single_player_id(pid, pulled_player_id_data)
 
