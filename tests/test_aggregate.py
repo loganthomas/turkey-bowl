@@ -101,12 +101,8 @@ def test__get_player_pts_stats_type_raises_error_for_multi_types(
         "310": actual_player_pts["310"],
     }
 
-    expected_error1 = (
-        "More than one unique stats type detected: {'stats', 'projectedStats'}"
-    )
-    expected_error2 = (
-        "More than one unique stats type detected: {'projectedStats', 'stats'}"
-    )
+    expected_error1 = "More than one unique stats type detected: {'stats', 'projectedStats'}"
+    expected_error2 = "More than one unique stats type detected: {'projectedStats', 'stats'}"
     # Exercise
     with pytest.raises(ValueError) as error_info:
         aggregate._get_player_pts_stat_type(player_pts)
@@ -156,7 +152,9 @@ def test__get_player_pts_stats_type_raises_error_for_unrecognized_type():
         },
     }
 
-    expected_error = "Unrecognized stats type: 'bad_stats'. Expected either 'projectedStats' or 'stats'."
+    expected_error = (
+        "Unrecognized stats type: 'bad_stats'. Expected either 'projectedStats' or 'stats'."
+    )
     # Exercise
     with pytest.raises(ValueError) as error_info:
         aggregate._get_player_pts_stat_type(player_pts)
@@ -169,12 +167,8 @@ def test__get_player_pts_stats_type_raises_error_for_unrecognized_type():
     # Cleanup - none necessary
 
 
-@pytest.mark.parametrize(
-    "stat_type", ["projectedStats", "stats"], ids=["projected", "actual"]
-)
-def test__get_player_pts_stats_type(
-    stat_type, mock_proj_player_pts, mock_actual_player_pts
-):
+@pytest.mark.parametrize("stat_type", ["projectedStats", "stats"], ids=["projected", "actual"])
+def test__get_player_pts_stats_type(stat_type, mock_proj_player_pts, mock_actual_player_pts):
     # Setup
     if stat_type == "projectedStats":
         player_pts = mock_proj_player_pts
@@ -242,7 +236,9 @@ def test_create_player_pts_df_raises_error_when_projected_and_no_savepath():
         "382": {"projectedStats": {}},
     }
 
-    expected_error = "When creating a projected player points dataframe, ``savepath`` must be specified."
+    expected_error = (
+        "When creating a projected player points dataframe, ``savepath`` must be specified."
+    )
 
     # Exercise
     with pytest.raises(ValueError) as error_info:
@@ -254,7 +250,7 @@ def test_create_player_pts_df_raises_error_when_projected_and_no_savepath():
     # Cleanup - none necessary
 
 
-def test_check_projected_player_pts_pulled_true(tmp_path, capsys):
+def test_projected_player_pts_pulled_true(tmp_path, capsys):
     # Setup
     year = 2020
     week = 12
@@ -265,13 +261,11 @@ def test_check_projected_player_pts_pulled_true(tmp_path, capsys):
     tmp_year_dir = tmp_archive_dir.joinpath(str(year))
     tmp_year_dir.mkdir()
 
-    tmp_projected_player_pts_path = tmp_path.joinpath(
-        f"{year}_{week}_projected_player_pts.csv"
-    )
+    tmp_projected_player_pts_path = tmp_path.joinpath(f"{year}_{week}_projected_player_pts.csv")
 
     player_pts_df_data = {
         "Player": {0: "Chad Henne", 1: "Matt Ryan", 2: "Joe Flacco"},
-        "Team": {0: "KC", 1: "ATL", 2: "NYJ"},
+        "Team": {0: "KC", 1: "IND", 2: "NYJ"},
         "PROJ_pts": {0: 0.31, 1: 20.01, 2: 0.84},
         "PROJ_Games_Played": {0: 1, 1: 1, 2: 1},
         "PROJ_Passing_Yards": {0: 6.05, 1: 296.77, 2: 16.93},
@@ -316,9 +310,7 @@ def test_check_projected_player_pts_pulled_true(tmp_path, capsys):
 
     # Exercise
     assert tmp_projected_player_pts_path.exists() is True
-    result = aggregate.check_projected_player_pts_pulled(
-        year, week, tmp_projected_player_pts_path
-    )
+    result = aggregate.projected_player_pts_pulled(year, week, tmp_projected_player_pts_path)
 
     # Verify
     assert result is True
@@ -332,7 +324,7 @@ def test_check_projected_player_pts_pulled_true(tmp_path, capsys):
     # Cleanup - none necessary
 
 
-def test_check_projected_player_pts_pulled_false(tmp_path):
+def test_projected_player_pts_pulled_false(tmp_path):
     # Setup
     year = 2020
     week = 12
@@ -343,15 +335,11 @@ def test_check_projected_player_pts_pulled_false(tmp_path):
     tmp_year_dir = tmp_archive_dir.joinpath(str(year))
     tmp_year_dir.mkdir()
 
-    tmp_projected_player_pts_path = tmp_path.joinpath(
-        f"{year}_{week}_projected_player_pts.csv"
-    )
+    tmp_projected_player_pts_path = tmp_path.joinpath(f"{year}_{week}_projected_player_pts.csv")
 
     # Exercise
     assert tmp_projected_player_pts_path.exists() is False
-    result = aggregate.check_projected_player_pts_pulled(
-        year, week, tmp_projected_player_pts_path
-    )
+    result = aggregate.projected_player_pts_pulled(year, week, tmp_projected_player_pts_path)
 
     # Verify
     assert result is False
@@ -370,9 +358,7 @@ def test_create_player_pts_df_projected_doesnt_exists(tmp_path, capsys):
     tmp_year_dir = tmp_archive_dir.joinpath(str(year))
     tmp_year_dir.mkdir()
 
-    tmp_projected_player_pts_path = tmp_path.joinpath(
-        f"{year}_{week}_projected_player_pts.csv"
-    )
+    tmp_projected_player_pts_path = tmp_path.joinpath(f"{year}_{week}_projected_player_pts.csv")
 
     player_pts = {
         "2555260": {
@@ -434,7 +420,7 @@ def test_create_player_pts_df_projected_doesnt_exists(tmp_path, capsys):
 
     player_pts_df_data = {
         "Player": {0: "Dak Prescott", 1: "Matt Ryan", 2: "Tom Brady"},
-        "Team": {0: "DAL", 1: "ATL", 2: "TB"},
+        "Team": {0: "DAL", 1: "IND", 2: "TB"},
         "PROJ_pts": {0: 0.31, 1: 20.01, 2: 0.84},
         "PROJ_Games_Played": {0: 1.0, 1.0: 1.0, 2: 1.0},
         "PROJ_Passing_Yards": {0: 6.05, 1: 296.77, 2: 16.93},
@@ -461,12 +447,13 @@ def test_create_player_pts_df_projected_doesnt_exists(tmp_path, capsys):
         "PROJ_2-Point_Conversions": np.dtype("float64"),
         "PROJ_Rushing_Touchdowns": np.dtype("float64"),
     }
-
+    expected_stdout = (
+        "\tAll player ids in pulled player points exist in player_ids.json\n"
+        f"\tWriting projected player stats to {tmp_projected_player_pts_path}...\n"
+    )
     # Exercise
     assert tmp_projected_player_pts_path.exists() is False
-    result = aggregate.create_player_pts_df(
-        year, week, player_pts, tmp_projected_player_pts_path
-    )
+    result = aggregate.create_player_pts_df(year, week, player_pts, tmp_projected_player_pts_path)
     result_written = pd.read_csv(tmp_projected_player_pts_path, index_col=0)
 
     # Verify
@@ -477,10 +464,7 @@ def test_create_player_pts_df_projected_doesnt_exists(tmp_path, capsys):
     assert result.dtypes.to_dict() == expected_dtypes
 
     captured = capsys.readouterr()
-    assert (
-        captured.out
-        == f"\tWriting projected player stats to {tmp_projected_player_pts_path}...\n"
-    )
+    assert captured.out == expected_stdout
 
     # Cleanup - none necessary
 
@@ -496,9 +480,7 @@ def test_create_player_pts_df_actual(tmp_path):
     tmp_year_dir = tmp_archive_dir.joinpath(str(year))
     tmp_year_dir.mkdir()
 
-    tmp_projected_player_pts_path = tmp_path.joinpath(
-        f"{year}_{week}_projected_player_pts.csv"
-    )
+    tmp_projected_player_pts_path = tmp_path.joinpath(f"{year}_{week}_projected_player_pts.csv")
 
     player_pts = {
         "2555260": {
@@ -560,7 +542,7 @@ def test_create_player_pts_df_actual(tmp_path):
 
     player_pts_df_data = {
         "Player": {0: "Dak Prescott", 1: "Matt Ryan", 2: "Tom Brady"},
-        "Team": {0: "DAL", 1: "ATL", 2: "TB"},
+        "Team": {0: "DAL", 1: "IND", 2: "TB"},
         "ACTUAL_pts": {0: 0.31, 1: 20.01, 2: 0.84},
         "ACTUAL_Games_Played": {0: 1.0, 1.0: 1.0, 2: 1.0},
         "ACTUAL_Passing_Yards": {0: 6.05, 1: 296.77, 2: 16.93},
@@ -590,9 +572,7 @@ def test_create_player_pts_df_actual(tmp_path):
 
     # Exercise
     assert tmp_projected_player_pts_path.exists() is False
-    result = aggregate.create_player_pts_df(
-        year, week, player_pts, tmp_projected_player_pts_path
-    )
+    result = aggregate.create_player_pts_df(year, week, player_pts, tmp_projected_player_pts_path)
 
     # Verify
     assert result.equals(expected)
@@ -708,7 +688,7 @@ def mock_participant_teams():
                 9: "Randall Cobb",
             },
             "Team": {
-                0: "ATL",
+                0: "IND",
                 1: "DET",
                 2: "BUF",
                 3: "ATL",
@@ -778,7 +758,7 @@ def mock_participant_teams():
             17: "DET",
             18: "DET",
             19: "DAL",
-            20: "ATL",
+            20: "IND",
             21: "DET",
             22: "BUF",
             23: "ATL",
@@ -892,9 +872,7 @@ def test_merge_points(mock_participant_teams):
     # Cleanup - none necessary
 
 
-def test_merge_points_prints_warning_if_player_not_found(
-    mock_participant_teams, capsys
-):
+def test_merge_points_prints_warning_if_player_not_found(mock_participant_teams, capsys):
     # Setup
     participant_teams, pts_df = mock_participant_teams
 
@@ -960,9 +938,7 @@ def test_sort_robust_cols(mock_participant_teams):
     # Cleanup - none necessary
 
 
-def test_write_robust_pariticipant_team_scores(
-    mock_participant_teams, tmp_path, capsys
-):
+def test_write_robust_participant_team_scores(mock_participant_teams, tmp_path, capsys):
     # Setup
     year = 2020
     week = 12

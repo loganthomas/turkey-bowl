@@ -25,9 +25,7 @@ def test_Scraper_instantiation():
 
     # Verify
     assert scraper.year == 2020
-    assert scraper.dir_config.player_ids_json_path == here.joinpath(
-        "assets/player_ids.json"
-    )
+    assert scraper.dir_config.player_ids_json_path == here.joinpath("assets/player_ids.json")
 
     assert scraper.__repr__() == "Scraper(2020)"
     assert scraper.__str__() == "Turkey Bowl Scraper (Year: 2020 NFL Week: 12)"
@@ -160,9 +158,7 @@ def test_Scraper_thanksgiving_calendar_week_start(year, expected_thanksgiving_da
         (2020, 12),
     ],
 )
-def test_Scraper_nfl_thanksgiving_calendar_week(
-    year, expected_nfl_thanksgiving_calendar_WEEK
-):
+def test_Scraper_nfl_thanksgiving_calendar_week(year, expected_nfl_thanksgiving_calendar_WEEK):
     """
     Test that the NFL week of Thanksgiving is returned.
     This will be the pull week to use within the API.
@@ -174,10 +170,7 @@ def test_Scraper_nfl_thanksgiving_calendar_week(
     scraper = Scraper(year)
 
     # Verify
-    assert (
-        scraper.nfl_thanksgiving_calendar_week
-        == expected_nfl_thanksgiving_calendar_WEEK
-    )
+    assert scraper.nfl_thanksgiving_calendar_week == expected_nfl_thanksgiving_calendar_WEEK
 
     # Cleanup - none necessary
 
@@ -204,10 +197,7 @@ def test_Scraper_nfl_thanksgiving_calendar_week_setter(
     """
     # Setup
     scraper = Scraper(year)
-    assert (
-        scraper.nfl_thanksgiving_calendar_week
-        == expected_nfl_thanksgiving_calendar_WEEK
-    )
+    assert scraper.nfl_thanksgiving_calendar_week == expected_nfl_thanksgiving_calendar_WEEK
 
     # Exercise
     scraper.nfl_thanksgiving_calendar_week = 5
@@ -257,7 +247,9 @@ def test_Scraper_encode_url_params(year, week):
 )
 def test_Scraper_projected_pts_url(year, week):
     # Setup
-    expected = f"https://api.fantasy.nfl.com/v2/players/weekprojectedstats?season={year}&week={week}"
+    expected = (
+        f"https://api.fantasy.nfl.com/v2/players/weekprojectedstats?season={year}&week={week}"
+    )
 
     # Exercise
     scraper = Scraper(year)
@@ -281,9 +273,7 @@ def test_Scraper_projected_pts_url(year, week):
 )
 def test_Scraper_actual_pts_url(year, week):
     # Setup
-    expected = (
-        f"https://api.fantasy.nfl.com/v2/players/weekstats?season={year}&week={week}"
-    )
+    expected = f"https://api.fantasy.nfl.com/v2/players/weekstats?season={year}&week={week}"
 
     # Exercise
     scraper = Scraper(year)
@@ -435,10 +425,7 @@ def test_Scraper_get_projected_player_pts(caplog):
     # Verify
     assert result == expected_player_pts
     assert "\nCollecting projected player points...\n" in caplog.text
-    assert (
-        f"\tSuccessful API response obtained for: {scraper.projected_pts_url}\n"
-        in caplog.text
-    )
+    assert f"\tSuccessful API response obtained for: {scraper.projected_pts_url}\n" in caplog.text
     # Cleanup - none necessary
 
 
@@ -489,9 +476,7 @@ def test_Scraper_get_actual_player_pts(caplog):
     }
 
     scraper = Scraper(2020)
-    responses.add(
-        method=responses.GET, url=scraper.actual_pts_url, json=request_json, status=200
-    )
+    responses.add(method=responses.GET, url=scraper.actual_pts_url, json=request_json, status=200)
 
     expected_player_pts = {
         "2649": {
@@ -534,15 +519,12 @@ def test_Scraper_get_actual_player_pts(caplog):
     # Verify
     assert result == expected_player_pts
     assert "\nCollecting actual player points...\n" in caplog.text
-    assert (
-        f"\tSuccessful API response obtained for: {scraper.actual_pts_url}\n"
-        in caplog.text
-    )
+    assert f"\tSuccessful API response obtained for: {scraper.actual_pts_url}\n" in caplog.text
 
     # Cleanup - none necessary
 
 
-def test_Scraper__check_player_ids_need_update_exists_same_year(tmp_path):
+def test_Scraper_player_ids_need_update_exists_same_year(tmp_path):
     # Setup
     tmp_dir = tmp_path.joinpath("assets")
     tmp_dir.mkdir()
@@ -565,7 +547,7 @@ def test_Scraper__check_player_ids_need_update_exists_same_year(tmp_path):
 
     # Exercise
     scraper = Scraper(2020, root=tmp_path)
-    result = scraper._check_player_ids_need_update()
+    result = scraper._player_ids_need_update()
 
     # Verify
     assert result is False
@@ -573,7 +555,7 @@ def test_Scraper__check_player_ids_need_update_exists_same_year(tmp_path):
     # Cleanup - none necessary
 
 
-def test_Scraper__check_player_ids_need_update_exists_diff_year(tmp_path):
+def test_Scraper_player_ids_need_update_exists_diff_year(tmp_path):
     # Setup
     tmp_dir = tmp_path.joinpath("assets")
     tmp_dir.mkdir()
@@ -596,7 +578,7 @@ def test_Scraper__check_player_ids_need_update_exists_diff_year(tmp_path):
 
     # Exercise
     scraper = Scraper(2020, root=tmp_path)
-    result = scraper._check_player_ids_need_update()
+    result = scraper._player_ids_need_update()
 
     # Verify
     assert result is True
@@ -604,14 +586,14 @@ def test_Scraper__check_player_ids_need_update_exists_diff_year(tmp_path):
     # Cleanup - none necessary
 
 
-def test_Scraper__check_player_ids_need_update_doesnt_exist(tmp_path):
+def test_Scraper_player_ids_need_update_doesnt_exist(tmp_path):
     # Setup
     tmp_dir = tmp_path.joinpath("assets")
     tmp_dir.mkdir()
 
     # Exercise
     scraper = Scraper(2020)
-    result = scraper._check_player_ids_need_update()
+    result = scraper._player_ids_need_update()
 
     # Verify
     assert result is True
