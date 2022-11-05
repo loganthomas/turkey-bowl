@@ -1,6 +1,6 @@
 repos:
 - repo: https://github.com/pre-commit/pre-commit-hooks
-  rev: v4.0.1
+  rev: v4.3.0
   hooks:
   - id: trailing-whitespace
   - id: end-of-file-fixer
@@ -8,12 +8,12 @@ repos:
   - id: check-added-large-files
   - id: check-json
 - repo: https://github.com/psf/black
-  rev: 20.8b0
+  rev: 22.10.0
   hooks:
   - id: black
-    args: [--config, pyproject.toml]
+    args: [--config, pyproject.toml, --target-version, py37]
     language_version: python3.7
 - repo: https://github.com/pycqa/isort
-  rev: 5.5.2
+  rev: 5.10.1
   hooks:
   - id: isort
