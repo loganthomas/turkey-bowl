@@ -11,7 +11,7 @@ repos:
   rev: 22.10.0
   hooks:
   - id: black
-    args: [--config, pyproject.toml, --target-version, py37]
+    args: [--config, pyproject.toml]
     language_version: python3.7
 - repo: https://github.com/pycqa/isort
   rev: 5.10.1
