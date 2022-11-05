@@ -38,7 +38,7 @@ def clean():
             typer.echo("Deleting...")
             shutil.rmtree(draft.dir_config.output_dir.resolve())
     else:
-        print(f"{draft.dir_config.output_dir} does not exits.")
+        logger.info(f"{draft.dir_config.output_dir} does not exits.")
 
 
 @app.command()

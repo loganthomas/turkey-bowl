@@ -1,6 +1,7 @@
 """
 Thanksgiving Football module
 """
+import logging
 import sys
 from pathlib import Path
 
@@ -11,6 +12,8 @@ from turkey_bowl.draft import Draft
 from turkey_bowl.leader_board import LeaderBoard
 from turkey_bowl.scrape import Scraper
 
+logger = logging.getLogger(__name__)
+
 
 def main():
 
@@ -18,7 +21,7 @@ def main():
     pd.options.display.width = None
 
     year = utils.get_current_year()
-    print(f"\n{'-'*5} {year} Turkey Bowl {'-'*5}")
+    logger.info(f"\n{'-'*5} {year} Turkey Bowl {'-'*5}")
 
     draft = Draft(year)
     draft.setup()
@@ -48,7 +51,7 @@ def main():
     # Check done after projected_player_pts so that projected points
     #   are pulled during draft.
     if not draft.check_players_have_been_drafted(participant_teams):
-        print(f"\nNot all players have been drafted yet! Please complete the draft for {year}.")
+        logger.info(f"Not all players have been drafted yet! Please complete the draft for {year}.")
         sys.exit()
 
     actual_player_pts = scraper.get_actual_player_pts()

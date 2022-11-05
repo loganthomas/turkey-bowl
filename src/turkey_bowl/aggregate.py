@@ -1,6 +1,7 @@
 """
 Data aggregation functions
 """
+import logging
 from pathlib import Path
 from typing import Any, Dict, Optional
 
@@ -8,6 +9,8 @@ import pandas as pd
 
 from turkey_bowl import utils
 from turkey_bowl.scrape import Scraper
+
+logger = logging.getLogger(__name__)
 
 
 def _get_player_pts_stat_type(player_pts: Dict[str, Any]) -> str:
@@ -46,7 +49,7 @@ def projected_player_pts_pulled(year: int, week: int, savepath: Path) -> bool:
     Helper function to check if projected points have been pulled.
     """
     if savepath.exists():
-        print(f"\nProjected player data already exists at {savepath}")
+        logger.info(f"Projected player data already exists at {savepath}")
         return True
 
     return False
@@ -112,13 +115,13 @@ def create_player_pts_df(
 
         for pid in undocumented_players:
             player_metadata = scraper._get_player_metadata(pid)
-            print(f"\tUndocumented player {pid}: {player_metadata['name']}")
+            logger.info(f"Undocumented player {pid}: {player_metadata['name']}")
             scraper._update_single_player_id(pid, player_ids)
 
         utils.write_to_json(json_dict=player_ids, filename=scraper.dir_config.player_ids_json_path)
 
     else:
-        print("\tAll player ids in pulled player points exist in player_ids.json")
+        logger.info("All player ids in pulled player points exist in player_ids.json")
 
     team = player_pts_df["Player"].apply(lambda x: player_ids[x]["team"])
     player_pts_df.insert(1, "Team", team)
@@ -147,7 +150,7 @@ def create_player_pts_df(
     # Write projected players to csv so only done once
     if stats_type == "projectedStats":
 
-        print(f"\tWriting projected player stats to {savepath}...")
+        logger.info(f"Writing projected player stats to {savepath}...")
         player_pts_df.to_csv(savepath)
 
     return player_pts_df
@@ -178,7 +181,7 @@ def merge_points(
 
             if sum(not_found_mask) > 0:
                 missing = merged[:-1]["Player"][not_found_mask].tolist()
-                print(f"\n\tWARNING: {participant} has missing players: {missing}\n")
+                logger.info(f"WARNING: {participant} has missing players: {missing}")
 
         # Fill remaining nan with 0.0 (if they exist)
         merged = merged.fillna(0.0)
@@ -219,7 +222,7 @@ def write_robust_participant_team_scores(
     """
     Writes the total points to an excel file that can be reviewed.
     """
-    print(f"\tWriting robust player points summary to {savepath}...")
+    logger.info(f"Writing robust player points summary to {savepath}...")
 
     with pd.ExcelWriter(savepath) as writer:
         for participant, participant_team in participant_teams.items():

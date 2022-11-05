@@ -424,8 +424,8 @@ def test_Scraper_get_projected_player_pts(caplog):
 
     # Verify
     assert result == expected_player_pts
-    assert "\nCollecting projected player points...\n" in caplog.text
-    assert f"\tSuccessful API response obtained for: {scraper.projected_pts_url}\n" in caplog.text
+    assert "Collecting projected player points..." in caplog.text
+    assert f"Successful API response obtained for: {scraper.projected_pts_url}" in caplog.text
     # Cleanup - none necessary
 
 
@@ -518,8 +518,8 @@ def test_Scraper_get_actual_player_pts(caplog):
 
     # Verify
     assert result == expected_player_pts
-    assert "\nCollecting actual player points...\n" in caplog.text
-    assert f"\tSuccessful API response obtained for: {scraper.actual_pts_url}\n" in caplog.text
+    assert "Collecting actual player points..." in caplog.text
+    assert f"Successful API response obtained for: {scraper.actual_pts_url}" in caplog.text
 
     # Cleanup - none necessary
 
@@ -729,14 +729,12 @@ def test_Scraper_update_player_ids_exist(tmp_path, caplog):
 
     projected_player_pts = {}  # placeholder (not used)
 
-    expected_out = f"\tPlayer ids are up to date at {tmp_player_ids_json_path}\n"
-
     # Exercise
     scraper = Scraper(2020, root=tmp_path)
     scraper.update_player_ids(projected_player_pts)
 
     # Verify
-    assert expected_out in caplog.text
+    assert f"Player ids are up to date at {tmp_player_ids_json_path}" in caplog.text
 
 
 @responses.activate
