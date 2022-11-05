@@ -6449,5 +6449,11 @@
     "position": "DB",
     "team": "DET",
     "injury": null
+  },
+  "310": {
+    "name": "Matt Ryan",
+    "position": "QB",
+    "team": "IND",
+    "injury": "Out"
   }
 }
