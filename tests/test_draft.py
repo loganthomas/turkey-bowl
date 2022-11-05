@@ -2,6 +2,7 @@
 Unit tests for draft.py
 """
 import json
+import logging
 import random
 from pathlib import Path
 
@@ -20,12 +21,8 @@ def test_Draft_instantiation():
     # Verify
     assert draft.year == 2020
     assert draft.dir_config.output_dir == here.joinpath("archive/2020")
-    assert draft.dir_config.draft_order_path == here.joinpath(
-        "archive/2020/2020_draft_order.json"
-    )
-    assert draft.dir_config.draft_sheet_path == here.joinpath(
-        "archive/2020/2020_draft_sheet.xlsx"
-    )
+    assert draft.dir_config.draft_order_path == here.joinpath("archive/2020/2020_draft_order.json")
+    assert draft.dir_config.draft_sheet_path == here.joinpath("archive/2020/2020_draft_sheet.xlsx")
 
     assert draft.__repr__() == "Draft(2020)"
     assert draft.__str__() == "Turkey Bowl Draft: 2020"
@@ -33,9 +30,10 @@ def test_Draft_instantiation():
     # Cleanup - none necessary
 
 
-def test_Draft_setup_nothing_exists(tmp_path, monkeypatch, capsys):
+def test_Draft_setup_nothing_exists(tmp_path, monkeypatch, caplog):
     """Test Draft.setup() when no directories exist in root."""
     # Setup - create temp archive dir (assumed to always exist)
+    caplog.set_level(logging.INFO)
     tmp_archive_dir = tmp_path.joinpath("archive")
     tmp_archive_dir.mkdir()
 
@@ -52,12 +50,8 @@ def test_Draft_setup_nothing_exists(tmp_path, monkeypatch, capsys):
 
     # Override output dirs to temp path created for testing
     draft.dir_config.output_dir = tmp_archive_dir.joinpath("2020")
-    draft.dir_config.draft_order_path = tmp_archive_dir.joinpath(
-        "2020/2020_draft_order.json"
-    )
-    draft.dir_config.draft_sheet_path = tmp_archive_dir.joinpath(
-        "2020/2020_draft_sheet.xlsx"
-    )
+    draft.dir_config.draft_order_path = tmp_archive_dir.joinpath("2020/2020_draft_order.json")
+    draft.dir_config.draft_sheet_path = tmp_archive_dir.joinpath("2020/2020_draft_sheet.xlsx")
 
     # Set random seed for draft order consistency in testing
     random.seed(42)
@@ -80,9 +74,7 @@ def test_Draft_setup_nothing_exists(tmp_path, monkeypatch, capsys):
     assert draft.participant_list == ["logan", "becca", "dodd"]
     assert draft.draft_order == ["dodd", "logan", "becca"]
 
-    with open(
-        tmp_archive_dir.joinpath("2020/2020_draft_order.json"), "r"
-    ) as written_json:
+    with open(tmp_archive_dir.joinpath("2020/2020_draft_order.json"), "r") as written_json:
         loaded_json = json.load(written_json)
 
     assert list(loaded_json.keys()) == ["dodd", "logan", "becca"]
@@ -114,21 +106,25 @@ def test_Draft_setup_nothing_exists(tmp_path, monkeypatch, capsys):
             )
         )
 
-    captured = capsys.readouterr()
-    assert captured.out == (
-        "\nDrafting in slot 1...\ndodd\n"
-        + "\nDrafting in slot 2...\nlogan\n"
-        + "\nDrafting in slot 3...\nbecca\n\n"
-        + "\n\tDraft Order: ['dodd', 'logan', 'becca']\n"
-        + f"\tSaved draft order to {tmp_archive_dir.joinpath('2020/2020_draft_order.json')}\n"
+    assert "Drafting in slot 1..." in caplog.text
+    assert "dodd" in caplog.text
+    assert "Drafting in slot 2..." in caplog.text
+    assert "logan" in caplog.text
+    assert "Drafting in slot 3..." in caplog.text
+    assert "becca" in caplog.text
+    assert "Draft Order: ['dodd', 'logan', 'becca']" in caplog.text
+    assert (
+        f"Saved draft order to {tmp_archive_dir.joinpath('2020/2020_draft_order.json')}"
+        in caplog.text
     )
 
     # Cleanup - none necessary
 
 
-def test_Draft_setup_already_exists(tmp_path, capsys):
+def test_Draft_setup_already_exists(tmp_path, caplog):
     """Test Draft.setup() when files exist in root."""
     # Setup
+    caplog.set_level(logging.INFO)
     tmp_archive_dir = tmp_path.joinpath("archive")
     tmp_archive_dir.mkdir()
 
@@ -180,12 +176,8 @@ def test_Draft_setup_already_exists(tmp_path, capsys):
 
     # Override output dirs to temp path crated for testing
     draft.dir_config.output_dir = tmp_archive_dir.joinpath("2020")
-    draft.dir_config.draft_order_path = tmp_archive_dir.joinpath(
-        "2020/2020_draft_order.json"
-    )
-    draft.dir_config.draft_sheet_path = tmp_archive_dir.joinpath(
-        "2020/2020_draft_sheet.xlsx"
-    )
+    draft.dir_config.draft_order_path = tmp_archive_dir.joinpath("2020/2020_draft_order.json")
+    draft.dir_config.draft_sheet_path = tmp_archive_dir.joinpath("2020/2020_draft_sheet.xlsx")
 
     draft.setup()
 
@@ -210,11 +202,11 @@ def test_Draft_setup_already_exists(tmp_path, capsys):
     assert draft.participant_list == existing_draft_order
     assert draft.draft_order == existing_draft_order
 
-    captured = capsys.readouterr()
-    assert captured.out == (
-        f"\nDraft order already exists at {tmp_archive_dir.joinpath('2020/2020_draft_order.json')}\n"
-        + f"\n\tDraft Order: {existing_draft_order}\n"
+    assert (
+        f"Draft order already exists at {tmp_archive_dir.joinpath('2020/2020_draft_order.json')}"
+        in caplog.text
     )
+    assert f"Draft Order: {existing_draft_order}" in caplog.text
 
     # Cleanup - none necessary
 
@@ -272,12 +264,8 @@ def test_Draft_load(tmp_path):
 
     # Override output dirs to temp path crated for testing
     draft.dir_config.output_dir = tmp_archive_dir.joinpath("2005")
-    draft.dir_config.draft_order_path = tmp_archive_dir.joinpath(
-        "2005/2005_draft_order.json"
-    )
-    draft.dir_config.draft_sheet_path = tmp_archive_dir.joinpath(
-        "2005/2005_draft_sheet.xlsx"
-    )
+    draft.dir_config.draft_order_path = tmp_archive_dir.joinpath("2005/2005_draft_order.json")
+    draft.dir_config.draft_sheet_path = tmp_archive_dir.joinpath("2005/2005_draft_sheet.xlsx")
 
     draft.setup()
     result = draft.load()
@@ -411,12 +399,8 @@ def test_Draft_load_stripping_whitespace(tmp_path):
 
     # Override output dirs to temp path crated for testing
     draft.dir_config.output_dir = tmp_archive_dir.joinpath("2005")
-    draft.dir_config.draft_order_path = tmp_archive_dir.joinpath(
-        "2005/2005_draft_order.json"
-    )
-    draft.dir_config.draft_sheet_path = tmp_archive_dir.joinpath(
-        "2005/2005_draft_sheet.xlsx"
-    )
+    draft.dir_config.draft_order_path = tmp_archive_dir.joinpath("2005/2005_draft_order.json")
+    draft.dir_config.draft_sheet_path = tmp_archive_dir.joinpath("2005/2005_draft_sheet.xlsx")
 
     draft.setup()
     result = draft.load()
