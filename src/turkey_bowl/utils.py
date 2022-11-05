@@ -41,7 +41,7 @@ def load_from_json(filename: Path) -> Dict[str, Any]:
     return json_dict
 
 
-def setup_logger(level=logging.INFO):
+def setup_logger(level: int = logging.INFO, filepath: str = "turkey-bowl.log") -> None:
     """Set up logger with standard formatting and handlers."""
 
     PREFIX = "%(asctime)s %(levelname).4s %(name)s - "
@@ -65,6 +65,12 @@ def setup_logger(level=logging.INFO):
         )
     console.setFormatter(formatter)
     logger.addHandler(console)
+
+    # default mode='a' but can use mode='w' to write instead of append
+    log_file = logging.FileHandler(filepath)
+    log_file.setLevel(level)
+    log_file.setFormatter(formatter)
+    logger.addHandler(log_file)
 
 
 def write_to_json(json_dict: Dict[str, Any], filename: Path) -> None:

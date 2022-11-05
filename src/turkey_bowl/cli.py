@@ -16,7 +16,8 @@ app = typer.Typer()
 # Set option for nice DataFrame display
 pd.options.display.width = None
 
-HEADER = "\n{message:-^72}"
+HEADER = "\n\n{message:-^72}"
+YEAR = utils.get_current_year()
 
 
 logger = logging.getLogger(__name__)
@@ -26,8 +27,7 @@ utils.setup_logger()
 @app.command()
 def clean():
     """Delete current draft output directory and all its contents."""
-    year = utils.get_current_year()
-    draft = Draft(year)
+    draft = Draft(YEAR)
 
     if Path(draft.dir_config.output_dir).exists():
         delete = typer.confirm(
@@ -44,9 +44,8 @@ def clean():
 @app.command()
 def setup():
     """Setup output directory and create draft order."""
-    year = utils.get_current_year()
-    typer.echo(HEADER.format(message=f" {year} Turkey Bowl "))
-    draft = Draft(year)
+    logger.info(HEADER.format(message=f" {YEAR} Turkey Bowl "))
+    draft = Draft(YEAR)
     draft.setup()
 
 
@@ -58,10 +57,9 @@ def scrape_projected(
     Scrape api.fantasy.nfl.com for player PROJECTED points and
     merge with participant drafted teams.
     """
-    year = utils.get_current_year()
-    typer.echo(HEADER.format(message=" Scraping Player Projected Points "))
-    draft = Draft(year)
-    scraper = Scraper(year)
+    logger.info(HEADER.format(message=" Scraping Player Projected Points "))
+    draft = Draft(YEAR)
+    scraper = Scraper(YEAR)
 
     if dry_run:
         week = int(input("Enter dry-run week: "))
@@ -70,14 +68,14 @@ def scrape_projected(
         week = scraper.nfl_thanksgiving_calendar_week
 
     projected_player_pts_path = Path(
-        f"{draft.dir_config.output_dir}/{year}_{week}_projected_player_pts.csv"
+        f"{draft.dir_config.output_dir}/{YEAR}_{week}_projected_player_pts.csv"
     )
 
-    if not aggregate.projected_player_pts_pulled(year, week, savepath=projected_player_pts_path):
+    if not aggregate.projected_player_pts_pulled(YEAR, week, savepath=projected_player_pts_path):
         projected_player_pts = scraper.get_projected_player_pts()
         scraper.update_player_ids(projected_player_pts)
         aggregate.create_player_pts_df(
-            year=year,
+            year=YEAR,
             week=week,
             player_pts=projected_player_pts,
             savepath=projected_player_pts_path,
@@ -92,18 +90,17 @@ def scrape_actual(
     Scrape api.fantasy.nfl.com for player ACTUAL points and
     merge with participant drafted teams.
     """
-    year = utils.get_current_year()
-    typer.echo(HEADER.format(message=" Scraping Player Actual Points "))
-    draft = Draft(year)
+    logger.info(HEADER.format(message=" Scraping Player Actual Points "))
+    draft = Draft(YEAR)
     participant_teams = draft.load()
 
     if not draft.check_players_have_been_drafted(participant_teams):
-        typer.echo(
-            f"\nNot all players have been drafted yet! Please complete the draft for {year}."
+        logger.info(
+            f"\nNot all players have been drafted yet! Please complete the draft for {YEAR}."
         )
         raise typer.Abort()
 
-    scraper = Scraper(year)
+    scraper = Scraper(YEAR)
 
     if dry_run:
         week = int(input("Enter dry-run week: "))
@@ -112,14 +109,14 @@ def scrape_actual(
         week = scraper.nfl_thanksgiving_calendar_week
 
     projected_player_pts_path = Path(
-        f"{draft.dir_config.output_dir}/{year}_{week}_projected_player_pts.csv"
+        f"{draft.dir_config.output_dir}/{YEAR}_{week}_projected_player_pts.csv"
     )
     projected_player_pts_df = pd.read_csv(projected_player_pts_path, index_col=0)
     actual_player_pts = scraper.get_actual_player_pts()
 
     if actual_player_pts:
         actual_player_pts_df = aggregate.create_player_pts_df(
-            year=year, week=week, player_pts=actual_player_pts, savepath=None
+            year=YEAR, week=week, player_pts=actual_player_pts, savepath=None
         )
     else:
         actual_player_pts_df = projected_player_pts_df[["Player", "Team"]].copy()
@@ -141,13 +138,13 @@ def scrape_actual(
     aggregate.write_robust_participant_team_scores(
         participant_teams=participant_teams,
         savepath=Path(
-            f"{draft.dir_config.output_dir}/{year}_{week}_robust_participant_player_pts.xlsx"
+            f"{draft.dir_config.output_dir}/{YEAR}_{week}_robust_participant_player_pts.xlsx"
         ),
     )
 
-    board = LeaderBoard(year, participant_teams)
+    board = LeaderBoard(YEAR, participant_teams)
     board.display()
-    board.save(Path(f"{draft.dir_config.output_dir}/{year}_leader_board.xlsx"))
+    board.save(Path(f"{draft.dir_config.output_dir}/{YEAR}_leader_board.xlsx"))
 
 
 if __name__ == "__main__":
