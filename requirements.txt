@@ -11,6 +11,7 @@ pre-commit
 pytest
 pytest-cov
 pytest-freezegun
+pytest-mock
 PyQt5
 requests
 responses
