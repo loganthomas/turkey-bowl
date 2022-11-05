@@ -76,3 +76,4 @@ def setup_logger(level: int = logging.INFO, filepath: str = "turkey-bowl.log") -
 def write_to_json(json_dict: Dict[str, Any], filename: Path) -> None:
     with open(filename, "w") as json_file:
         json.dump(json_dict, json_file, indent=2)
+        json_file.write("\n")  # ensure new line is written at end of file
