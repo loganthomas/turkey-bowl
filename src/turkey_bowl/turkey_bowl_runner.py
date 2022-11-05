@@ -31,9 +31,7 @@ def main():
     projected_player_pts_path = Path(
         f"{draft.dir_config.output_dir}/{year}_{week}_projected_player_pts.csv"
     )
-    if aggregate.check_projected_player_pts_pulled(
-        year, week, savepath=projected_player_pts_path
-    ):
+    if aggregate.projected_player_pts_pulled(year, week, savepath=projected_player_pts_path):
         projected_player_pts_df = pd.read_csv(projected_player_pts_path, index_col=0)
 
     else:
@@ -50,9 +48,7 @@ def main():
     # Check done after projected_player_pts so that projected points
     #   are pulled during draft.
     if not draft.check_players_have_been_drafted(participant_teams):
-        print(
-            f"\nNot all players have been drafted yet! Please complete the draft for {year}."
-        )
+        print(f"\nNot all players have been drafted yet! Please complete the draft for {year}.")
         sys.exit()
 
     actual_player_pts = scraper.get_actual_player_pts()
