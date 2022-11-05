@@ -1,11 +1,14 @@
 """
 Unit tests for aggregate.py
 """
+from pathlib import Path
+
 import numpy as np
 import pandas as pd
 import pytest
+import responses
 
-from turkey_bowl import aggregate
+from turkey_bowl import aggregate, utils
 
 
 @pytest.fixture
@@ -579,6 +582,162 @@ def test_create_player_pts_df_actual(tmp_path):
     assert result.isnull().sum().sum() == 0
     assert result.dtypes.to_dict() == expected_dtypes
     assert tmp_projected_player_pts_path.exists() is False
+
+    # Cleanup - none necessary
+
+
+@responses.activate
+def test_create_player_pts_df_undocumented_players(tmp_path, capsys, mocker):
+    # Setup
+    year = 2020
+    week = 12
+
+    tmp_archive_dir = tmp_path.joinpath("archive")
+    tmp_archive_dir.mkdir()
+
+    tmp_year_dir = tmp_archive_dir.joinpath(str(year))
+    tmp_year_dir.mkdir()
+
+    tmp_projected_player_pts_path = tmp_path.joinpath(f"{year}_{week}_projected_player_pts.csv")
+
+    # Mock assets/player_ids.json
+    # mocked_player_ids = {
+    #     'year': 2020,
+    #     '2555260': {'name': 'Dak Prescott', 'position': 'QB', 'team': 'DAL', 'injury': None},
+    #     '310': {'name': 'Matt Ryan', 'position': 'QB', 'team': 'IND', 'injury': None},
+    #     '2504211': {'name': 'Tom Brady', 'position': 'QB', 'team': 'TB', 'injury': None},
+    # }
+    # mocker.patch('turkey_bowl.utils.load_from_json', return_value=mocked_player_ids)
+
+    # These are "actual points"; pulled an a new previously undocumented player exists in this pull
+    # that doesn't exist in the current player_ids.json nor projected_player_pts.csv
+    undocumented_player_id = "123456789"  # fake pid for Logan Thomas
+
+    player_ids_json_path = Path("assets/player_ids.json")
+    current_player_ids = utils.load_from_json(player_ids_json_path)
+    assert undocumented_player_id not in current_player_ids
+
+    player_pts = {
+        "2555260": {
+            "stats": {
+                "week": {
+                    "2020": {
+                        "12": {
+                            "1": "1",
+                            "5": "6.05",
+                            "6": "0.03",
+                            "7": "0.04",
+                            "14": "0.06",
+                            "30": "0.01",
+                            "32": "0.02",
+                            "pts": "0.31",
+                        }
+                    }
+                }
+            }
+        },
+        "310": {
+            "stats": {
+                "week": {
+                    "2020": {
+                        "12": {
+                            "1": "1",
+                            "5": "296.77",
+                            "6": "1.94",
+                            "7": "0.74",
+                            "14": "9.99",
+                            "15": "0.11",
+                            "30": "0.09",
+                            "32": "0.19",
+                            "pts": "20.01",
+                        }
+                    }
+                }
+            }
+        },
+        "2504211": {
+            "stats": {
+                "week": {
+                    "2020": {
+                        "12": {
+                            "1": "1",
+                            "5": "16.93",
+                            "6": "0.04",
+                            "7": "0.06",
+                            "15": "0.01",
+                            "30": "0.01",
+                            "32": "0.04",
+                            "pts": "0.84",
+                        }
+                    }
+                }
+            }
+        },
+        # Undocumented Player (Logan Thomas)
+        undocumented_player_id: {
+            "stats": {
+                "week": {
+                    "2020": {
+                        "12": {
+                            "1": "1",
+                            "5": "42.42",
+                            "6": "0.42",
+                            "7": "0.42",
+                            "15": "0.42",
+                            "30": "0.42",
+                            "32": "0.42",
+                            "pts": "0.42",
+                        }
+                    }
+                }
+            }
+        },
+    }
+
+    # Mock undocumented player request
+    url = f"https://api.fantasy.nfl.com/v2/player/ngs-content?playerId={undocumented_player_id}"
+    request_json = {
+        "games": {
+            "102022": {
+                "players": {
+                    undocumented_player_id: {
+                        "playerId": "2543767",
+                        "nflGlobalEntityId": "32005448-4f29-6280-e212-928e7f08f1ce",
+                        "esbId": "THO296280",
+                        "name": "Logan Thomas",
+                        "firstName": "Logan",
+                        "lastName": "Thomas",
+                        "position": "TE",
+                        "nflTeamAbbr": "WAS",
+                        "nflTeamId": "32",
+                        "injuryGameStatus": None,
+                        "imageUrl": "https://static.www.nfl.com/image/private/w_200,h_200,c_fill/league/wzb0lbrvqknwfcgnj5sq",
+                        "smallImageUrl": "https://static.www.nfl.com/image/private/w_65,h_90,c_fill/league/wzb0lbrvqknwfcgnj5sq",
+                        "largeImageUrl": "https://static.www.nfl.com/image/private/w_1400,h_1000,c_fill/league/wzb0lbrvqknwfcgnj5sq",
+                        "byeWeek": "14",
+                        "cancelledWeeks": [],
+                        "archetypes": [],
+                        "isUndroppable": False,
+                        "isReserveStatus": False,
+                        "lastVideoTimestamp": "1969-12-31T16:00:00-08:00",
+                    }
+                }
+            }
+        }
+    }
+    responses.add(method=responses.GET, url=url, json=request_json, status=200)
+
+    # Exercise
+    _ = aggregate.create_player_pts_df(year, week, player_pts, tmp_projected_player_pts_path)
+
+    # Verify
+    updated_player_ids = utils.load_from_json(player_ids_json_path)
+    assert undocumented_player_id in updated_player_ids
+    del updated_player_ids[undocumented_player_id]
+    utils.write_to_json(updated_player_ids, player_ids_json_path)
+
+    captured = capsys.readouterr()
+    assert captured.out == f"\tUndocumented player {undocumented_player_id}: Logan Thomas\n"
 
     # Cleanup - none necessary
 

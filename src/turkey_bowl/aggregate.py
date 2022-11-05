@@ -73,8 +73,7 @@ def create_player_pts_df(
         # Projected points should always be saved (pulled only once)
         if savepath is None:
             raise ValueError(
-                "When creating a projected player points dataframe, "
-                + "``savepath`` must be specified."
+                "When creating a projected player points dataframe, ``savepath`` must be specified."
             )
 
     # _get_player_pts_stat_type handles check and raises error if not
@@ -116,10 +115,8 @@ def create_player_pts_df(
             print(f"\tUndocumented player {pid}: {player_metadata['name']}")
             scraper._update_single_player_id(pid, player_ids)
 
-        utils.write_to_json(
-            json_dict=player_ids,
-            filename=scraper.dir_config.player_ids_json_path,
-        )
+        utils.write_to_json(json_dict=player_ids, filename=scraper.dir_config.player_ids_json_path)
+
     else:
         print("\tAll player ids in pulled player points exist in player_ids.json")
 
