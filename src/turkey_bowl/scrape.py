@@ -36,9 +36,7 @@ class Scraper:
     def __init__(self, year: int, root: Optional[str] = None) -> None:
         self.dir_config = utils.load_dir_config(year, root)
         self.year = year
-        self.week_delta = (
-            self.thanksgiving_calendar_week_start - self.nfl_calendar_week_start
-        )
+        self.week_delta = self.thanksgiving_calendar_week_start - self.nfl_calendar_week_start
 
     def __repr__(self):
         return f"Scraper({self.year})"
@@ -159,7 +157,7 @@ class Scraper:
     @property
     def projected_pts_url(self) -> str:
         """
-        Url for web scrapping (or API calling) PRJECTED fantasy points.
+        Url for web scrapping (or API calling) PROJECTED fantasy points.
 
         The base url will always remain the same. However, this method
         will create a query url for the desired year, week, and
@@ -229,16 +227,14 @@ class Scraper:
 
         return actual_player_pts
 
-    def _check_player_ids_need_update(self) -> bool:
+    def _player_ids_need_update(self) -> bool:
         """
         Helper function to check if player ids exist.
         If it does, player ids need to be updated only if ``year`` does
         not match THIS year.
         """
         if self.dir_config.player_ids_json_path.exists():
-            player_ids_loaded = utils.load_from_json(
-                self.dir_config.player_ids_json_path
-            )
+            player_ids_loaded = utils.load_from_json(self.dir_config.player_ids_json_path)
 
             if player_ids_loaded.get("year") == self.year:
                 return False
@@ -257,11 +253,21 @@ class Scraper:
 
         return metadata
 
+    def _update_single_player_id(
+        self, pid: str, pulled_player_id_data: Dict[str, Dict[str, Optional[str]]]
+    ) -> None:
+        player_metadata = self._get_player_metadata(pid)
+        pulled_player_id_data[pid] = {}
+        pulled_player_id_data[pid]["name"] = player_metadata.get("name")
+        pulled_player_id_data[pid]["position"] = player_metadata.get("position")
+        pulled_player_id_data[pid]["team"] = player_metadata.get("nflTeamAbbr")
+        pulled_player_id_data[pid]["injury"] = player_metadata.get("injuryGameStatus")
+
     def update_player_ids(self, projected_player_pts: Dict[str, Any]) -> None:
         """
         Updates player ids (name, pos, team) and saves to json file.
         """
-        if self._check_player_ids_need_update():
+        if self._player_ids_need_update():
             pulled_player_ids = list(projected_player_pts.keys())
 
             # Sort by numerical string value
@@ -269,30 +275,18 @@ class Scraper:
 
             # Add a year reference (for checking)
             pulled_player_ids.insert(0, "year")
-            pulled_player_data = {pid: {} for pid in pulled_player_ids}  # type: ignore[var-annotated]
+            pulled_player_id_data: Dict[str, Dict[str, Optional[str]]] = {}
 
             for pid in tqdm(pulled_player_ids, desc="\tUpdating player ids", ncols=75):
                 if pid == "year":
-                    pulled_player_data[pid] = self.year  # type: ignore[assignment]
-
+                    pulled_player_id_data[pid] = self.year  # type: ignore[assignment]
                 else:
-                    player_metadata = self._get_player_metadata(pid)
-
-                    pulled_player_data[pid]["name"] = player_metadata.get("name")
-                    pulled_player_data[pid]["position"] = player_metadata.get(
-                        "position"
-                    )
-                    pulled_player_data[pid]["team"] = player_metadata.get("nflTeamAbbr")
-                    pulled_player_data[pid]["injury"] = player_metadata.get(
-                        "injuryGameStatus"
-                    )
+                    self._update_single_player_id(pid, pulled_player_id_data)
 
             utils.write_to_json(
-                json_dict=pulled_player_data,
+                json_dict=pulled_player_id_data,
                 filename=self.dir_config.player_ids_json_path,
             )
 
         else:
-            logger.info(
-                f"\tPlayer ids are up to date at {self.dir_config.player_ids_json_path}"
-            )
+            logger.info(f"\tPlayer ids are up to date at {self.dir_config.player_ids_json_path}")

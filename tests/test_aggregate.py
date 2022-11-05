@@ -1,11 +1,14 @@
 """
 Unit tests for aggregate.py
 """
+from pathlib import Path
+
 import numpy as np
 import pandas as pd
 import pytest
+import responses
 
-from turkey_bowl import aggregate
+from turkey_bowl import aggregate, utils
 
 
 @pytest.fixture
@@ -101,12 +104,8 @@ def test__get_player_pts_stats_type_raises_error_for_multi_types(
         "310": actual_player_pts["310"],
     }
 
-    expected_error1 = (
-        "More than one unique stats type detected: {'stats', 'projectedStats'}"
-    )
-    expected_error2 = (
-        "More than one unique stats type detected: {'projectedStats', 'stats'}"
-    )
+    expected_error1 = "More than one unique stats type detected: {'stats', 'projectedStats'}"
+    expected_error2 = "More than one unique stats type detected: {'projectedStats', 'stats'}"
     # Exercise
     with pytest.raises(ValueError) as error_info:
         aggregate._get_player_pts_stat_type(player_pts)
@@ -156,7 +155,9 @@ def test__get_player_pts_stats_type_raises_error_for_unrecognized_type():
         },
     }
 
-    expected_error = "Unrecognized stats type: 'bad_stats'. Expected either 'projectedStats' or 'stats'."
+    expected_error = (
+        "Unrecognized stats type: 'bad_stats'. Expected either 'projectedStats' or 'stats'."
+    )
     # Exercise
     with pytest.raises(ValueError) as error_info:
         aggregate._get_player_pts_stat_type(player_pts)
@@ -169,12 +170,8 @@ def test__get_player_pts_stats_type_raises_error_for_unrecognized_type():
     # Cleanup - none necessary
 
 
-@pytest.mark.parametrize(
-    "stat_type", ["projectedStats", "stats"], ids=["projected", "actual"]
-)
-def test__get_player_pts_stats_type(
-    stat_type, mock_proj_player_pts, mock_actual_player_pts
-):
+@pytest.mark.parametrize("stat_type", ["projectedStats", "stats"], ids=["projected", "actual"])
+def test__get_player_pts_stats_type(stat_type, mock_proj_player_pts, mock_actual_player_pts):
     # Setup
     if stat_type == "projectedStats":
         player_pts = mock_proj_player_pts
@@ -242,7 +239,9 @@ def test_create_player_pts_df_raises_error_when_projected_and_no_savepath():
         "382": {"projectedStats": {}},
     }
 
-    expected_error = "When creating a projected player points dataframe, ``savepath`` must be specified."
+    expected_error = (
+        "When creating a projected player points dataframe, ``savepath`` must be specified."
+    )
 
     # Exercise
     with pytest.raises(ValueError) as error_info:
@@ -254,7 +253,7 @@ def test_create_player_pts_df_raises_error_when_projected_and_no_savepath():
     # Cleanup - none necessary
 
 
-def test_check_projected_player_pts_pulled_true(tmp_path, capsys):
+def test_projected_player_pts_pulled_true(tmp_path, capsys):
     # Setup
     year = 2020
     week = 12
@@ -265,13 +264,11 @@ def test_check_projected_player_pts_pulled_true(tmp_path, capsys):
     tmp_year_dir = tmp_archive_dir.joinpath(str(year))
     tmp_year_dir.mkdir()
 
-    tmp_projected_player_pts_path = tmp_path.joinpath(
-        f"{year}_{week}_projected_player_pts.csv"
-    )
+    tmp_projected_player_pts_path = tmp_path.joinpath(f"{year}_{week}_projected_player_pts.csv")
 
     player_pts_df_data = {
         "Player": {0: "Chad Henne", 1: "Matt Ryan", 2: "Joe Flacco"},
-        "Team": {0: "KC", 1: "ATL", 2: "NYJ"},
+        "Team": {0: "KC", 1: "IND", 2: "NYJ"},
         "PROJ_pts": {0: 0.31, 1: 20.01, 2: 0.84},
         "PROJ_Games_Played": {0: 1, 1: 1, 2: 1},
         "PROJ_Passing_Yards": {0: 6.05, 1: 296.77, 2: 16.93},
@@ -316,9 +313,7 @@ def test_check_projected_player_pts_pulled_true(tmp_path, capsys):
 
     # Exercise
     assert tmp_projected_player_pts_path.exists() is True
-    result = aggregate.check_projected_player_pts_pulled(
-        year, week, tmp_projected_player_pts_path
-    )
+    result = aggregate.projected_player_pts_pulled(year, week, tmp_projected_player_pts_path)
 
     # Verify
     assert result is True
@@ -332,7 +327,7 @@ def test_check_projected_player_pts_pulled_true(tmp_path, capsys):
     # Cleanup - none necessary
 
 
-def test_check_projected_player_pts_pulled_false(tmp_path):
+def test_projected_player_pts_pulled_false(tmp_path):
     # Setup
     year = 2020
     week = 12
@@ -343,15 +338,11 @@ def test_check_projected_player_pts_pulled_false(tmp_path):
     tmp_year_dir = tmp_archive_dir.joinpath(str(year))
     tmp_year_dir.mkdir()
 
-    tmp_projected_player_pts_path = tmp_path.joinpath(
-        f"{year}_{week}_projected_player_pts.csv"
-    )
+    tmp_projected_player_pts_path = tmp_path.joinpath(f"{year}_{week}_projected_player_pts.csv")
 
     # Exercise
     assert tmp_projected_player_pts_path.exists() is False
-    result = aggregate.check_projected_player_pts_pulled(
-        year, week, tmp_projected_player_pts_path
-    )
+    result = aggregate.projected_player_pts_pulled(year, week, tmp_projected_player_pts_path)
 
     # Verify
     assert result is False
@@ -370,9 +361,7 @@ def test_create_player_pts_df_projected_doesnt_exists(tmp_path, capsys):
     tmp_year_dir = tmp_archive_dir.joinpath(str(year))
     tmp_year_dir.mkdir()
 
-    tmp_projected_player_pts_path = tmp_path.joinpath(
-        f"{year}_{week}_projected_player_pts.csv"
-    )
+    tmp_projected_player_pts_path = tmp_path.joinpath(f"{year}_{week}_projected_player_pts.csv")
 
     player_pts = {
         "2555260": {
@@ -434,7 +423,7 @@ def test_create_player_pts_df_projected_doesnt_exists(tmp_path, capsys):
 
     player_pts_df_data = {
         "Player": {0: "Dak Prescott", 1: "Matt Ryan", 2: "Tom Brady"},
-        "Team": {0: "DAL", 1: "ATL", 2: "TB"},
+        "Team": {0: "DAL", 1: "IND", 2: "TB"},
         "PROJ_pts": {0: 0.31, 1: 20.01, 2: 0.84},
         "PROJ_Games_Played": {0: 1.0, 1.0: 1.0, 2: 1.0},
         "PROJ_Passing_Yards": {0: 6.05, 1: 296.77, 2: 16.93},
@@ -461,12 +450,13 @@ def test_create_player_pts_df_projected_doesnt_exists(tmp_path, capsys):
         "PROJ_2-Point_Conversions": np.dtype("float64"),
         "PROJ_Rushing_Touchdowns": np.dtype("float64"),
     }
-
+    expected_stdout = (
+        "\tAll player ids in pulled player points exist in player_ids.json\n"
+        f"\tWriting projected player stats to {tmp_projected_player_pts_path}...\n"
+    )
     # Exercise
     assert tmp_projected_player_pts_path.exists() is False
-    result = aggregate.create_player_pts_df(
-        year, week, player_pts, tmp_projected_player_pts_path
-    )
+    result = aggregate.create_player_pts_df(year, week, player_pts, tmp_projected_player_pts_path)
     result_written = pd.read_csv(tmp_projected_player_pts_path, index_col=0)
 
     # Verify
@@ -477,10 +467,7 @@ def test_create_player_pts_df_projected_doesnt_exists(tmp_path, capsys):
     assert result.dtypes.to_dict() == expected_dtypes
 
     captured = capsys.readouterr()
-    assert (
-        captured.out
-        == f"\tWriting projected player stats to {tmp_projected_player_pts_path}...\n"
-    )
+    assert captured.out == expected_stdout
 
     # Cleanup - none necessary
 
@@ -496,9 +483,7 @@ def test_create_player_pts_df_actual(tmp_path):
     tmp_year_dir = tmp_archive_dir.joinpath(str(year))
     tmp_year_dir.mkdir()
 
-    tmp_projected_player_pts_path = tmp_path.joinpath(
-        f"{year}_{week}_projected_player_pts.csv"
-    )
+    tmp_projected_player_pts_path = tmp_path.joinpath(f"{year}_{week}_projected_player_pts.csv")
 
     player_pts = {
         "2555260": {
@@ -560,7 +545,7 @@ def test_create_player_pts_df_actual(tmp_path):
 
     player_pts_df_data = {
         "Player": {0: "Dak Prescott", 1: "Matt Ryan", 2: "Tom Brady"},
-        "Team": {0: "DAL", 1: "ATL", 2: "TB"},
+        "Team": {0: "DAL", 1: "IND", 2: "TB"},
         "ACTUAL_pts": {0: 0.31, 1: 20.01, 2: 0.84},
         "ACTUAL_Games_Played": {0: 1.0, 1.0: 1.0, 2: 1.0},
         "ACTUAL_Passing_Yards": {0: 6.05, 1: 296.77, 2: 16.93},
@@ -590,15 +575,169 @@ def test_create_player_pts_df_actual(tmp_path):
 
     # Exercise
     assert tmp_projected_player_pts_path.exists() is False
-    result = aggregate.create_player_pts_df(
-        year, week, player_pts, tmp_projected_player_pts_path
-    )
+    result = aggregate.create_player_pts_df(year, week, player_pts, tmp_projected_player_pts_path)
 
     # Verify
     assert result.equals(expected)
     assert result.isnull().sum().sum() == 0
     assert result.dtypes.to_dict() == expected_dtypes
     assert tmp_projected_player_pts_path.exists() is False
+
+    # Cleanup - none necessary
+
+
+@responses.activate
+def test_create_player_pts_df_undocumented_players(tmp_path, capsys, mocker):
+    # Setup
+    year = 2020
+    week = 12
+
+    tmp_archive_dir = tmp_path.joinpath("archive")
+    tmp_archive_dir.mkdir()
+
+    tmp_year_dir = tmp_archive_dir.joinpath(str(year))
+    tmp_year_dir.mkdir()
+
+    tmp_projected_player_pts_path = tmp_path.joinpath(f"{year}_{week}_projected_player_pts.csv")
+
+    # Mock assets/player_ids.json
+    # mocked_player_ids = {
+    #     'year': 2020,
+    #     '2555260': {'name': 'Dak Prescott', 'position': 'QB', 'team': 'DAL', 'injury': None},
+    #     '310': {'name': 'Matt Ryan', 'position': 'QB', 'team': 'IND', 'injury': None},
+    #     '2504211': {'name': 'Tom Brady', 'position': 'QB', 'team': 'TB', 'injury': None},
+    # }
+    # mocker.patch('turkey_bowl.utils.load_from_json', return_value=mocked_player_ids)
+
+    # These are "actual points"; pulled an a new previously undocumented player exists in this pull
+    # that doesn't exist in the current player_ids.json nor projected_player_pts.csv
+    undocumented_player_id = "123456789"  # fake pid for Logan Thomas
+
+    player_ids_json_path = Path("assets/player_ids.json")
+    current_player_ids = utils.load_from_json(player_ids_json_path)
+    assert undocumented_player_id not in current_player_ids
+
+    player_pts = {
+        "2555260": {
+            "stats": {
+                "week": {
+                    "2020": {
+                        "12": {
+                            "1": "1",
+                            "5": "6.05",
+                            "6": "0.03",
+                            "7": "0.04",
+                            "14": "0.06",
+                            "30": "0.01",
+                            "32": "0.02",
+                            "pts": "0.31",
+                        }
+                    }
+                }
+            }
+        },
+        "310": {
+            "stats": {
+                "week": {
+                    "2020": {
+                        "12": {
+                            "1": "1",
+                            "5": "296.77",
+                            "6": "1.94",
+                            "7": "0.74",
+                            "14": "9.99",
+                            "15": "0.11",
+                            "30": "0.09",
+                            "32": "0.19",
+                            "pts": "20.01",
+                        }
+                    }
+                }
+            }
+        },
+        "2504211": {
+            "stats": {
+                "week": {
+                    "2020": {
+                        "12": {
+                            "1": "1",
+                            "5": "16.93",
+                            "6": "0.04",
+                            "7": "0.06",
+                            "15": "0.01",
+                            "30": "0.01",
+                            "32": "0.04",
+                            "pts": "0.84",
+                        }
+                    }
+                }
+            }
+        },
+        # Undocumented Player (Logan Thomas)
+        undocumented_player_id: {
+            "stats": {
+                "week": {
+                    "2020": {
+                        "12": {
+                            "1": "1",
+                            "5": "42.42",
+                            "6": "0.42",
+                            "7": "0.42",
+                            "15": "0.42",
+                            "30": "0.42",
+                            "32": "0.42",
+                            "pts": "0.42",
+                        }
+                    }
+                }
+            }
+        },
+    }
+
+    # Mock undocumented player request
+    url = f"https://api.fantasy.nfl.com/v2/player/ngs-content?playerId={undocumented_player_id}"
+    request_json = {
+        "games": {
+            "102022": {
+                "players": {
+                    undocumented_player_id: {
+                        "playerId": "2543767",
+                        "nflGlobalEntityId": "32005448-4f29-6280-e212-928e7f08f1ce",
+                        "esbId": "THO296280",
+                        "name": "Logan Thomas",
+                        "firstName": "Logan",
+                        "lastName": "Thomas",
+                        "position": "TE",
+                        "nflTeamAbbr": "WAS",
+                        "nflTeamId": "32",
+                        "injuryGameStatus": None,
+                        "imageUrl": "https://static.www.nfl.com/image/private/w_200,h_200,c_fill/league/wzb0lbrvqknwfcgnj5sq",
+                        "smallImageUrl": "https://static.www.nfl.com/image/private/w_65,h_90,c_fill/league/wzb0lbrvqknwfcgnj5sq",
+                        "largeImageUrl": "https://static.www.nfl.com/image/private/w_1400,h_1000,c_fill/league/wzb0lbrvqknwfcgnj5sq",
+                        "byeWeek": "14",
+                        "cancelledWeeks": [],
+                        "archetypes": [],
+                        "isUndroppable": False,
+                        "isReserveStatus": False,
+                        "lastVideoTimestamp": "1969-12-31T16:00:00-08:00",
+                    }
+                }
+            }
+        }
+    }
+    responses.add(method=responses.GET, url=url, json=request_json, status=200)
+
+    # Exercise
+    _ = aggregate.create_player_pts_df(year, week, player_pts, tmp_projected_player_pts_path)
+
+    # Verify
+    updated_player_ids = utils.load_from_json(player_ids_json_path)
+    assert undocumented_player_id in updated_player_ids
+    del updated_player_ids[undocumented_player_id]
+    utils.write_to_json(updated_player_ids, player_ids_json_path)
+
+    captured = capsys.readouterr()
+    assert captured.out == f"\tUndocumented player {undocumented_player_id}: Logan Thomas\n"
 
     # Cleanup - none necessary
 
@@ -708,7 +847,7 @@ def mock_participant_teams():
                 9: "Randall Cobb",
             },
             "Team": {
-                0: "ATL",
+                0: "IND",
                 1: "DET",
                 2: "BUF",
                 3: "ATL",
@@ -778,7 +917,7 @@ def mock_participant_teams():
             17: "DET",
             18: "DET",
             19: "DAL",
-            20: "ATL",
+            20: "IND",
             21: "DET",
             22: "BUF",
             23: "ATL",
@@ -892,9 +1031,7 @@ def test_merge_points(mock_participant_teams):
     # Cleanup - none necessary
 
 
-def test_merge_points_prints_warning_if_player_not_found(
-    mock_participant_teams, capsys
-):
+def test_merge_points_prints_warning_if_player_not_found(mock_participant_teams, capsys):
     # Setup
     participant_teams, pts_df = mock_participant_teams
 
@@ -960,9 +1097,7 @@ def test_sort_robust_cols(mock_participant_teams):
     # Cleanup - none necessary
 
 
-def test_write_robust_pariticipant_team_scores(
-    mock_participant_teams, tmp_path, capsys
-):
+def test_write_robust_participant_team_scores(mock_participant_teams, tmp_path, capsys):
     # Setup
     year = 2020
     week = 12
