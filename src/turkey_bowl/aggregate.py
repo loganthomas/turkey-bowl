@@ -7,6 +7,7 @@ from typing import Any, Dict, Optional
 import pandas as pd
 
 from turkey_bowl import utils
+from turkey_bowl.scrape import Scraper
 
 
 def _get_player_pts_stat_type(player_pts: Dict[str, Any]) -> str:
@@ -30,9 +31,7 @@ def _get_player_pts_stat_type(player_pts: Dict[str, Any]) -> str:
     return stats_type
 
 
-def _unpack_player_pts(
-    year: int, week: int, player_pts_dict: Dict[str, Any]
-) -> Dict[str, str]:
+def _unpack_player_pts(year: int, week: int, player_pts_dict: Dict[str, Any]) -> Dict[str, str]:
     """
     Helper function to unpack player points nested dictionaries.
     """
@@ -42,7 +41,7 @@ def _unpack_player_pts(
     return points_dict
 
 
-def check_projected_player_pts_pulled(year: int, week: int, savepath: Path) -> bool:
+def projected_player_pts_pulled(year: int, week: int, savepath: Path) -> bool:
     """
     Helper function to check if projected points have been pulled.
     """
@@ -105,6 +104,25 @@ def create_player_pts_df(
     # Get definition of each player team and name based on player id
     player_ids_json_path = Path("assets/player_ids.json")
     player_ids = utils.load_from_json(player_ids_json_path)
+
+    # It is possible that there are new players when scraping actual points
+    # that don't exist in player_ids.json nor projected points; if so, report and re-pull player ids
+    undocumented_players = set(player_pts_df["Player"]).difference(set(player_ids))
+    if undocumented_players:
+        scraper = Scraper(year)
+
+        for pid in undocumented_players:
+            player_metadata = scraper._get_player_metadata(pid)
+            print(f"\tUndocumented player {pid}: {player_metadata['name']}")
+            scraper._update_single_player_id(pid, player_ids)
+
+        utils.write_to_json(
+            json_dict=player_ids,
+            filename=scraper.dir_config.player_ids_json_path,
+        )
+    else:
+        print("\tAll player ids in pulled player points exist in player_ids.json")
+
     team = player_pts_df["Player"].apply(lambda x: player_ids[x]["team"])
     player_pts_df.insert(1, "Team", team)
 
@@ -153,9 +171,7 @@ def merge_points(
 
         # Drop columns where all values are nan (sum to zero since nan replaced with 0.0)
         # Leave ACTUAL_pts in case they are all 0.0 at start
-        cols_to_drop = [
-            c for c in merged.columns[merged.sum() == 0] if c != "ACTUAL_pts"
-        ]
+        cols_to_drop = [c for c in merged.columns[merged.sum() == 0] if c != "ACTUAL_pts"]
         merged = merged.drop(columns=cols_to_drop)
 
         if verbose:
@@ -175,9 +191,7 @@ def merge_points(
     return participant_teams
 
 
-def sort_robust_cols(
-    participant_teams: Dict[str, pd.DataFrame]
-) -> Dict[str, pd.DataFrame]:
+def sort_robust_cols(participant_teams: Dict[str, pd.DataFrame]) -> Dict[str, pd.DataFrame]:
     """
     Sort projected and actual columns so that they line up post merge
     """
@@ -188,12 +202,8 @@ def sort_robust_cols(
         for c in orig_cols:
             stripped_c = c.replace("PROJ_", "").replace("ACTUAL_", "")
 
-            if (
-                (f"PROJ_{stripped_c}" in orig_cols)
-                & (f"ACTUAL_{stripped_c}" in orig_cols)
-            ) & (
-                (f"PROJ_{stripped_c}" not in new_cols)
-                & (f"ACTUAL_{stripped_c}" not in new_cols)
+            if ((f"PROJ_{stripped_c}" in orig_cols) & (f"ACTUAL_{stripped_c}" in orig_cols)) & (
+                (f"PROJ_{stripped_c}" not in new_cols) & (f"ACTUAL_{stripped_c}" not in new_cols)
             ):
                 new_cols.append(f"ACTUAL_{stripped_c}")
                 new_cols.append(f"PROJ_{stripped_c}")

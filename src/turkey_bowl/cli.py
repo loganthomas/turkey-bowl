@@ -23,12 +23,17 @@ def clean():
     """Delete current draft output directory and all its contents."""
     year = utils.get_current_year()
     draft = Draft(year)
-    delete = typer.confirm(
-        f"Are you sure you want to delete {draft.output_dir}?", abort=True
-    )
-    if delete:
-        typer.echo("Deleting...")
-        shutil.rmtree(draft.output_dir.resolve())
+
+    if Path(draft.dir_config.output_dir).exists():
+        delete = typer.confirm(
+            f"Are you sure you want to delete {draft.dir_config.output_dir}?",
+            abort=True,
+        )
+        if delete:
+            typer.echo("Deleting...")
+            shutil.rmtree(draft.dir_config.output_dir.resolve())
+    else:
+        print(f"{draft.dir_config.output_dir} does not exits.")
 
 
 @app.command()
@@ -54,18 +59,16 @@ def scrape_projected(
     scraper = Scraper(year)
 
     if dry_run:
-        week = input("Enter dry-run week: ")
-        # TODO: use getter and setter to update scraper here
+        week = int(input("Enter dry-run week: "))
+        scraper.nfl_thanksgiving_calendar_week = week
     else:
         week = scraper.nfl_thanksgiving_calendar_week
 
     projected_player_pts_path = Path(
-        f"{draft.output_dir}/{year}_{week}_projected_player_pts.csv"
+        f"{draft.dir_config.output_dir}/{year}_{week}_projected_player_pts.csv"
     )
 
-    if not aggregate.check_projected_player_pts_pulled(
-        year, week, savepath=projected_player_pts_path
-    ):
+    if not aggregate.projected_player_pts_pulled(year, week, savepath=projected_player_pts_path):
         projected_player_pts = scraper.get_projected_player_pts()
         scraper.update_player_ids(projected_player_pts)
         aggregate.create_player_pts_df(
@@ -98,13 +101,13 @@ def scrape_actual(
     scraper = Scraper(year)
 
     if dry_run:
-        week = input("Enter dry-run week: ")
-        # TODO: use getter and setter to update this
+        week = int(input("Enter dry-run week: "))
+        scraper.nfl_thanksgiving_calendar_week = week
     else:
         week = scraper.nfl_thanksgiving_calendar_week
 
     projected_player_pts_path = Path(
-        f"{draft.output_dir}/{year}_{week}_projected_player_pts.csv"
+        f"{draft.dir_config.output_dir}/{year}_{week}_projected_player_pts.csv"
     )
     projected_player_pts_df = pd.read_csv(projected_player_pts_path, index_col=0)
     actual_player_pts = scraper.get_actual_player_pts()
@@ -133,13 +136,13 @@ def scrape_actual(
     aggregate.write_robust_participant_team_scores(
         participant_teams=participant_teams,
         savepath=Path(
-            f"{draft.output_dir}/{year}_{week}_robust_participant_player_pts.xlsx"
+            f"{draft.dir_config.output_dir}/{year}_{week}_robust_participant_player_pts.xlsx"
         ),
     )
 
     board = LeaderBoard(year, participant_teams)
     board.display()
-    board.save(f"{draft.output_dir}/{year}_leader_board.xlsx")
+    board.save(Path(f"{draft.dir_config.output_dir}/{year}_leader_board.xlsx"))
 
 
 if __name__ == "__main__":
