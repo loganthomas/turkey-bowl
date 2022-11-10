@@ -3,6 +3,7 @@ import logging
 import random
 from types import SimpleNamespace
 
+import numpy as np
 import pandas as pd
 import pytest
 
@@ -115,7 +116,7 @@ def test_MockDraft_projected_exists_not_all_players_drafted(
     tmp_archive_path = tmp_path.joinpath("archive")
     tmp_archive_path.mkdir()
 
-    tmp_archive_year_path = tmp_path.joinpath("2005")
+    tmp_archive_year_path = tmp_archive_path.joinpath("2005")
     tmp_archive_year_path.mkdir()
 
     # Mock Draft.__init__ so data saved to tmp_path
@@ -186,7 +187,7 @@ def test_MockDraft_projected_dont_exists_not_all_players_drafted(
     tmp_archive_path = tmp_path.joinpath("archive")
     tmp_archive_path.mkdir()
 
-    tmp_archive_year_path = tmp_path.joinpath("2005")
+    tmp_archive_year_path = tmp_archive_path.joinpath("2005")
     tmp_archive_year_path.mkdir()
 
     # Mock Draft.__init__ so data saved to tmp_path
@@ -296,7 +297,7 @@ def test_MockDraft(
     tmp_archive_path = tmp_path.joinpath("archive")
     tmp_archive_path.mkdir()
 
-    tmp_archive_year_path = tmp_path.joinpath("2005")
+    tmp_archive_year_path = tmp_archive_path.joinpath("2005")
     tmp_archive_year_path.mkdir()
 
     participant_teams = mock_participant_teams
@@ -429,6 +430,11 @@ def test_MockDraft(
             )
 
             participant_teams_robust_sorted[p].insert(3, "ACTUAL_pts", 0.0)
+
+            if "Randall Cobb" in participant_teams_robust_sorted[p].to_numpy():
+                participant_teams_robust_sorted[p].loc[
+                    participant_teams_robust_sorted[p]["Player"] == "Randall Cobb", "ACTUAL_pts"
+                ] = np.nan
 
         assert df.equals(participant_teams_robust_sorted[p])
 

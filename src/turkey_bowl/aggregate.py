@@ -169,22 +169,18 @@ def merge_points(
         # Merge points
         merged = pd.merge(participant_team, pts_df, how="left", on=["Player", "Team"])
 
-        # Drop columns where all values are nan (sum to zero since nan replaced with 0.0)
+        # Drop columns where projected or actual points are 0.0
         # Leave ACTUAL_pts in case they are all 0.0 at start
         cols_to_drop = [c for c in merged.columns[merged.sum() == 0] if c != "ACTUAL_pts"]
         merged = merged.drop(columns=cols_to_drop)
 
+        # Check that all players have a projected and actual score
         if verbose:
-            # Check that all players are found (ignore bench)
-            # Assumes bench player is last row
-            not_found_mask = merged[:-1].isnull().any(axis=1)
+            check_mask = merged[["PROJ_pts", "ACTUAL_pts"]].isna().all(axis=1)
 
-            if sum(not_found_mask) > 0:
-                missing = merged[:-1]["Player"][not_found_mask].tolist()
-                logger.info(f"WARNING: {participant} has missing players: {missing}")
-
-        # Fill remaining nan with 0.0 (if they exist)
-        merged = merged.fillna(0.0)
+            if check_mask.sum() > 0:
+                check_players = merged.loc[check_mask, "Player"].tolist()
+                logger.info(f"WARNING: {participant} has players with NaN values: {check_players}")
 
         participant_teams[participant] = merged
 

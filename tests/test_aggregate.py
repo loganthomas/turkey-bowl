@@ -1043,9 +1043,9 @@ def test_merge_points_prints_warning_if_player_not_found(mock_participant_teams,
     participant_teams = aggregate.merge_points(participant_teams, pts_df, verbose=True)
 
     # Verify
-    assert "WARNING: Dodd has missing players: ['Josh Alle']" in caplog.text
-    assert "WARNING: Becca has missing players: ['Dak Prescot']" in caplog.text
-    assert "WARNING: Logan has missing players: ['Matt Rya']" in caplog.text
+    assert "WARNING: Dodd has players with NaN values: ['Josh Alle']" in caplog.text
+    assert "WARNING: Becca has players with NaN values: ['Dak Prescot']" in caplog.text
+    assert "WARNING: Logan has players with NaN values: ['Matt Rya']" in caplog.text
 
     # Cleanup - none necessary
 
