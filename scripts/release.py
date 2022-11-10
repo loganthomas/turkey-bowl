@@ -61,9 +61,7 @@ class Release:
         self.root = Path(__file__).parent.parent
         self.changelog_path = self.root.joinpath("CHANGELOG.md").resolve()
         self.dry_run = dry_run
-        self.news_fragment_path = self.root.joinpath(
-            "docs/releases/upcoming/"
-        ).resolve()
+        self.news_fragment_path = self.root.joinpath("docs/releases/upcoming/").resolve()
 
     @property
     def changelog_mapping(self):
@@ -100,14 +98,8 @@ class Release:
 
         handled_file_paths = []
 
-        for fragment_type, description in self.changelog_mapping[
-            "type_to_description"
-        ].items():
-            pattern = (
-                Path(self.news_fragment_path)
-                .joinpath(f"*.{fragment_type}.md")
-                .resolve()
-            )
+        for fragment_type, description in self.changelog_mapping["type_to_description"].items():
+            pattern = Path(self.news_fragment_path).joinpath(f"*.{fragment_type}.md").resolve()
             pattern = str(pattern)
             file_paths = sorted(glob.glob(pattern))
 
@@ -144,9 +136,7 @@ class Release:
                 Path.unlink(Path(file_path))
 
             # Report any leftover for developers to inspect.
-            leftovers = sorted(
-                glob.glob(str(Path(self.news_fragment_path).joinpath("*")))
-            )
+            leftovers = sorted(glob.glob(str(Path(self.news_fragment_path).joinpath("*"))))
             if leftovers:
                 logger.info("These files are not collected:")
                 logger.info("\n  ".join([""] + leftovers))
@@ -157,13 +147,9 @@ class Release:
         """Create a news fragment for a PR."""
         choices = [option.value for option in FragmentOptions]
         pr_number = typer.prompt("Please enter the PR number", type=int)
-        fragment_type = typer.prompt(
-            f"Choose a fragment type {choices}", type=FragmentOptions
-        )
+        fragment_type = typer.prompt(f"Choose a fragment type {choices}", type=FragmentOptions)
 
-        filepath = Path(self.news_fragment_path).joinpath(
-            f"{pr_number}.{fragment_type}.md"
-        )
+        filepath = Path(self.news_fragment_path).joinpath(f"{pr_number}.{fragment_type}.md")
 
         if filepath.exists():
             logger.warning("FAILED: File {} already exists.".format(filepath))
@@ -178,6 +164,7 @@ class Release:
             Path.mkdir(self.news_fragment_path, parents=True)
         with open(filepath, "w", encoding="utf-8") as fp:
             fp.write(content + f" (#{pr_number})")
+            fp.write("\n")  # ensure file ends in newline
 
         logger.info(f"Please commit the file created at: {filepath}")
 

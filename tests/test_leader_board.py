@@ -1,6 +1,7 @@
 """
 Unit tests for leader_board.py
 """
+import logging
 import textwrap
 
 import pandas as pd
@@ -1215,13 +1216,13 @@ def test_LeaderBoard_data_with_acutal_pts(mock_participant_teams):
     # Cleanup - none necessary
 
 
-def test_LeaderBoard_display_no_actual_pts(mock_participant_teams, capsys):
+def test_LeaderBoard_display_no_actual_pts(mock_participant_teams, caplog):
     # Setup
+    caplog.set_level(logging.INFO)
     participant_teams = mock_participant_teams
 
-    expected_out = """
+    expected_out_dodd = """
         ### DODD stats ###
-
                       Position            Player Team  ACTUAL_pts  PROJ_pts
         0                   QB        Josh Allen  BUF         0.0     20.22
         1                 RB_1  David Montgomery  CHI         0.0     14.68
@@ -1233,13 +1234,10 @@ def test_LeaderBoard_display_no_actual_pts(mock_participant_teams, capsys):
         7                    K      Cairo Santos  CHI         0.0      6.46
         8  Defense (Team Name)     Chicago Bears  CHI         0.0      6.66
         9     Bench (RB/WR/TE)   Latavius Murray   NO         0.0      6.98
+        """
 
-
-
-
-
+    expected_out_becca = """
         ### BECCA stats ###
-
                       Position           Player Team  ACTUAL_pts  PROJ_pts
         0                   QB     Dak Prescott  DAL         0.0     21.55
         1                 RB_1  Adrian Peterson  DET         0.0     12.88
@@ -1251,13 +1249,10 @@ def test_LeaderBoard_display_no_actual_pts(mock_participant_teams, capsys):
         7                    K      Matt Prater  DET         0.0      7.34
         8  Defense (Team Name)    Detroit Lions  DET         0.0      6.74
         9     Bench (RB/WR/TE)   Michael Gallup  DAL         0.0     14.37
+        """
 
-
-
-
-
+    expected_out_logan = """
         ### LOGAN stats ###
-
                       Position            Player Team  ACTUAL_pts  PROJ_pts
         0                   QB         Matt Ryan  ATL         0.0     20.01
         1                 RB_1     D'Andre Swift  DET         0.0      7.15
@@ -1269,17 +1264,14 @@ def test_LeaderBoard_display_no_actual_pts(mock_participant_teams, capsys):
         7                    K        Tyler Bass  BUF         0.0      6.15
         8  Defense (Team Name)    Dallas Cowboys  DAL         0.0      7.40
         9     Bench (RB/WR/TE)      Randall Cobb  DAL         0.0      0.00
+        """
 
-
-
-
-
-        Dodd winning with 0.0 pts
-
+    expected_out_winning_top = "Dodd winning with 0.0 pts"
+    expected_out_winning_stats = """
                PTS  margin  pts_back
         Dodd   0.0     0.0       0.0
         Becca  0.0     0.0       0.0
-        Logan  0.0     NaN       0.0\n\n
+        Logan  0.0     NaN       0.0
         """
 
     # Exercise
@@ -1288,14 +1280,18 @@ def test_LeaderBoard_display_no_actual_pts(mock_participant_teams, capsys):
     board.display()
 
     # Verify
-    captured = capsys.readouterr()
-    assert captured.out == textwrap.dedent(expected_out)
+    assert textwrap.dedent(expected_out_dodd) in caplog.text
+    assert textwrap.dedent(expected_out_becca) in caplog.text
+    assert textwrap.dedent(expected_out_logan) in caplog.text
+    assert expected_out_winning_top in caplog.text
+    assert textwrap.dedent(expected_out_winning_stats) in caplog.text
 
     # Cleanup - none necessary
 
 
-def test_LeaderBoard_display_with_actual_pts(mock_participant_teams, capsys):
+def test_LeaderBoard_display_with_actual_pts(mock_participant_teams, caplog):
     # Setup
+    caplog.set_level(logging.INFO)
     participant_teams = mock_participant_teams
     participant_teams["Dodd"]["ACTUAL_pts"] = [
         1.0,
@@ -1334,9 +1330,8 @@ def test_LeaderBoard_display_with_actual_pts(mock_participant_teams, capsys):
         19.0,
     ]
 
-    expected_out = """
+    expected_out_dodd = """
         ### DODD stats ###
-
                       Position            Player Team  ACTUAL_pts  PROJ_pts
         0                   QB        Josh Allen  BUF         1.0     20.22
         1                 RB_1  David Montgomery  CHI         2.0     14.68
@@ -1348,13 +1343,9 @@ def test_LeaderBoard_display_with_actual_pts(mock_participant_teams, capsys):
         7                    K      Cairo Santos  CHI         8.0      6.46
         8  Defense (Team Name)     Chicago Bears  CHI         9.0      6.66
         9     Bench (RB/WR/TE)   Latavius Murray   NO        10.0      6.98
-
-
-
-
-
+        """
+    expected_out_becca = """
         ### BECCA stats ###
-
                       Position           Player Team  ACTUAL_pts  PROJ_pts
         0                   QB     Dak Prescott  DAL         1.0     21.55
         1                 RB_1  Adrian Peterson  DET         2.0     12.88
@@ -1366,13 +1357,10 @@ def test_LeaderBoard_display_with_actual_pts(mock_participant_teams, capsys):
         7                    K      Matt Prater  DET         8.0      7.34
         8  Defense (Team Name)    Detroit Lions  DET        10.0      6.74
         9     Bench (RB/WR/TE)   Michael Gallup  DAL        11.0     14.37
+        """
 
-
-
-
-
+    expected_out_logan = """
         ### LOGAN stats ###
-
                       Position            Player Team  ACTUAL_pts  PROJ_pts
         0                   QB         Matt Ryan  ATL        10.0     20.01
         1                 RB_1     D'Andre Swift  DET        11.0      7.15
@@ -1384,17 +1372,14 @@ def test_LeaderBoard_display_with_actual_pts(mock_participant_teams, capsys):
         7                    K        Tyler Bass  BUF        17.0      6.15
         8  Defense (Team Name)    Dallas Cowboys  DAL        18.0      7.40
         9     Bench (RB/WR/TE)      Randall Cobb  DAL        19.0      0.00
+        """
 
-
-
-
-
-        Logan winning with 126.0 pts
-
+    expected_out_winning_top = "Logan winning with 126.0 pts"
+    expected_out_winning_stats = """
                  PTS  margin  pts_back
         Logan  126.0    80.0       0.0
         Becca   46.0     1.0      80.0
-        Dodd    45.0     NaN      81.0\n\n
+        Dodd    45.0     NaN      81.0
         """
 
     # Exercise
@@ -1403,12 +1388,18 @@ def test_LeaderBoard_display_with_actual_pts(mock_participant_teams, capsys):
     board.display()
 
     # Verify
-    captured = capsys.readouterr()
-    assert captured.out == textwrap.dedent(expected_out)
+    assert textwrap.dedent(expected_out_dodd) in caplog.text
+    assert textwrap.dedent(expected_out_becca) in caplog.text
+    assert textwrap.dedent(expected_out_logan) in caplog.text
+    assert expected_out_winning_top in caplog.text
+    assert textwrap.dedent(expected_out_winning_stats) in caplog.text
+
+    # Cleanup - none necessary
 
 
-def test_LeaderBoard_save(mock_participant_teams, tmp_path, capsys):
+def test_LeaderBoard_save(mock_participant_teams, tmp_path, caplog):
     # Setup
+    caplog.set_level(logging.INFO)
     year = 2020
     participant_teams = mock_participant_teams
     participant_teams["Dodd"]["ACTUAL_pts"] = [
@@ -1465,7 +1456,7 @@ def test_LeaderBoard_save(mock_participant_teams, tmp_path, capsys):
 
     expected_board_data_df = pd.DataFrame(expected_data)
 
-    expected_out = f"Saving LeaderBoard to {tmp_leader_board_path}...\n"
+    expected_out = f"Saving LeaderBoard to {tmp_leader_board_path}..."
     # Exercise
     assert tmp_leader_board_path.exists() is False
     board = LeaderBoard(year, participant_teams)
@@ -1484,29 +1475,20 @@ def test_LeaderBoard_save(mock_participant_teams, tmp_path, capsys):
     )
     written_board = written_board.astype("float64")
 
-    written_dodd = pd.read_excel(
-        tmp_leader_board_path, sheet_name="Dodd", engine="openpyxl"
-    )
+    written_dodd = pd.read_excel(tmp_leader_board_path, sheet_name="Dodd", engine="openpyxl")
     written_dodd = written_dodd.astype(participant_dtypes)
 
-    written_becca = pd.read_excel(
-        tmp_leader_board_path, sheet_name="Becca", engine="openpyxl"
-    )
+    written_becca = pd.read_excel(tmp_leader_board_path, sheet_name="Becca", engine="openpyxl")
     written_becca = written_becca.astype(participant_dtypes)
 
-    written_logan = pd.read_excel(
-        tmp_leader_board_path, sheet_name="Logan", engine="openpyxl"
-    )
+    written_logan = pd.read_excel(tmp_leader_board_path, sheet_name="Logan", engine="openpyxl")
     written_logan = written_logan.astype(participant_dtypes)
 
     assert written_board.equals(expected_board_data_df)
     assert written_dodd.equals(
-        participant_teams["Dodd"][
-            ["Position", "Player", "Team", "ACTUAL_pts", "PROJ_pts"]
-        ]
+        participant_teams["Dodd"][["Position", "Player", "Team", "ACTUAL_pts", "PROJ_pts"]]
     )
 
-    captured = capsys.readouterr()
-    assert captured.out == expected_out
+    assert expected_out in caplog.text
 
     # Cleanup - none necessary

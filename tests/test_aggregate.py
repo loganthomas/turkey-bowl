@@ -1,6 +1,7 @@
 """
 Unit tests for aggregate.py
 """
+import logging
 from pathlib import Path
 
 import numpy as np
@@ -253,8 +254,9 @@ def test_create_player_pts_df_raises_error_when_projected_and_no_savepath():
     # Cleanup - none necessary
 
 
-def test_projected_player_pts_pulled_true(tmp_path, capsys):
+def test_projected_player_pts_pulled_true(tmp_path, caplog):
     # Setup
+    caplog.set_level(logging.INFO)
     year = 2020
     week = 12
 
@@ -318,11 +320,7 @@ def test_projected_player_pts_pulled_true(tmp_path, capsys):
     # Verify
     assert result is True
 
-    captured = capsys.readouterr()
-    assert (
-        captured.out
-        == f"\nProjected player data already exists at {tmp_projected_player_pts_path}\n"
-    )
+    assert f"Projected player data already exists at {tmp_projected_player_pts_path}" in caplog.text
 
     # Cleanup - none necessary
 
@@ -350,8 +348,9 @@ def test_projected_player_pts_pulled_false(tmp_path):
     # Cleanup - none necessary
 
 
-def test_create_player_pts_df_projected_doesnt_exists(tmp_path, capsys):
+def test_create_player_pts_df_projected_doesnt_exists(tmp_path, caplog):
     # Setup
+    caplog.set_level(logging.INFO)
     year = 2020
     week = 12
 
@@ -450,10 +449,7 @@ def test_create_player_pts_df_projected_doesnt_exists(tmp_path, capsys):
         "PROJ_2-Point_Conversions": np.dtype("float64"),
         "PROJ_Rushing_Touchdowns": np.dtype("float64"),
     }
-    expected_stdout = (
-        "\tAll player ids in pulled player points exist in player_ids.json\n"
-        f"\tWriting projected player stats to {tmp_projected_player_pts_path}...\n"
-    )
+
     # Exercise
     assert tmp_projected_player_pts_path.exists() is False
     result = aggregate.create_player_pts_df(year, week, player_pts, tmp_projected_player_pts_path)
@@ -466,9 +462,8 @@ def test_create_player_pts_df_projected_doesnt_exists(tmp_path, capsys):
     assert result.isnull().sum().sum() == 0
     assert result.dtypes.to_dict() == expected_dtypes
 
-    captured = capsys.readouterr()
-    assert captured.out == expected_stdout
-
+    assert "All player ids in pulled player points exist in player_ids.json" in caplog.text
+    assert f"Writing projected player stats to {tmp_projected_player_pts_path}..." in caplog.text
     # Cleanup - none necessary
 
 
@@ -587,8 +582,9 @@ def test_create_player_pts_df_actual(tmp_path):
 
 
 @responses.activate
-def test_create_player_pts_df_undocumented_players(tmp_path, capsys, mocker):
+def test_create_player_pts_df_undocumented_players(tmp_path, caplog, mocker):
     # Setup
+    caplog.set_level(logging.INFO)
     year = 2020
     week = 12
 
@@ -601,6 +597,7 @@ def test_create_player_pts_df_undocumented_players(tmp_path, capsys, mocker):
     tmp_projected_player_pts_path = tmp_path.joinpath(f"{year}_{week}_projected_player_pts.csv")
 
     # Mock assets/player_ids.json
+    # see https://www.freblogg.com/pytest-functions-mocking-1
     # mocked_player_ids = {
     #     'year': 2020,
     #     '2555260': {'name': 'Dak Prescott', 'position': 'QB', 'team': 'DAL', 'injury': None},
@@ -736,8 +733,7 @@ def test_create_player_pts_df_undocumented_players(tmp_path, capsys, mocker):
     del updated_player_ids[undocumented_player_id]
     utils.write_to_json(updated_player_ids, player_ids_json_path)
 
-    captured = capsys.readouterr()
-    assert captured.out == f"\tUndocumented player {undocumented_player_id}: Logan Thomas\n"
+    assert f"Undocumented player {undocumented_player_id}: Logan Thomas" in caplog.text
 
     # Cleanup - none necessary
 
@@ -1031,8 +1027,9 @@ def test_merge_points(mock_participant_teams):
     # Cleanup - none necessary
 
 
-def test_merge_points_prints_warning_if_player_not_found(mock_participant_teams, capsys):
+def test_merge_points_prints_warning_if_player_not_found(mock_participant_teams, caplog):
     # Setup
+    caplog.set_level(logging.INFO)
     participant_teams, pts_df = mock_participant_teams
 
     # Intentional misspell
@@ -1042,18 +1039,13 @@ def test_merge_points_prints_warning_if_player_not_found(mock_participant_teams,
 
     pts_df["drop_me"] = 0.0
 
-    expected_warning = (
-        "\n\tWARNING: Dodd has missing players: ['Josh Alle']\n\n"
-        + "\n\tWARNING: Becca has missing players: ['Dak Prescot']\n\n"
-        + "\n\tWARNING: Logan has missing players: ['Matt Rya']\n\n"
-    )
-
     # Exercise
     participant_teams = aggregate.merge_points(participant_teams, pts_df, verbose=True)
 
     # Verify
-    captured = capsys.readouterr()
-    assert captured.out == expected_warning
+    assert "WARNING: Dodd has missing players: ['Josh Alle']" in caplog.text
+    assert "WARNING: Becca has missing players: ['Dak Prescot']" in caplog.text
+    assert "WARNING: Logan has missing players: ['Matt Rya']" in caplog.text
 
     # Cleanup - none necessary
 
@@ -1097,8 +1089,9 @@ def test_sort_robust_cols(mock_participant_teams):
     # Cleanup - none necessary
 
 
-def test_write_robust_participant_team_scores(mock_participant_teams, tmp_path, capsys):
+def test_write_robust_participant_team_scores(mock_participant_teams, tmp_path, caplog):
     # Setup
+    caplog.set_level(logging.INFO)
     year = 2020
     week = 12
 
@@ -1126,8 +1119,7 @@ def test_write_robust_participant_team_scores(mock_participant_teams, tmp_path, 
         participant_team["ACTUAL_Z"] = 0.0
 
     expected_out = (
-        "\tWriting robust player points summary to "
-        + f"{tmp_robust_participant_player_pts_path}...\n"
+        f"Writing robust player points summary to {tmp_robust_participant_player_pts_path}..."
     )
 
     # Exercise
@@ -1158,7 +1150,6 @@ def test_write_robust_participant_team_scores(mock_participant_teams, tmp_path, 
         participant_team = participant_team.astype(expected_dtypes)
         assert participant_teams[participant].equals(participant_team)
 
-    captured = capsys.readouterr()
-    assert captured.out == expected_out
+    assert expected_out in caplog.text
 
     # Cleanup - none necessary

@@ -191,9 +191,9 @@ class Scraper:
 
         if verbose:
             if response.status_code == requests.codes.ok:
-                logger.info(f"\tSuccessful API response obtained for: {query_url}")
+                logger.info(f"Successful API response obtained for: {query_url}")
             else:
-                logger.info(f"\tWARNING: API response unsuccessful for: {query_url}")
+                logger.info(f"WARNING: API response unsuccessful for: {query_url}")
 
         return response.json()
 
@@ -205,7 +205,7 @@ class Scraper:
         json is parsed to only get relevant player points.
         """
         # This is a unique identifier NOT truly a GAME identifier
-        logger.info("\nCollecting projected player points...")
+        logger.info("Collecting projected player points...")
         response_json = self.scrape_url(self.projected_pts_url)
         system_config = response_json["systemConfig"].get("currentGameId")
         projected_player_pts = response_json["games"][system_config].get("players")
@@ -220,7 +220,7 @@ class Scraper:
         json is parsed to only get relevant player points.
         """
         # This is a unique identifier NOT truly a GAME identifier
-        logger.info("\nCollecting actual player points...")
+        logger.info("Collecting actual player points...")
         response_json = self.scrape_url(self.actual_pts_url)
         system_config = response_json["systemConfig"].get("currentGameId")
         actual_player_pts = response_json["games"][system_config].get("players")
@@ -289,4 +289,4 @@ class Scraper:
             )
 
         else:
-            logger.info(f"\tPlayer ids are up to date at {self.dir_config.player_ids_json_path}")
+            logger.info(f"Player ids are up to date at {self.dir_config.player_ids_json_path}")

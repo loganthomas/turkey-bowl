@@ -1,10 +1,13 @@
 """
 Leader board methods
 """
+import logging
 from pathlib import Path
 from typing import Dict
 
 import pandas as pd
+
+logger = logging.getLogger(__name__)
 
 
 class LeaderBoard:
@@ -30,9 +33,7 @@ class LeaderBoard:
             leader_board_data[participant] = team_pts
 
         # Create a DataFrame from point_totals
-        leader_board_df = pd.DataFrame.from_dict(
-            leader_board_data, orient="index", columns=["PTS"]
-        )
+        leader_board_df = pd.DataFrame.from_dict(leader_board_data, orient="index", columns=["PTS"])
 
         # Sort the leader board on highest pts to lowest pts
         leader_board_df = leader_board_df.sort_values("PTS", ascending=False)
@@ -41,26 +42,22 @@ class LeaderBoard:
         leader_board_df["margin"] = leader_board_df["PTS"].diff(-1)
 
         # Create column to show how far out of lead they are
-        leader_board_df["pts_back"] = (
-            leader_board_df.iloc[0, 0] - leader_board_df["PTS"].values
-        )
+        leader_board_df["pts_back"] = leader_board_df.iloc[0, 0] - leader_board_df["PTS"].values
 
         return leader_board_df
 
     def display(self) -> None:
         for participant, participant_team in self.participant_teams.items():
-            print(f"\n### {participant.upper()} stats ###\n")
-            print(participant_team[self.filter_cols])
-            print("\n\n\n")
+            logger.info(
+                f"\n\n### {participant.upper()} stats ###\n{participant_team[self.filter_cols]}\n"
+            )
 
-        print(
-            f"\n{self.data.index[0]} winning with {round(self.data.iloc[0,0],2)} pts\n"
+        logger.info(
+            f"{self.data.index[0]} winning with {round(self.data.iloc[0,0],2)} pts\n{self.data}\n"
         )
-        print(self.data)
-        print("\n")
 
     def save(self, savepath: Path) -> None:
-        print(f"Saving LeaderBoard to {savepath}...")
+        logger.info(f"Saving LeaderBoard to {savepath}...")
 
         with pd.ExcelWriter(savepath) as writer:
 
@@ -93,9 +90,7 @@ class LeaderBoard:
 
                 for i, col in enumerate(participant_team):
                     series = participant_team[col]
-                    max_len = max(
-                        series.astype(str).map(len).max(), len(str(series.name))
-                    )
+                    max_len = max(series.astype(str).map(len).max(), len(str(series.name)))
 
                     # Add a little extra spacing
                     if col in ("Position", "Player", "Team"):

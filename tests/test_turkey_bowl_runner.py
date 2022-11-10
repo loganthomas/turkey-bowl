@@ -1,4 +1,5 @@
 import json
+import logging
 import random
 from types import SimpleNamespace
 
@@ -7,6 +8,8 @@ import pytest
 
 from turkey_bowl import aggregate
 from turkey_bowl.turkey_bowl_runner import main
+
+logger = logging.getLogger(__name__)
 
 
 @pytest.fixture
@@ -103,9 +106,10 @@ def mock_leader_board_data_no_actual():
 
 @pytest.mark.freeze_time
 def test_MockDraft_projected_exists_not_all_players_drafted(
-    freezer, tmp_path, monkeypatch, mock_projected_player_pts_df, capsys
+    freezer, tmp_path, monkeypatch, mock_projected_player_pts_df, caplog
 ):
     # Setup
+    caplog.set_level(logging.INFO)
     freezer.move_to("2005-01-01")
 
     tmp_archive_path = tmp_path.joinpath("archive")
@@ -148,16 +152,24 @@ def test_MockDraft_projected_exists_not_all_players_drafted(
     assert tmp_archive_year_path.joinpath("2005_draft_order.json").exists()
     assert tmp_archive_year_path.joinpath("2005_draft_sheet.xlsx").exists()
 
-    captured = capsys.readouterr()
-    assert captured.out == (
-        "\n----- 2005 Turkey Bowl -----\n"
-        + "\nDrafting in slot 1...\ndodd\n"
-        + "\nDrafting in slot 2...\nlogan\n"
-        + "\nDrafting in slot 3...\nbecca\n\n"
-        + "\n\tDraft Order: ['dodd', 'logan', 'becca']\n"
-        + f"\tSaved draft order to {tmp_archive_year_path.joinpath('2005_draft_order.json')}\n"
-        + f"\nProjected player data already exists at {tmp_archive_year_path.joinpath('2005_12_projected_player_pts.csv')}\n"
-        + "\nNot all players have been drafted yet! Please complete the draft for 2005.\n"
+    assert "----- 2005 Turkey Bowl -----" in caplog.text
+    assert "Drafting in slot 1..." in caplog.text
+    assert "dodd" in caplog.text
+    assert "Drafting in slot 2..." in caplog.text
+    assert "logan" in caplog.text
+    assert "Drafting in slot 3..." in caplog.text
+    assert "becca" in caplog.text
+    assert "Draft Order: ['dodd', 'logan', 'becca']" in caplog.text
+    assert (
+        f"Saved draft order to {tmp_archive_year_path.joinpath('2005_draft_order.json')}"
+        in caplog.text
+    )
+    assert (
+        f"Projected player data already exists at {tmp_archive_year_path.joinpath('2005_12_projected_player_pts.csv')}"
+        in caplog.text
+    )
+    assert (
+        "Not all players have been drafted yet! Please complete the draft for 2005." in caplog.text
     )
 
     # Cleanup - none necessary
@@ -165,9 +177,10 @@ def test_MockDraft_projected_exists_not_all_players_drafted(
 
 @pytest.mark.freeze_time
 def test_MockDraft_projected_dont_exists_not_all_players_drafted(
-    freezer, tmp_path, monkeypatch, mock_projected_player_pts_df, capsys
+    freezer, tmp_path, monkeypatch, mock_projected_player_pts_df, caplog
 ):
     # Setup
+    caplog.set_level(logging.INFO)
     freezer.move_to("2005-01-01")
 
     tmp_archive_path = tmp_path.joinpath("archive")
@@ -195,9 +208,9 @@ def test_MockDraft_projected_dont_exists_not_all_players_drafted(
 
     # Mock scraper methods so no requests call
     def mock_get_projected_player_pts(self):
-        print("\nCollecting projected player points...")
-        print(
-            "\tSuccessful API response obtained for: https://api.fantasy.nfl.com/v2/players/weekprojectedstats?season=2005&week=12"
+        logger.info("Collecting projected player points...")
+        logger.info(
+            "Successful API response obtained for: https://api.fantasy.nfl.com/v2/players/weekprojectedstats?season=2005&week=12"
         )
 
     monkeypatch.setattr(
@@ -206,28 +219,22 @@ def test_MockDraft_projected_dont_exists_not_all_players_drafted(
     )
 
     def mock_update_player_ids(self, projected_player_pts):
-        print("\tPlayer ids are up to date at player_ids.json")
+        logger.info("Player ids are up to date at player_ids.json")
 
-    monkeypatch.setattr(
-        "turkey_bowl.scrape.Scraper.update_player_ids", mock_update_player_ids
-    )
+    monkeypatch.setattr("turkey_bowl.scrape.Scraper.update_player_ids", mock_update_player_ids)
 
     # Mock aggregate.create_players_pts_df to return testing dataframe asset
     def mock_create_player_pts_df(year, week, player_pts, savepath):
-        print(
-            f"\tWriting projected player stats to {tmp_archive_year_path.joinpath('2005_12_projected_player_pts.csv')}"
+        logger.info(
+            f"Writing projected player stats to {tmp_archive_year_path.joinpath('2005_12_projected_player_pts.csv')}"
         )
         projected_player_pts_df = mock_projected_player_pts_df
         return projected_player_pts_df
 
-    monkeypatch.setattr(
-        "turkey_bowl.aggregate.create_player_pts_df", mock_create_player_pts_df
-    )
+    monkeypatch.setattr("turkey_bowl.aggregate.create_player_pts_df", mock_create_player_pts_df)
 
     # Ensure projected doesn't exist
-    assert not tmp_archive_year_path.joinpath(
-        "2005_12_projected_player_pts.csv"
-    ).exists()
+    assert not tmp_archive_year_path.joinpath("2005_12_projected_player_pts.csv").exists()
 
     # Exercise (wrap since main will exist in this case)
     with pytest.raises(SystemExit) as e:
@@ -240,19 +247,30 @@ def test_MockDraft_projected_dont_exists_not_all_players_drafted(
     assert tmp_archive_year_path.joinpath("2005_draft_order.json").exists()
     assert tmp_archive_year_path.joinpath("2005_draft_sheet.xlsx").exists()
 
-    captured = capsys.readouterr()
-    assert captured.out == (
-        "\n----- 2005 Turkey Bowl -----\n"
-        + "\nDrafting in slot 1...\ndodd\n"
-        + "\nDrafting in slot 2...\nlogan\n"
-        + "\nDrafting in slot 3...\nbecca\n\n"
-        + "\n\tDraft Order: ['dodd', 'logan', 'becca']\n"
-        + f"\tSaved draft order to {tmp_archive_year_path.joinpath('2005_draft_order.json')}\n"
-        + "\nCollecting projected player points...\n"
-        + "\tSuccessful API response obtained for: https://api.fantasy.nfl.com/v2/players/weekprojectedstats?season=2005&week=12\n"
-        + "\tPlayer ids are up to date at player_ids.json\n"
-        + f"\tWriting projected player stats to {tmp_archive_year_path.joinpath('2005_12_projected_player_pts.csv')}\n"
-        + "\nNot all players have been drafted yet! Please complete the draft for 2005.\n"
+    assert "----- 2005 Turkey Bowl -----" in caplog.text
+    assert "Drafting in slot 1..." in caplog.text
+    assert "dodd" in caplog.text
+    assert "Drafting in slot 2..." in caplog.text
+    assert "logan" in caplog.text
+    assert " Drafting in slot 3..." in caplog.text
+    assert "becca" in caplog.text
+    assert "Draft Order: ['dodd', 'logan', 'becca']" in caplog.text
+    assert (
+        f"Saved draft order to {tmp_archive_year_path.joinpath('2005_draft_order.json')}"
+        in caplog.text
+    )
+    assert "Collecting projected player points..." in caplog.text
+    assert (
+        "Successful API response obtained for: https://api.fantasy.nfl.com/v2/players/weekprojectedstats?season=2005&week=12"
+        in caplog.text
+    )
+    assert "Player ids are up to date at player_ids.json" in caplog.text
+    assert (
+        f"Writing projected player stats to {tmp_archive_year_path.joinpath('2005_12_projected_player_pts.csv')}"
+        in caplog.text
+    )
+    assert (
+        "Not all players have been drafted yet! Please complete the draft for 2005." in caplog.text
     )
 
     # Cleanup - none necessary
@@ -296,20 +314,14 @@ def test_MockDraft(
     with open(tmp_archive_year_path.joinpath("2005_draft_order.json"), "w") as f:
         json.dump(mock_draft_order, f)
 
-    with pd.ExcelWriter(
-        tmp_archive_year_path.joinpath("2005_draft_sheet.xlsx")
-    ) as writer:
+    with pd.ExcelWriter(tmp_archive_year_path.joinpath("2005_draft_sheet.xlsx")) as writer:
         for participant, participant_team in participant_teams.items():
-            participant_team.to_excel(
-                writer, sheet_name=participant.title(), index=False
-            )
+            participant_team.to_excel(writer, sheet_name=participant.title(), index=False)
 
     projected_player_pts_df.to_csv(
         tmp_archive_year_path.joinpath("2005_12_projected_player_pts.csv")
     )
-    actual_player_pts_df.to_csv(
-        tmp_archive_year_path.joinpath("2005_12_actual_player_pts.csv")
-    )
+    actual_player_pts_df.to_csv(tmp_archive_year_path.joinpath("2005_12_actual_player_pts.csv"))
 
     # Mock Draft.__init__ so data saved to tmp_path
     def mock_init(self, year):
@@ -334,9 +346,7 @@ def test_MockDraft(
             lambda x: {"999": {"stats": {}}},
         )
     else:
-        monkeypatch.setattr(
-            "turkey_bowl.scrape.Scraper.get_actual_player_pts", lambda _: None
-        )
+        monkeypatch.setattr("turkey_bowl.scrape.Scraper.get_actual_player_pts", lambda _: None)
 
     # def mock_update_player_ids(self, projected_player_pts):
     #     return None
@@ -361,9 +371,7 @@ def test_MockDraft(
 
         return player_pts_df
 
-    monkeypatch.setattr(
-        "turkey_bowl.aggregate.create_player_pts_df", mock_create_player_pts_df
-    )
+    monkeypatch.setattr("turkey_bowl.aggregate.create_player_pts_df", mock_create_player_pts_df)
 
     # Exercise
     main()
@@ -396,9 +404,7 @@ def test_MockDraft(
     assert written_projected_player_pts.equals(projected_player_pts_df)
 
     # Verify robust participant player points
-    assert tmp_archive_year_path.joinpath(
-        "2005_12_robust_participant_player_pts.xlsx"
-    ).exists()
+    assert tmp_archive_year_path.joinpath("2005_12_robust_participant_player_pts.xlsx").exists()
     written_robust_participant_player_pts = pd.read_excel(
         tmp_archive_year_path.joinpath("2005_12_robust_participant_player_pts.xlsx"),
         sheet_name=None,
@@ -413,16 +419,14 @@ def test_MockDraft(
                 col_types[c] = "float64"
 
         df = df.astype(col_types)
-        participant_teams_robust_sorted[p] = participant_teams_robust_sorted[p].astype(
-            col_types
-        )
+        participant_teams_robust_sorted[p] = participant_teams_robust_sorted[p].astype(col_types)
 
         if not actual_pts_exist:
             drop_cols = [c for c in participant_teams_robust_sorted[p] if "ACTUAL" in c]
 
-            participant_teams_robust_sorted[p] = participant_teams_robust_sorted[
-                p
-            ].drop(drop_cols, axis=1)
+            participant_teams_robust_sorted[p] = participant_teams_robust_sorted[p].drop(
+                drop_cols, axis=1
+            )
 
             participant_teams_robust_sorted[p].insert(3, "ACTUAL_pts", 0.0)
 

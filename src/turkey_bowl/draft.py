@@ -3,6 +3,7 @@ Draft functions
 """
 import itertools
 import json
+import logging
 import random
 import time
 from pathlib import Path
@@ -12,6 +13,8 @@ import click_spinner
 import pandas as pd
 
 from turkey_bowl import utils
+
+logger = logging.getLogger(__name__)
 
 
 class Draft:
@@ -37,35 +40,32 @@ class Draft:
 
             self.participant_list = [*map(str.strip, participant_list)]
 
-            self.draft_order = random.sample(
-                self.participant_list, len(self.participant_list)
-            )
+            self.draft_order = random.sample(self.participant_list, len(self.participant_list))
 
-            print()
             for i, participant in enumerate(self.draft_order, 1):
-                print(f"Drafting in slot {i}...")
+                logger.info(f"Drafting in slot {i}...")
                 with click_spinner.spinner():
                     time.sleep(3)
-                print(f"{participant}\n")
+                logger.info(f"{participant}\n")
 
-            print(f"\n\tDraft Order: {self.draft_order}")
+            logger.info(f"Draft Order: {self.draft_order}")
 
             draft_order_dict = {p: i for i, p in enumerate(self.draft_order, 1)}
 
             with open(self.dir_config.draft_order_path, "w") as draft_order_file:
                 json.dump(draft_order_dict, draft_order_file)
 
-            print(f"\tSaved draft order to {self.dir_config.draft_order_path}")
+            logger.info(f"Saved draft order to {self.dir_config.draft_order_path}")
 
         else:
-            print(f"\nDraft order already exists at {self.dir_config.draft_order_path}")
+            logger.info(f"Draft order already exists at {self.dir_config.draft_order_path}")
             with open(self.dir_config.draft_order_path, "r") as draft_order_file:
                 draft_order_dict = json.load(draft_order_file)
 
             self.participant_list = list(draft_order_dict.keys())
             self.draft_order = list(draft_order_dict.keys())
 
-            print(f"\n\tDraft Order: {self.draft_order}")
+            logger.info(f"Draft Order: {self.draft_order}")
 
         if not self.dir_config.draft_sheet_path.exists():
             draft_info = {
@@ -88,9 +88,7 @@ class Draft:
 
             with pd.ExcelWriter(self.dir_config.draft_sheet_path) as writer:
                 for participant in self.draft_order:
-                    draft_df.to_excel(
-                        writer, sheet_name=participant.title(), index=False
-                    )
+                    draft_df.to_excel(writer, sheet_name=participant.title(), index=False)
 
                     # Ensure Position text is correct spacing length
                     worksheet = writer.sheets[participant.title()]
@@ -120,29 +118,22 @@ class Draft:
         # Strip all whitespace
         # All columns are string values so can be apply across DataFrame
         for participant, participant_team in participant_teams.items():
-            participant_teams[participant] = participant_team.apply(
-                lambda x: x.str.strip()
-            )
+            participant_teams[participant] = participant_team.apply(lambda x: x.str.strip())
 
         return participant_teams
 
     @staticmethod
-    def check_players_have_been_drafted(
-        participant_teams: Dict[str, pd.DataFrame]
-    ) -> bool:
+    def check_players_have_been_drafted(participant_teams: Dict[str, pd.DataFrame]) -> bool:
         """
         Helper function to determine if early stopping should occur.
         If all players are equal to "" within the participant teams,
         then no players have been drafted and the process should end.
         """
         drafted_players = [
-            participant_team["Player"].tolist()
-            for participant_team in participant_teams.values()
+            participant_team["Player"].tolist() for participant_team in participant_teams.values()
         ]
 
-        drafted_players = [
-            player for player in itertools.chain.from_iterable(drafted_players)
-        ]
+        drafted_players = [player for player in itertools.chain.from_iterable(drafted_players)]
 
         players_have_been_drafted = all(player != "" for player in drafted_players)
 
