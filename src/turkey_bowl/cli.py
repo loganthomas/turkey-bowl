@@ -16,12 +16,11 @@ app = typer.Typer()
 # Set option for nice DataFrame display
 pd.options.display.width = None
 
-HEADER = "\n\n{message:-^72}"
+HEADER = "\n\n{message:-^72}\n"
 YEAR = utils.get_current_year()
 
 
 logger = logging.getLogger(__name__)
-utils.setup_logger()
 
 
 @app.command()
@@ -38,12 +37,13 @@ def clean():
             typer.echo("Deleting...")
             shutil.rmtree(draft.dir_config.output_dir.resolve())
     else:
-        logger.info(f"{draft.dir_config.output_dir} does not exits.")
+        typer.echo(f"{draft.dir_config.output_dir} does not exits.")
 
 
 @app.command()
 def setup():
     """Setup output directory and create draft order."""
+    utils.setup_logger()
     logger.info(HEADER.format(message=f" {YEAR} Turkey Bowl "))
     draft = Draft(YEAR)
     draft.setup()

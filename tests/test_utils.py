@@ -2,6 +2,7 @@
 Unit tests for utils.py
 """
 import json
+import logging
 from pathlib import Path
 
 import pytest
@@ -123,3 +124,73 @@ def test_load_player_ids():
             assert list(v.keys()) == ["name", "position", "team", "injury"]
 
     # Cleanup - none necessary
+
+
+@pytest.mark.freeze_time
+def test_setup_logger_without_current_year_in_archive(tmp_path, freezer):
+    # Setup - create temp archive dir
+    tmp_archive_dir = tmp_path.joinpath("archive")
+    tmp_archive_dir.mkdir()
+    freezer.move_to("2005")
+
+    assert not tmp_archive_dir.joinpath("2005").exists()
+
+    # Exercise
+    utils.setup_logger(root=tmp_path)
+
+    # Verify
+    assert tmp_archive_dir.joinpath("2005").exists()
+    assert tmp_archive_dir.joinpath("2005/turkey-bowl.log").exists()
+
+
+@pytest.mark.freeze_time
+def test_setup_logger_current_year_in_archive(tmp_path, freezer):
+    # Setup - create temp archive dir
+    tmp_archive_dir = tmp_path.joinpath("archive")
+    tmp_archive_dir.mkdir()
+    tmp_archive_dir.joinpath("2005").mkdir()
+    freezer.move_to("2005")
+
+    assert tmp_archive_dir.joinpath("2005").exists()
+
+    # Exercise
+    utils.setup_logger(root=tmp_path)
+
+    # Verify
+    assert tmp_archive_dir.joinpath("2005/turkey-bowl.log").exists()
+
+
+@pytest.mark.freeze_time
+def test_logger_format_DEBUG(tmp_path, freezer, caplog):
+    # Setup - create temp archive dir
+    caplog.set_level(logging.DEBUG)
+    tmp_archive_dir = tmp_path.joinpath("archive")
+    tmp_archive_dir.mkdir()
+    tmp_archive_dir.joinpath("2005").mkdir()
+    freezer.move_to("2005")
+
+    # Exercise
+    logger = logging.getLogger(__name__)
+    utils.setup_logger(level=logging.DEBUG, root=tmp_path)
+    logger.debug("testing")
+
+    # Verify
+    assert caplog.record_tuples == [("test_utils", logging.DEBUG, "testing")]
+
+
+@pytest.mark.freeze_time
+def test_logger_format_INFO(tmp_path, freezer, caplog):
+    # Setup - create temp archive dir
+    caplog.set_level(logging.INFO)
+    tmp_archive_dir = tmp_path.joinpath("archive")
+    tmp_archive_dir.mkdir()
+    tmp_archive_dir.joinpath("2005").mkdir()
+    freezer.move_to("2005")
+
+    # Exercise
+    logger = logging.getLogger(__name__)
+    utils.setup_logger(root=tmp_path)
+    logger.info("testing")
+
+    # Verify
+    assert caplog.record_tuples == [("test_utils", logging.INFO, "testing")]

@@ -41,11 +41,12 @@ def load_from_json(filename: Path) -> Dict[str, Any]:
     return json_dict
 
 
-def setup_logger(level: int = logging.INFO, filepath: str = "turkey-bowl.log") -> None:
+def setup_logger(level: int = logging.INFO, root: Optional[str] = None) -> None:
     """Set up logger with standard formatting and handlers."""
 
     PREFIX = "%(asctime)s %(levelname).4s %(name)s - "
     DATE_FMT = "%Y-%m-%d %H:%M:%S"
+    root = Path(__file__).parents[2] if root is None else Path(root)
 
     # Get root logger
     logger = logging.getLogger()
@@ -66,8 +67,16 @@ def setup_logger(level: int = logging.INFO, filepath: str = "turkey-bowl.log") -
     console.setFormatter(formatter)
     logger.addHandler(console)
 
+    # Initialize the log file in the current year archive directory
+    dir_config = load_dir_config(year=get_current_year(), root=root)
+    log_filepath = dir_config.output_dir.joinpath("turkey-bowl.log")
+    if not log_filepath.exists():
+        if not log_filepath.parent.exists():
+            log_filepath.parent.mkdir()
+        open(log_filepath, mode="a").close()
+
     # default mode='a' but can use mode='w' to write instead of append
-    log_file = logging.FileHandler(filepath)
+    log_file = logging.FileHandler(log_filepath)
     log_file.setLevel(level)
     log_file.setFormatter(formatter)
     logger.addHandler(log_file)
