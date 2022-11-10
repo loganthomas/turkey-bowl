@@ -68,6 +68,7 @@ def setup_logger(level: int = logging.INFO, root: Optional[str] = None) -> None:
     logger.addHandler(console)
 
     # Initialize the log file in the current year archive directory
+    # TODO: better file/archive management instead of root here
     dir_config = load_dir_config(year=get_current_year(), root=root)
     log_filepath = dir_config.output_dir.joinpath("turkey-bowl.log")
     if not log_filepath.exists():

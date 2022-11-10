@@ -597,6 +597,7 @@ def test_create_player_pts_df_undocumented_players(tmp_path, caplog, mocker):
     tmp_projected_player_pts_path = tmp_path.joinpath(f"{year}_{week}_projected_player_pts.csv")
 
     # Mock assets/player_ids.json
+    # see https://www.freblogg.com/pytest-functions-mocking-1
     # mocked_player_ids = {
     #     'year': 2020,
     #     '2555260': {'name': 'Dak Prescott', 'position': 'QB', 'team': 'DAL', 'injury': None},
