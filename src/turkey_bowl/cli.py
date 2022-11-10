@@ -57,6 +57,7 @@ def scrape_projected(
     Scrape api.fantasy.nfl.com for player PROJECTED points and
     merge with participant drafted teams.
     """
+    utils.setup_logger()
     logger.info(HEADER.format(message=" Scraping Player Projected Points "))
     draft = Draft(YEAR)
     scraper = Scraper(YEAR)
@@ -90,6 +91,7 @@ def scrape_actual(
     Scrape api.fantasy.nfl.com for player ACTUAL points and
     merge with participant drafted teams.
     """
+    utils.setup_logger()
     logger.info(HEADER.format(message=" Scraping Player Actual Points "))
     draft = Draft(YEAR)
     participant_teams = draft.load()
