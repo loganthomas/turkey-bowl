@@ -34,9 +34,9 @@ class Draft:
             self.dir_config.output_dir.mkdir()
 
         if not self.dir_config.draft_order_path.exists():
-            participant_list = input(
-                "\nPlease enter the participants separated by a comma: "
-            ).split(",")
+            participant_list = input("Please enter the participants separated by a comma: ").split(
+                ","
+            )
 
             self.participant_list = [*map(str.strip, participant_list)]
 
