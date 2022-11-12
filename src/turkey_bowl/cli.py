@@ -1,17 +1,18 @@
 import logging
 import shutil
 from pathlib import Path
+from typing import Optional
 
 import pandas as pd
 import typer
 
-from turkey_bowl import aggregate, utils
+from turkey_bowl import __version__, aggregate, utils
 from turkey_bowl.draft import Draft
 from turkey_bowl.leader_board import LeaderBoard
 from turkey_bowl.scrape import Scraper
 
 # Main CLI entry point
-app = typer.Typer()
+app = typer.Typer(help="Turkey Bowl fantasy football draft CLI")
 
 # Set option for nice DataFrame display
 pd.options.display.width = None
@@ -44,7 +45,9 @@ def clean():
 def setup():
     """Setup output directory and create draft order."""
     utils.setup_logger()
-    logger.info(HEADER.format(message=f" {YEAR} Turkey Bowl "))
+    logger.info(
+        HEADER.format(message=f" {YEAR} Turkey Bowl ") + f"turkey-bowl version: {__version__}\n"
+    )
     draft = Draft(YEAR)
     draft.setup()
 
@@ -147,6 +150,29 @@ def scrape_actual(
     board = LeaderBoard(YEAR, participant_teams)
     board.display()
     board.save(Path(f"{draft.dir_config.output_dir}/{YEAR}_leader_board.xlsx"))
+
+
+def version_callback(value: bool):
+    """
+    Report current version of turkey-bowl package.
+    """
+    if value:
+        typer.echo(f"{__version__}")
+        raise typer.Exit()
+
+
+@app.callback()
+def main(
+    version: Optional[bool] = typer.Option(
+        None,
+        "--version",
+        "-V",
+        callback=version_callback,
+        is_eager=True,
+        help="Report current version of turkey-bowl package.",
+    )
+):
+    return
 
 
 if __name__ == "__main__":
