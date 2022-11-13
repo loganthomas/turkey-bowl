@@ -6,7 +6,7 @@ with open("README.md", "r") as f:
 
 setup(
     name="turkey_bowl",
-    version="2021.1",
+    version="2022.1",
     license="MIT",
     description="Turkey Bowl - Thanksgiving Day Draft Package",
     long_description=long_description,
