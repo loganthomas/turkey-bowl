@@ -1,6 +1,7 @@
 """
 Unit tests for aggregate.py
 """
+import json
 import logging
 from pathlib import Path
 
@@ -579,6 +580,102 @@ def test_create_player_pts_df_actual(tmp_path):
     assert tmp_projected_player_pts_path.exists() is False
 
     # Cleanup - none necessary
+
+
+@pytest.fixture
+def standard_scoring_factors():
+    scoring_factors = {
+        "Passing_Yards": lambda x: x / 25,  # 1 pt per 25 yds
+        "Passing_Touchdowns": lambda x: x * 4,
+        "Interceptions_Thrown": lambda x: x * -2,
+        "Rushing_Yards": lambda x: x / 10,  # 1 pt per 10 yds
+        "Rushing_Touchdowns": lambda x: x * 6,
+        "Receptions": lambda x: x * 1,
+        "Receiving_Yards": lambda x: x / 10,  # 1 pt per 10 yds
+        "Receiving_Touchdowns": lambda x: x * 6,
+        "Kickoff_and_Punt_Return_Touchdowns": lambda x: x * 6,
+        "Fumble_Recovered_for_TD": lambda x: x * 6,
+        "2-Point_Conversions": lambda x: x * 2,
+        "Fumbles_Lost": lambda x: x * -2,
+        "PAT_Made": lambda x: x * 1,
+        "FG_Made_0-19": lambda x: x * 3,
+        "FG_Made_20-29": lambda x: x * 3,
+        "FG_Made_30-39": lambda x: x * 3,
+        "FG_Made_40-49": lambda x: x * 3,
+        "FG_Made_50+": lambda x: x * 5,
+        "Sacks": lambda x: x * 1,
+        "Interceptions": lambda x: x * 2,
+        "Fumbles_Recovered": lambda x: x * 2,
+        "Safeties": lambda x: x * 2,
+        "Touchdowns": lambda x: x * 6,
+        "Team_Kickoff_and_Punt_Return_Touchdowns": lambda x: x * 6,
+        "Points_Allowed_0": lambda x: x * 10,
+        "Points_Allowed_1-6": lambda x: x * 7,
+        "Points_Allowed_7-13": lambda x: x * 4,
+        "Points_Allowed_14-20": lambda x: x * 1,
+        "Points_Allowed_21-27": lambda x: x * 0,
+        "Points_Allowed_28-34": lambda x: x * -1,
+        "Points_Allowed_35+": lambda x: x * -4,
+    }
+    return scoring_factors
+
+
+def test_standard_scoring_factors_projected(standard_scoring_factors):
+    """
+    See https://support.nfl.com/hc/en-us/articles/4989179237404-Scoring
+
+    Notes
+    -----
+    This test does not pull updated scores (i.e. it does not test
+    whether or not the API and scoring has changed).
+    It only tests an example for existing data (mostly a way to show how
+    scores are calculated).
+    """
+    # Setup
+    with open("assets/for_tests/mock_projected_player_pts.json") as f:
+        projs_raw = json.load(f)
+
+    projs_df = pd.DataFrame(projs_raw)
+    projs = projs_df.filter(like="PROJ").rename(columns=lambda col: col.replace("PROJ_", ""))
+    projs["Player"] = projs_df["Player"]
+    scoring_factors = standard_scoring_factors
+
+    # cannot use df.apply() as some columns in scoring factors will not exist in df
+    for col, eq in scoring_factors.items():
+        if col in projs:
+            projs[f"{col}_calc"] = projs[col].apply(eq)
+
+    assert projs["pts"].equals(projs.filter(like="calc").sum(axis=1).round(2))
+
+
+def test_standard_scoring_factors_actual(standard_scoring_factors):
+    """
+    See https://support.nfl.com/hc/en-us/articles/4989179237404-Scoring
+
+    Notes
+    -----
+    This test does not pull updated scores (i.e. it does not test
+    whether or not the API and scoring has changed).
+    It only tests an example for existing data (mostly a way to show how
+    scores are calculated).
+    """
+    # Setup
+    with open("assets/for_tests/mock_actual_player_pts.json") as f:
+        actuals_raw = json.load(f)
+
+    actuals_df = pd.DataFrame(actuals_raw)
+    actuals = actuals_df.filter(like="ACTUAL").rename(
+        columns=lambda col: col.replace("ACTUAL_", "")
+    )
+    actuals["Player"] = actuals_df["Player"]
+    scoring_factors = standard_scoring_factors
+
+    # cannot use df.apply() as some columns in scoring factors will not exist in df
+    for col, eq in scoring_factors.items():
+        if col in actuals:
+            actuals[f"{col}_calc"] = actuals[col].apply(eq)
+
+    assert actuals["pts"].equals(actuals.filter(like="calc").sum(axis=1).round(2))
 
 
 @responses.activate

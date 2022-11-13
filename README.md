@@ -27,15 +27,56 @@ A few things to note:
     function to run each line. This isn't the best option (to be fixed), but will give you
     a lot of meta data to work with.
 
+## Fantasy Scoring Details
+__*Standard* scoring__ is used to aggregate points (see [nfl.com scoring](https://support.nfl.com/hc/en-us/articles/4989179237404-Scoring) for details; there is also a `tests/test_aggregate.test_standard_scoring_factors_*() unittest`)
 
-# Developer Notes
+### Offense
+| Stat                               | Scoring Details      |
+| ---------------------------------- | ---------------      |
+| Passing                            | 1 point per 25 yards |
+| Passing Touchdowns                 | 4 points             |
+| Interceptions Thrown               | -2 Points            |
+| Rushing                            | 1 point per 10 yards |
+| Rushing Touchdowns                 | 6 points             |
+| Receptions                         | 1 point              |
+| Receiving Yards                    | 1 point per 10 yards |
+| Receiving Touchdowns               | 6 points             |
+| Kickoff and Punt Return Touchdowns | 6 points             |
+| Fumble Recovered for TD            | 6 points             |
+| 2-Point Conversions                | 2 points             |
+| Fumbles Lost                       | -2 points            |
 
-## Release CLI Documentation
+### Kicking
+| Stat           | Scoring Details |
+| -------------- | --------------- |
+| PAT Made       | 1 point         |
+| FG Made (0-49) | 3 points        |
+| FG Made (50+)  | 5 points        |
+
+### Team Defense and Special Teams
+| Stat                            | Scoring Details |
+| ------------------------------- | --------------- |
+| Sack                            | 1 point         |
+| Interception                    | 2 points        |
+| Fumble Recovered                | 2 points        |
+| Safety                          | 2 points        |
+| Defensive Touchdowns            | 6 points        |
+| Kick and Punt Return Touchdowns | 6 points        |
+| 0 Points Allowed                | 10 points       |
+| 1-6 Points Allowed              | 7 points        |
+| 7-13 Points Allowed             | 4 points        |
+| 14-20 Points Allowed            | 1 point         |
+| 21-27 Points Allowed            | 0 points        |
+| 28-34 Points Allowed            | -1 points       |
+| 35+ Points Allowed              | -4 points       |
+
+## Developer Notes
+
+### Release CLI Documentation
 For documentation of the full `release` command line interface (CLI),
 please see the [release docs](docs/releases/README.md)
 
-Add a news fragment
--------------------
+#### Add a news fragment
 Create a new file with a name like `<pull-request>.<type>.md`, where
 `<pull-request>` is a pull request number, and `<type>` is one of:
 
@@ -61,10 +102,9 @@ $ python -m release create-news-fragment
 
 # From the project's root directory
 $ python -m scripts.release create-news-fragment
-````
+```
 
-Updating & Building the CHANGELOG
----------------------------------
+#### Updating & Building the CHANGELOG
 Updating and building the `CHANGELOG.md` from the news fragments can be
 accomplished by executing either of the below commands:
 
