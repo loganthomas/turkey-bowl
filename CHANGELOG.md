@@ -2,6 +2,8 @@
 
 ## Release v2022.1 -- 2022-11-13
 
+## Release v2022.1 -- 2022-11-13
+
 Fixes
 -----
 * Fix getter and setter for scraper nfl week. (#89)
