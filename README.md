@@ -27,7 +27,7 @@ A few things to note:
     function to run each line. This isn't the best option (to be fixed), but will give you
     a lot of meta data to work with.
 
-# Fantasy Scoring Details
+## Fantasy Scoring Details
 __*Standard* scoring__ is used to aggregate points (see [nfl.com scoring](https://support.nfl.com/hc/en-us/articles/4989179237404-Scoring) for details; there is also a `tests/test_aggregate.test_standard_scoring_factors_*() unittest`)
 
 
@@ -71,14 +71,13 @@ __*Standard* scoring__ is used to aggregate points (see [nfl.com scoring](https:
 | 28-34 Points Allowed            | -1 points       |
 | 35+ Points Allowed              | -4 points       |
 
-# Developer Notes
+## Developer Notes
 
-## Release CLI Documentation
+### Release CLI Documentation
 For documentation of the full `release` command line interface (CLI),
 please see the [release docs](docs/releases/README.md)
 
-Add a news fragment
--------------------
+#### Add a news fragment
 Create a new file with a name like `<pull-request>.<type>.md`, where
 `<pull-request>` is a pull request number, and `<type>` is one of:
 
@@ -104,10 +103,9 @@ $ python -m release create-news-fragment
 
 # From the project's root directory
 $ python -m scripts.release create-news-fragment
-````
+```
 
-Updating & Building the CHANGELOG
----------------------------------
+#### Updating & Building the CHANGELOG
 Updating and building the `CHANGELOG.md` from the news fragments can be
 accomplished by executing either of the below commands:
 
