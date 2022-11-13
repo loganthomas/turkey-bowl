@@ -84,10 +84,10 @@ Commands:
 ```
 
 A typical workflow can be found below.
-- If desiring to update `player_ids.json`, be sure to change the first line
-`"year": 2022` to a year that is not the current year.
-- If desiring to run a test, consider using the `--dry-run` option for both
-the `scrape-projected` and `scrape-actual` commands.
+- If desiring to update `player_ids.json`,
+  be sure to change the first line `"year": 2022` to a year that is not the current year.
+- If desiring to run a test,
+  consider using the `--dry-run` option for both the `scrape-projected` and `scrape-actual` commands.
 
 ```
 $ turkey-bowl setup
