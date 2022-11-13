@@ -65,7 +65,7 @@ __*Standard* scoring__ is used to aggregate points (see [nfl.com scoring](https:
 ## Usage
 
 ```
- turkey-bowl --help
+$ turkey-bowl --help
 Usage: turkey-bowl [OPTIONS] COMMAND [ARGS]...
 
   Turkey Bowl fantasy football draft CLI
