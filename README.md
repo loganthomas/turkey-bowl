@@ -30,7 +30,6 @@ A few things to note:
 ## Fantasy Scoring Details
 __*Standard* scoring__ is used to aggregate points (see [nfl.com scoring](https://support.nfl.com/hc/en-us/articles/4989179237404-Scoring) for details; there is also a `tests/test_aggregate.test_standard_scoring_factors_*() unittest`)
 
-
 ### Offense
 | Stat                               | Scoring Details      |
 | ---------------------------------- | ---------------      |
