@@ -20,3 +20,197 @@ turkey-bowl version: 2022.1
 
 2022-11-23 11:46:08 INFO turkey_bowl.draft - Draft Order: ['yeager', 'cindy', 'logan', 'dodd', 'becca']
 2022-11-23 11:46:08 INFO turkey_bowl.draft - Saved draft order to /Users/logan/Desktop/repos/turkey-bowl/archive/2022/2022_draft_order.json
+2022-11-23 12:35:11 INFO turkey_bowl.cli -
+
+------------------- Scraping Player Projected Points -------------------
+
+2022-11-23 12:35:11 INFO turkey_bowl.scrape - Collecting projected player points...
+2022-11-23 12:35:12 INFO turkey_bowl.scrape - Successful API response obtained for: https://api.fantasy.nfl.com/v2/players/weekprojectedstats?season=2022&week=12
+2022-11-23 12:39:26 INFO turkey_bowl.aggregate - All player ids in pulled player points exist in player_ids.json
+2022-11-23 12:39:26 INFO turkey_bowl.aggregate - Writing projected player stats to /Users/logan/Desktop/repos/turkey-bowl/archive/2022/2022_12_projected_player_pts.csv...
+2022-11-23 12:39:47 INFO turkey_bowl.cli -
+
+-------------------- Scraping Player Actual Points ---------------------
+
+2022-11-23 12:39:48 INFO turkey_bowl.scrape - Collecting actual player points...
+2022-11-23 12:39:48 INFO turkey_bowl.scrape - Successful API response obtained for: https://api.fantasy.nfl.com/v2/players/weekstats?season=2022&week=12
+2022-11-23 12:39:48 INFO turkey_bowl.aggregate - WARNING: Yeager has players with NaN values: ['Jannu Smith']
+2022-11-23 12:39:48 INFO turkey_bowl.aggregate - WARNING: Cindy has players with NaN values: ['Ezekiel Elliot']
+2022-11-23 12:39:48 INFO turkey_bowl.aggregate - WARNING: Logan has players with NaN values: ['Kenny Galladay']
+2022-11-23 12:39:48 INFO turkey_bowl.aggregate - WARNING: Becca has players with NaN values: ['D.J. Chark Jr.']
+2022-11-23 12:39:48 INFO turkey_bowl.aggregate - Writing robust player points summary to /Users/logan/Desktop/repos/turkey-bowl/archive/2022/2022_12_robust_participant_player_pts.xlsx...
+2022-11-23 12:39:48 INFO turkey_bowl.leader_board -
+
+### YEAGER stats ###
+              Position               Player Team  ACTUAL_pts  PROJ_pts
+0                   QB           Jared Goff  DET         0.0     15.44
+1                 RB_1  Rhamondre Stevenson   NE         0.0     16.65
+2                 RB_2     Devin Singletary  BUF         0.0     14.55
+3                 WR_1     Justin Jefferson  MIN         0.0     16.71
+4                 WR_2    Amon-Ra St. Brown  DET         0.0     15.52
+5                   TE          Jannu Smith   NE         NaN       NaN
+6      Flex (RB/WR/TE)       Darius Slayton  NYG         0.0     11.39
+7                    K          Brett Maher  DAL         0.0      7.54
+8  Defense (Team Name)    Minnesota Vikings  MIN         0.0      6.60
+9     Bench (RB/WR/TE)        Kalif Raymond  DET         0.0      7.85
+
+2022-11-23 12:39:48 INFO turkey_bowl.leader_board -
+
+### CINDY stats ###
+              Position           Player Team  ACTUAL_pts  PROJ_pts
+0                   QB       Josh Allen  BUF         0.0     25.59
+1                 RB_1  Jamaal Williams  DET         0.0     11.31
+2                 RB_2   Ezekiel Elliot  DAL         NaN       NaN
+3                 WR_1       Gabe Davis  BUF         0.0     12.72
+4                 WR_2    Jakobi Meyers   NE         0.0     13.88
+5                   TE     Hunter Henry   NE         0.0      6.58
+6      Flex (RB/WR/TE)       Noah Brown  DAL         0.0      7.08
+7                    K       Tyler Bass  BUF         0.0      6.00
+8  Defense (Team Name)  New York Giants  NYG         0.0      5.76
+9     Bench (RB/WR/TE)   Justin Jackson  DET         0.0      3.98
+
+2022-11-23 12:39:48 INFO turkey_bowl.leader_board -
+
+### LOGAN stats ###
+              Position          Player Team  ACTUAL_pts  PROJ_pts
+0                   QB    Kirk Cousins  MIN         0.0     15.91
+1                 RB_1     Dalvin Cook  MIN         0.0     14.16
+2                 RB_2   D'Andre Swift  DET         0.0      8.98
+3                 WR_1  Michael Gallup  DAL         0.0      9.53
+4                 WR_2  DeVante Parker   NE         0.0      5.89
+5                   TE  Dalton Schultz  DAL         0.0      9.62
+6      Flex (RB/WR/TE)  Kenny Galladay  NYG         NaN       NaN
+7                    K       Nick Folk   NE         0.0      5.83
+8  Defense (Team Name)   Buffalo Bills  BUF         0.0      6.64
+9     Bench (RB/WR/TE)    Nyheim Hines  BUF         0.0      3.80
+
+2022-11-23 12:39:48 INFO turkey_bowl.leader_board -
+
+### DODD stats ###
+              Position           Player Team  ACTUAL_pts  PROJ_pts
+0                   QB     Dak Prescott  DAL         0.0     19.61
+1                 RB_1     Tony Pollard  DAL         0.0     17.10
+2                 RB_2       James Cook  BUF         0.0      6.84
+3                 WR_1      CeeDee Lamb  DAL         0.0     16.55
+4                 WR_2  Isaiah McKenzie  BUF         0.0      8.15
+5                   TE   T.J. Hockenson  MIN         0.0     11.49
+6      Flex (RB/WR/TE)      Matt Breida  NYG         0.0      3.92
+7                    K      Graham Gano  NYG         0.0      6.01
+8  Defense (Team Name)   Dallas Cowboys  DAL         0.0      7.36
+9     Bench (RB/WR/TE)      K.J. Osborn  MIN         0.0      6.00
+
+2022-11-23 12:39:48 INFO turkey_bowl.leader_board -
+
+### BECCA stats ###
+              Position                Player Team  ACTUAL_pts  PROJ_pts
+0                   QB          Daniel Jones  NYG         0.0     16.08
+1                 RB_1        Saquon Barkley  NYG         0.0     16.07
+2                 RB_2         Damien Harris   NE         0.0      9.22
+3                 WR_1          Stefon Diggs  BUF         0.0     19.90
+4                 WR_2          Adam Thielen  MIN         0.0      9.84
+5                   TE           Dawson Knox  BUF         0.0      8.92
+6      Flex (RB/WR/TE)        D.J. Chark Jr.  DET         NaN       NaN
+7                    K           Greg Joseph  MIN         0.0      6.93
+8  Defense (Team Name)  New England Patriots   NE         0.0      6.68
+9     Bench (RB/WR/TE)       Kendrick Bourne   NE         0.0      3.27
+
+2022-11-23 12:39:48 INFO turkey_bowl.leader_board - Yeager winning with 0.0 pts
+        PTS  margin  pts_back
+Yeager  0.0     0.0       0.0
+Cindy   0.0     0.0       0.0
+Logan   0.0     0.0       0.0
+Dodd    0.0     0.0       0.0
+Becca   0.0     NaN       0.0
+
+2022-11-23 12:39:48 INFO turkey_bowl.leader_board - Saving LeaderBoard to /Users/logan/Desktop/repos/turkey-bowl/archive/2022/2022_leader_board.xlsx...
+2022-11-23 12:42:32 INFO turkey_bowl.cli -
+
+-------------------- Scraping Player Actual Points ---------------------
+
+2022-11-23 12:42:33 INFO turkey_bowl.scrape - Collecting actual player points...
+2022-11-23 12:42:33 INFO turkey_bowl.scrape - Successful API response obtained for: https://api.fantasy.nfl.com/v2/players/weekstats?season=2022&week=12
+2022-11-23 12:42:33 INFO turkey_bowl.aggregate - Writing robust player points summary to /Users/logan/Desktop/repos/turkey-bowl/archive/2022/2022_12_robust_participant_player_pts.xlsx...
+2022-11-23 12:42:33 INFO turkey_bowl.leader_board -
+
+### YEAGER stats ###
+              Position               Player Team  ACTUAL_pts  PROJ_pts
+0                   QB           Jared Goff  DET         0.0     15.44
+1                 RB_1  Rhamondre Stevenson   NE         0.0     16.65
+2                 RB_2     Devin Singletary  BUF         0.0     14.55
+3                 WR_1     Justin Jefferson  MIN         0.0     16.71
+4                 WR_2    Amon-Ra St. Brown  DET         0.0     15.52
+5                   TE          Jonnu Smith   NE         0.0      4.91
+6      Flex (RB/WR/TE)       Darius Slayton  NYG         0.0     11.39
+7                    K          Brett Maher  DAL         0.0      7.54
+8  Defense (Team Name)    Minnesota Vikings  MIN         0.0      6.60
+9     Bench (RB/WR/TE)        Kalif Raymond  DET         0.0      7.85
+
+2022-11-23 12:42:33 INFO turkey_bowl.leader_board -
+
+### CINDY stats ###
+              Position           Player Team  ACTUAL_pts  PROJ_pts
+0                   QB       Josh Allen  BUF         0.0     25.59
+1                 RB_1  Jamaal Williams  DET         0.0     11.31
+2                 RB_2  Ezekiel Elliott  DAL         0.0      5.98
+3                 WR_1       Gabe Davis  BUF         0.0     12.72
+4                 WR_2    Jakobi Meyers   NE         0.0     13.88
+5                   TE     Hunter Henry   NE         0.0      6.58
+6      Flex (RB/WR/TE)       Noah Brown  DAL         0.0      7.08
+7                    K       Tyler Bass  BUF         0.0      6.00
+8  Defense (Team Name)  New York Giants  NYG         0.0      5.76
+9     Bench (RB/WR/TE)   Justin Jackson  DET         0.0      3.98
+
+2022-11-23 12:42:33 INFO turkey_bowl.leader_board -
+
+### LOGAN stats ###
+              Position          Player Team  ACTUAL_pts  PROJ_pts
+0                   QB    Kirk Cousins  MIN         0.0     15.91
+1                 RB_1     Dalvin Cook  MIN         0.0     14.16
+2                 RB_2   D'Andre Swift  DET         0.0      8.98
+3                 WR_1  Michael Gallup  DAL         0.0      9.53
+4                 WR_2  DeVante Parker   NE         0.0      5.89
+5                   TE  Dalton Schultz  DAL         0.0      9.62
+6      Flex (RB/WR/TE)  Kenny Golladay  NYG         0.0      5.55
+7                    K       Nick Folk   NE         0.0      5.83
+8  Defense (Team Name)   Buffalo Bills  BUF         0.0      6.64
+9     Bench (RB/WR/TE)    Nyheim Hines  BUF         0.0      3.80
+
+2022-11-23 12:42:33 INFO turkey_bowl.leader_board -
+
+### DODD stats ###
+              Position           Player Team  ACTUAL_pts  PROJ_pts
+0                   QB     Dak Prescott  DAL         0.0     19.61
+1                 RB_1     Tony Pollard  DAL         0.0     17.10
+2                 RB_2       James Cook  BUF         0.0      6.84
+3                 WR_1      CeeDee Lamb  DAL         0.0     16.55
+4                 WR_2  Isaiah McKenzie  BUF         0.0      8.15
+5                   TE   T.J. Hockenson  MIN         0.0     11.49
+6      Flex (RB/WR/TE)      Matt Breida  NYG         0.0      3.92
+7                    K      Graham Gano  NYG         0.0      6.01
+8  Defense (Team Name)   Dallas Cowboys  DAL         0.0      7.36
+9     Bench (RB/WR/TE)      K.J. Osborn  MIN         0.0      6.00
+
+2022-11-23 12:42:33 INFO turkey_bowl.leader_board -
+
+### BECCA stats ###
+              Position                Player Team  ACTUAL_pts  PROJ_pts
+0                   QB          Daniel Jones  NYG         0.0     16.08
+1                 RB_1        Saquon Barkley  NYG         0.0     16.07
+2                 RB_2         Damien Harris   NE         0.0      9.22
+3                 WR_1          Stefon Diggs  BUF         0.0     19.90
+4                 WR_2          Adam Thielen  MIN         0.0      9.84
+5                   TE           Dawson Knox  BUF         0.0      8.92
+6      Flex (RB/WR/TE)            D.J. Chark  DET         0.0      8.03
+7                    K           Greg Joseph  MIN         0.0      6.93
+8  Defense (Team Name)  New England Patriots   NE         0.0      6.68
+9     Bench (RB/WR/TE)       Kendrick Bourne   NE         0.0      3.27
+
+2022-11-23 12:42:33 INFO turkey_bowl.leader_board - Yeager winning with 0.0 pts
+        PTS  margin  pts_back
+Yeager  0.0     0.0       0.0
+Cindy   0.0     0.0       0.0
+Logan   0.0     0.0       0.0
+Dodd    0.0     0.0       0.0
+Becca   0.0     NaN       0.0
+
+2022-11-23 12:42:33 INFO turkey_bowl.leader_board - Saving LeaderBoard to /Users/logan/Desktop/repos/turkey-bowl/archive/2022/2022_leader_board.xlsx...
