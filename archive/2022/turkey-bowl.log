@@ -1,0 +1,22 @@
+2022-11-23 11:45:40 INFO turkey_bowl.cli -
+
+--------------------------- 2022 Turkey Bowl ---------------------------
+turkey-bowl version: 2022.1
+
+2022-11-23 11:45:53 INFO turkey_bowl.draft - Drafting in slot 1...
+2022-11-23 11:45:56 INFO turkey_bowl.draft - yeager
+
+2022-11-23 11:45:56 INFO turkey_bowl.draft - Drafting in slot 2...
+2022-11-23 11:45:59 INFO turkey_bowl.draft - cindy
+
+2022-11-23 11:45:59 INFO turkey_bowl.draft - Drafting in slot 3...
+2022-11-23 11:46:02 INFO turkey_bowl.draft - logan
+
+2022-11-23 11:46:02 INFO turkey_bowl.draft - Drafting in slot 4...
+2022-11-23 11:46:05 INFO turkey_bowl.draft - dodd
+
+2022-11-23 11:46:05 INFO turkey_bowl.draft - Drafting in slot 5...
+2022-11-23 11:46:08 INFO turkey_bowl.draft - becca
+
+2022-11-23 11:46:08 INFO turkey_bowl.draft - Draft Order: ['yeager', 'cindy', 'logan', 'dodd', 'becca']
+2022-11-23 11:46:08 INFO turkey_bowl.draft - Saved draft order to /Users/logan/Desktop/repos/turkey-bowl/archive/2022/2022_draft_order.json
