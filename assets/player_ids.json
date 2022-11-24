@@ -6983,5 +6983,23 @@
     "position": "WR",
     "team": "DAL",
     "injury": null
+  },
+  "2555171": {
+    "name": "Tyler Matakevich",
+    "position": "LB",
+    "team": "BUF",
+    "injury": null
+  },
+  "2567544": {
+    "name": "James Houston",
+    "position": "LB",
+    "team": "DET",
+    "injury": null
+  },
+  "2561536": {
+    "name": "Mike Love",
+    "position": "DL",
+    "team": "BUF",
+    "injury": null
   }
 }
