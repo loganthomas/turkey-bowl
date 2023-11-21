@@ -126,20 +126,23 @@ def create_player_pts_df(
     team = player_pts_df["Player"].apply(lambda x: player_ids[x]["team"])
     player_pts_df.insert(1, "Team", team)
 
+    pos = player_pts_df["Player"].apply(lambda x: player_ids[x]["position"])
+    player_pts_df.insert(2, "Position", pos)
+
     player_defns = {k: v["name"] for k, v in player_ids.items() if k != "year"}
     name = player_pts_df["Player"].apply(lambda x: player_defns[x])
     player_pts_df["Player"] = name
 
-    # Make pts col the third column for easy access
+    # Make pts col the fourth column for easy access
     pts_col = player_pts_df.filter(regex=f"{prefix}pts")
     pts_col_name = f"{prefix}pts"
     player_pts_df = player_pts_df.drop(pts_col_name, axis=1)
-    player_pts_df.insert(2, pts_col_name, pts_col.to_numpy())
+    player_pts_df.insert(3, pts_col_name, pts_col.to_numpy())
 
     # Convert all col types to non-string as strings come from scrape
     col_types = {}
     for c in player_pts_df.columns:
-        if c in ("Player", "Team"):
+        if c in ("Player", "Team", "Position"):
             col_types[c] = "object"
         else:
             col_types[c] = "float64"
