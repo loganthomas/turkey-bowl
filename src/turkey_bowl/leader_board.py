@@ -30,6 +30,7 @@ class LeaderBoard:
 
             # Assumes Bench player is last row (displayed but not included in sum)
             team_pts = participant_team[:-1]["ACTUAL_pts"].sum().round(3)
+            # team_pts = participant_team[:-1]["PROJ_pts"].sum().round(3)
             leader_board_data[participant] = team_pts
 
         # Create a DataFrame from point_totals
