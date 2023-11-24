@@ -349,6 +349,7 @@ def test_projected_player_pts_pulled_false(tmp_path):
     # Cleanup - none necessary
 
 
+@responses.activate
 def test_create_player_pts_df_projected_doesnt_exists(tmp_path, caplog):
     # Setup
     caplog.set_level(logging.INFO)
@@ -382,7 +383,7 @@ def test_create_player_pts_df_projected_doesnt_exists(tmp_path, caplog):
                 }
             }
         },
-        "310": {
+        "2555334": {
             "projectedStats": {
                 "week": {
                     "2020": {
@@ -401,7 +402,7 @@ def test_create_player_pts_df_projected_doesnt_exists(tmp_path, caplog):
                 }
             }
         },
-        "2504211": {
+        "2568216": {
             "projectedStats": {
                 "week": {
                     "2020": {
@@ -422,8 +423,9 @@ def test_create_player_pts_df_projected_doesnt_exists(tmp_path, caplog):
     }
 
     player_pts_df_data = {
-        "Player": {0: "Dak Prescott", 1: "Matt Ryan", 2: "Tom Brady"},
-        "Team": {0: "DAL", 1: "IND", 2: "TB"},
+        "Player": {0: "Dak Prescott", 1: "Jared Goff", 2: "Brock Purdy"},
+        "Team": {0: "DAL", 1: "DET", 2: "SF"},
+        "PROJ_Position": {0: "QB", 1: "QB", 2: "QB"},
         "PROJ_pts": {0: 0.31, 1: 20.01, 2: 0.84},
         "PROJ_Games_Played": {0: 1.0, 1.0: 1.0, 2: 1.0},
         "PROJ_Passing_Yards": {0: 6.05, 1: 296.77, 2: 16.93},
@@ -440,6 +442,7 @@ def test_create_player_pts_df_projected_doesnt_exists(tmp_path, caplog):
     expected_dtypes = {
         "Player": np.dtype("O"),
         "Team": np.dtype("O"),
+        "PROJ_Position": np.dtype("O"),
         "PROJ_pts": np.dtype("float64"),
         "PROJ_Games_Played": np.dtype("float64"),
         "PROJ_Passing_Yards": np.dtype("float64"),
@@ -451,12 +454,110 @@ def test_create_player_pts_df_projected_doesnt_exists(tmp_path, caplog):
         "PROJ_Rushing_Touchdowns": np.dtype("float64"),
     }
 
+    # Mock undocumented player request
+    url_2555260 = "https://api.fantasy.nfl.com/v2/player/ngs-content?playerId=2555260"
+    request_json_2555260 = {
+        "games": {
+            "102023": {
+                "players": {
+                    "2555260": {
+                        "playerId": "2555260",
+                        "nflGlobalEntityId": "32005052-4528-5723-d1b2-96e92ebc1241",
+                        "esbId": "PRE285723",
+                        "name": "Dak Prescott",
+                        "firstName": "Dak",
+                        "lastName": "Prescott",
+                        "position": "QB",
+                        "nflTeamAbbr": "DAL",
+                        "nflTeamId": "8",
+                        "injuryGameStatus": np.nan,
+                        "imageUrl": "https://static.www.nfl.com/image/private/w_200,h_200,c_fill/league/knx0jxponzfkusnyvjkn",
+                        "smallImageUrl": "https://static.www.nfl.com/image/private/w_65,h_90,c_fill/league/knx0jxponzfkusnyvjkn",
+                        "largeImageUrl": "https://static.www.nfl.com/image/private/w_1400,h_1000,c_fill/league/knx0jxponzfkusnyvjkn",
+                        "byeWeek": "7",
+                        "cancelledWeeks": [],
+                        "archetypes": [],
+                        "isUndroppable": False,
+                        "isReserveStatus": False,
+                        "lastVideoTimestamp": np.nan,
+                    }
+                }
+            }
+        }
+    }
+    responses.add(method=responses.GET, url=url_2555260, json=request_json_2555260, status=200)
+
+    url_2555334 = "https://api.fantasy.nfl.com/v2/player/ngs-content?playerId=2555334"
+    request_json_2555334 = {
+        "games": {
+            "102023": {
+                "players": {
+                    "2555334": {
+                        "playerId": "2555334",
+                        "nflGlobalEntityId": "3200474f-4621-9636-7354-d2eb6365d257",
+                        "esbId": "GOF219636",
+                        "name": "Jared Goff",
+                        "firstName": "Jared",
+                        "lastName": "Goff",
+                        "position": "QB",
+                        "nflTeamAbbr": "DET",
+                        "nflTeamId": "10",
+                        "injuryGameStatus": np.nan,
+                        "imageUrl": "https://static.www.nfl.com/image/private/w_200,h_200,c_fill/league/nyitt4ybuzopzjzddafi",
+                        "smallImageUrl": "https://static.www.nfl.com/image/private/w_65,h_90,c_fill/league/nyitt4ybuzopzjzddafi",
+                        "largeImageUrl": "https://static.www.nfl.com/image/private/w_1400,h_1000,c_fill/league/nyitt4ybuzopzjzddafi",
+                        "byeWeek": "9",
+                        "cancelledWeeks": [],
+                        "archetypes": [],
+                        "isUndroppable": False,
+                        "isReserveStatus": False,
+                        "lastVideoTimestamp": np.nan,
+                    }
+                }
+            }
+        }
+    }
+    responses.add(method=responses.GET, url=url_2555334, json=request_json_2555334, status=200)
+
+    url_2568216 = f"https://api.fantasy.nfl.com/v2/player/ngs-content?playerId=2568216"
+    request_json_2568216 = {
+        "games": {
+            "102023": {
+                "players": {
+                    "2568216": {
+                        "playerId": "2568216",
+                        "nflGlobalEntityId": "32005055-5224-3289-b108-8aab5e23b748",
+                        "esbId": np.nan,
+                        "name": "Brock Purdy",
+                        "firstName": "Brock",
+                        "lastName": "Purdy",
+                        "position": "QB",
+                        "nflTeamAbbr": "SF",
+                        "nflTeamId": "29",
+                        "injuryGameStatus": np.nan,
+                        "imageUrl": "https://static.www.nfl.com/image/private/w_200,h_200,c_fill/league/hdwbdlyiose4znenx5ed",
+                        "smallImageUrl": "https://static.www.nfl.com/image/private/w_65,h_90,c_fill/league/hdwbdlyiose4znenx5ed",
+                        "largeImageUrl": "https://static.www.nfl.com/image/private/w_1400,h_1000,c_fill/league/hdwbdlyiose4znenx5ed",
+                        "byeWeek": "9",
+                        "cancelledWeeks": [],
+                        "archetypes": [],
+                        "isUndroppable": False,
+                        "isReserveStatus": False,
+                        "lastVideoTimestamp": np.nan,
+                    }
+                }
+            }
+        }
+    }
+    responses.add(method=responses.GET, url=url_2568216, json=request_json_2568216, status=200)
+
     # Exercise
     assert tmp_projected_player_pts_path.exists() is False
     result = aggregate.create_player_pts_df(year, week, player_pts, tmp_projected_player_pts_path)
     result_written = pd.read_csv(tmp_projected_player_pts_path, index_col=0)
 
     # Verify
+    assert result.to_html() == expected.to_html()
     assert result.equals(expected)
     assert result_written.equals(expected)
     assert result.equals(result_written)
@@ -468,6 +569,7 @@ def test_create_player_pts_df_projected_doesnt_exists(tmp_path, caplog):
     # Cleanup - none necessary
 
 
+@responses.activate
 def test_create_player_pts_df_actual(tmp_path):
     # Setup
     year = 2020
@@ -500,7 +602,7 @@ def test_create_player_pts_df_actual(tmp_path):
                 }
             }
         },
-        "310": {
+        "2555334": {
             "stats": {
                 "week": {
                     "2020": {
@@ -519,7 +621,7 @@ def test_create_player_pts_df_actual(tmp_path):
                 }
             }
         },
-        "2504211": {
+        "2568216": {
             "stats": {
                 "week": {
                     "2020": {
@@ -540,8 +642,9 @@ def test_create_player_pts_df_actual(tmp_path):
     }
 
     player_pts_df_data = {
-        "Player": {0: "Dak Prescott", 1: "Matt Ryan", 2: "Tom Brady"},
-        "Team": {0: "DAL", 1: "IND", 2: "TB"},
+        "Player": {0: "Dak Prescott", 1: "Jared Goff", 2: "Brock Purdy"},
+        "Team": {0: "DAL", 1: "DET", 2: "SF"},
+        "PROJ_Position": {0: "QB", 1: "QB", 2: "QB"},
         "ACTUAL_pts": {0: 0.31, 1: 20.01, 2: 0.84},
         "ACTUAL_Games_Played": {0: 1.0, 1.0: 1.0, 2: 1.0},
         "ACTUAL_Passing_Yards": {0: 6.05, 1: 296.77, 2: 16.93},
@@ -558,6 +661,7 @@ def test_create_player_pts_df_actual(tmp_path):
     expected_dtypes = {
         "Player": np.dtype("O"),
         "Team": np.dtype("O"),
+        "PROJ_Position": np.dtype("O"),
         "ACTUAL_pts": np.dtype("float64"),
         "ACTUAL_Games_Played": np.dtype("float64"),
         "ACTUAL_Passing_Yards": np.dtype("float64"),
@@ -569,11 +673,109 @@ def test_create_player_pts_df_actual(tmp_path):
         "ACTUAL_Rushing_Touchdowns": np.dtype("float64"),
     }
 
+    # Mock undocumented player request
+    url_2555260 = "https://api.fantasy.nfl.com/v2/player/ngs-content?playerId=2555260"
+    request_json_2555260 = {
+        "games": {
+            "102023": {
+                "players": {
+                    "2555260": {
+                        "playerId": "2555260",
+                        "nflGlobalEntityId": "32005052-4528-5723-d1b2-96e92ebc1241",
+                        "esbId": "PRE285723",
+                        "name": "Dak Prescott",
+                        "firstName": "Dak",
+                        "lastName": "Prescott",
+                        "position": "QB",
+                        "nflTeamAbbr": "DAL",
+                        "nflTeamId": "8",
+                        "injuryGameStatus": np.nan,
+                        "imageUrl": "https://static.www.nfl.com/image/private/w_200,h_200,c_fill/league/knx0jxponzfkusnyvjkn",
+                        "smallImageUrl": "https://static.www.nfl.com/image/private/w_65,h_90,c_fill/league/knx0jxponzfkusnyvjkn",
+                        "largeImageUrl": "https://static.www.nfl.com/image/private/w_1400,h_1000,c_fill/league/knx0jxponzfkusnyvjkn",
+                        "byeWeek": "7",
+                        "cancelledWeeks": [],
+                        "archetypes": [],
+                        "isUndroppable": False,
+                        "isReserveStatus": False,
+                        "lastVideoTimestamp": np.nan,
+                    }
+                }
+            }
+        }
+    }
+    responses.add(method=responses.GET, url=url_2555260, json=request_json_2555260, status=200)
+
+    url_2555334 = "https://api.fantasy.nfl.com/v2/player/ngs-content?playerId=2555334"
+    request_json_2555334 = {
+        "games": {
+            "102023": {
+                "players": {
+                    "2555334": {
+                        "playerId": "2555334",
+                        "nflGlobalEntityId": "3200474f-4621-9636-7354-d2eb6365d257",
+                        "esbId": "GOF219636",
+                        "name": "Jared Goff",
+                        "firstName": "Jared",
+                        "lastName": "Goff",
+                        "position": "QB",
+                        "nflTeamAbbr": "DET",
+                        "nflTeamId": "10",
+                        "injuryGameStatus": np.nan,
+                        "imageUrl": "https://static.www.nfl.com/image/private/w_200,h_200,c_fill/league/nyitt4ybuzopzjzddafi",
+                        "smallImageUrl": "https://static.www.nfl.com/image/private/w_65,h_90,c_fill/league/nyitt4ybuzopzjzddafi",
+                        "largeImageUrl": "https://static.www.nfl.com/image/private/w_1400,h_1000,c_fill/league/nyitt4ybuzopzjzddafi",
+                        "byeWeek": "9",
+                        "cancelledWeeks": [],
+                        "archetypes": [],
+                        "isUndroppable": False,
+                        "isReserveStatus": False,
+                        "lastVideoTimestamp": np.nan,
+                    }
+                }
+            }
+        }
+    }
+    responses.add(method=responses.GET, url=url_2555334, json=request_json_2555334, status=200)
+
+    url_2568216 = f"https://api.fantasy.nfl.com/v2/player/ngs-content?playerId=2568216"
+    request_json_2568216 = {
+        "games": {
+            "102023": {
+                "players": {
+                    "2568216": {
+                        "playerId": "2568216",
+                        "nflGlobalEntityId": "32005055-5224-3289-b108-8aab5e23b748",
+                        "esbId": np.nan,
+                        "name": "Brock Purdy",
+                        "firstName": "Brock",
+                        "lastName": "Purdy",
+                        "position": "QB",
+                        "nflTeamAbbr": "SF",
+                        "nflTeamId": "29",
+                        "injuryGameStatus": np.nan,
+                        "imageUrl": "https://static.www.nfl.com/image/private/w_200,h_200,c_fill/league/hdwbdlyiose4znenx5ed",
+                        "smallImageUrl": "https://static.www.nfl.com/image/private/w_65,h_90,c_fill/league/hdwbdlyiose4znenx5ed",
+                        "largeImageUrl": "https://static.www.nfl.com/image/private/w_1400,h_1000,c_fill/league/hdwbdlyiose4znenx5ed",
+                        "byeWeek": "9",
+                        "cancelledWeeks": [],
+                        "archetypes": [],
+                        "isUndroppable": False,
+                        "isReserveStatus": False,
+                        "lastVideoTimestamp": np.nan,
+                    }
+                }
+            }
+        }
+    }
+    responses.add(method=responses.GET, url=url_2568216, json=request_json_2568216, status=200)
+
     # Exercise
     assert tmp_projected_player_pts_path.exists() is False
     result = aggregate.create_player_pts_df(year, week, player_pts, tmp_projected_player_pts_path)
 
     # Verify
+    assert result.to_html() == expected.to_html()  # for debugging unequal dataframes
     assert result.equals(expected)
     assert result.isnull().sum().sum() == 0
     assert result.dtypes.to_dict() == expected_dtypes
@@ -712,61 +914,61 @@ def test_create_player_pts_df_undocumented_players(tmp_path, caplog, mocker):
     assert undocumented_player_id not in current_player_ids
 
     player_pts = {
-        "2555260": {
-            "stats": {
-                "week": {
-                    "2020": {
-                        "12": {
-                            "1": "1",
-                            "5": "6.05",
-                            "6": "0.03",
-                            "7": "0.04",
-                            "14": "0.06",
-                            "30": "0.01",
-                            "32": "0.02",
-                            "pts": "0.31",
-                        }
-                    }
-                }
-            }
-        },
-        "310": {
-            "stats": {
-                "week": {
-                    "2020": {
-                        "12": {
-                            "1": "1",
-                            "5": "296.77",
-                            "6": "1.94",
-                            "7": "0.74",
-                            "14": "9.99",
-                            "15": "0.11",
-                            "30": "0.09",
-                            "32": "0.19",
-                            "pts": "20.01",
-                        }
-                    }
-                }
-            }
-        },
-        "2504211": {
-            "stats": {
-                "week": {
-                    "2020": {
-                        "12": {
-                            "1": "1",
-                            "5": "16.93",
-                            "6": "0.04",
-                            "7": "0.06",
-                            "15": "0.01",
-                            "30": "0.01",
-                            "32": "0.04",
-                            "pts": "0.84",
-                        }
-                    }
-                }
-            }
-        },
+        # "2555260": {
+        #     "stats": {
+        #         "week": {
+        #             "2020": {
+        #                 "12": {
+        #                     "1": "1",
+        #                     "5": "6.05",
+        #                     "6": "0.03",
+        #                     "7": "0.04",
+        #                     "14": "0.06",
+        #                     "30": "0.01",
+        #                     "32": "0.02",
+        #                     "pts": "0.31",
+        #                 }
+        #             }
+        #         }
+        #     }
+        # },
+        # "310": {
+        #     "stats": {
+        #         "week": {
+        #             "2020": {
+        #                 "12": {
+        #                     "1": "1",
+        #                     "5": "296.77",
+        #                     "6": "1.94",
+        #                     "7": "0.74",
+        #                     "14": "9.99",
+        #                     "15": "0.11",
+        #                     "30": "0.09",
+        #                     "32": "0.19",
+        #                     "pts": "20.01",
+        #                 }
+        #             }
+        #         }
+        #     }
+        # },
+        # "2504211": {
+        #     "stats": {
+        #         "week": {
+        #             "2020": {
+        #                 "12": {
+        #                     "1": "1",
+        #                     "5": "16.93",
+        #                     "6": "0.04",
+        #                     "7": "0.06",
+        #                     "15": "0.01",
+        #                     "30": "0.01",
+        #                     "32": "0.04",
+        #                     "pts": "0.84",
+        #                 }
+        #             }
+        #         }
+        #     }
+        # },
         # Undocumented Player (Logan Thomas)
         undocumented_player_id: {
             "stats": {
