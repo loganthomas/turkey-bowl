@@ -7,13 +7,40 @@ repos:
   - id: check-yaml
   - id: check-added-large-files
   - id: check-json
-- repo: https://github.com/psf/black
-  rev: 22.10.0
-  hooks:
-  - id: black
-    args: [--config, pyproject.toml]
-    language_version: python3.7
+# - repo: https://github.com/psf/black
+#   rev: 22.10.0
+#   hooks:
+#   - id: black
+#     args: [--config, pyproject.toml]
+#     language_version: python3.7
 - repo: https://github.com/pycqa/isort
   rev: 5.10.1
   hooks:
   - id: isort
+- repo: https://github.com/astral-sh/ruff-pre-commit
+  rev: v0.4.10
+  hooks:
+  - id: ruff
+    args: ["--fix"]
+  - id: ruff-format
+- repo: https://github.com/pycqa/flake8
+  rev: '5.0.1'
+  hooks:
+  - id: flake8
+# - repo: https://github.com/codespell-project/codespell
+#   hooks:
+#   - id: codespell
+#     # multi-line patterns
+#     # see https://github.com/codespell-project/codespell/issues/1498
+#     # see https://github.com/matplotlib/matplotlib/blob/main/.pre-commit-config.yaml
+#     exclude: >
+#         (?x)^(
+#             .*\.csv
+#             .*\.json
+#         )$
+#     # ignore words must be lower case
+#     args: [
+#           "--ignore-words",
+#           "codespell-ignore-words.txt",
+#           # "--write-changes",
+#           ]
