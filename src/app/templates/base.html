@@ -1,0 +1,15 @@
+<!doctype html>
+<html>
+    <head>
+	{% if title %}
+        <title>{{ title }} - Turkey Bowl</title>
+        {% else %}
+	<title>Turkey Bowl</title>
+	{% endif %}
+    </head>
+    <body>
+	<div>Turkey Bowl: <a href='/index'>Home</a></div>
+	<hr>
+        {% block content %}{% endblock %}
+    </body>
+</html>
