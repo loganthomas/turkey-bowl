@@ -7337,5 +7337,11 @@
     "position": "DB",
     "team": "SF",
     "injury": null
+  },
+  "123456789": {
+    "name": "Logan Thomas",
+    "position": "TE",
+    "team": "WAS",
+    "injury": null
   }
 }
