@@ -236,6 +236,8 @@ class DraftGui(HasTraits):
         ]
         return all_views[: len(self.participants)]
 
+    # def default_traits_view(self) will not need .configure_traits(view=dg.create_view())
+    # depends on how you want to use it
     def create_view(self):
         return View(
             Group(
