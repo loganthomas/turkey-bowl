@@ -1,6 +1,7 @@
 """
 Data aggregation functions
 """
+
 import logging
 from pathlib import Path
 from typing import Any, Dict, Optional
@@ -67,6 +68,8 @@ def create_player_pts_df(
     more games are played/completed. Projected points should be pulled
     once and only once.
     """
+    dir_config = utils.load_dir_config(year)
+
     # Determine projected ('projectedStats') or actual points ('stats').
     stats_type = _get_player_pts_stat_type(player_pts)
 
@@ -95,7 +98,7 @@ def create_player_pts_df(
     player_pts_df = pd.DataFrame(points, index=index)
 
     # Get definition of each point attribute
-    stat_ids_json_path = Path("assets/stat_ids.json")
+    stat_ids_json_path = dir_config.stat_ids_json_path
     stat_ids_dict = utils.load_from_json(stat_ids_json_path)
     stat_defns = {k: v["name"].replace(" ", "_") for k, v in stat_ids_dict.items()}
     player_pts_df = player_pts_df.rename(columns=stat_defns)
@@ -104,7 +107,7 @@ def create_player_pts_df(
     player_pts_df = player_pts_df.reset_index().rename(columns={"index": "Player"})
 
     # Get definition of each player team and name based on player id
-    player_ids_json_path = Path("assets/player_ids.json")
+    player_ids_json_path = dir_config.stat_ids_json_path
     player_ids = utils.load_from_json(player_ids_json_path)
 
     # It is possible that there are new players when scraping actual points
@@ -152,7 +155,6 @@ def create_player_pts_df(
 
     # Write projected players to csv so only done once
     if stats_type == "projectedStats":
-
         logger.info(f"Writing projected player stats to {savepath}...")
         player_pts_df.to_csv(savepath)
 
@@ -168,7 +170,6 @@ def merge_points(
     ``pts_df`` can be projected or actual points scraped.
     """
     for participant, participant_team in participant_teams.items():
-
         if "PROJ_position" in pts_df.columns:
             pts_df = pts_df.drop("PROJ_position")
 
@@ -232,7 +233,6 @@ def write_robust_participant_team_scores(
 
     with pd.ExcelWriter(savepath) as writer:
         for participant, participant_team in participant_teams.items():
-
             # Write data to sheet
             participant_team.to_excel(writer, sheet_name=participant, index=False)
 

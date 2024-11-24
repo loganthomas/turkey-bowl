@@ -1,6 +1,7 @@
 """
 Utility functions
 """
+
 import json
 import logging
 from datetime import datetime
@@ -23,12 +24,14 @@ def load_dir_config(year: int, root: Optional[str] = None) -> SimpleNamespace:
     draft_order_path = output_dir.joinpath(f"{year}_draft_order.json")
     draft_sheet_path = output_dir.joinpath(f"{year}_draft_sheet.xlsx")
     player_ids_json_path = root.joinpath("assets/player_ids.json")
+    stat_ids_json_path = root.joinpath("assets/stat_ids.json")
 
     dir_config = SimpleNamespace(
         output_dir=output_dir.resolve(),
         draft_order_path=draft_order_path.resolve(),
         draft_sheet_path=draft_sheet_path.resolve(),
         player_ids_json_path=player_ids_json_path.resolve(),
+        stat_ids_json_path=stat_ids_json_path.resolve(),
     )
 
     return dir_config
