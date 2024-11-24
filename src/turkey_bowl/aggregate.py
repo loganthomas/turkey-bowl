@@ -176,7 +176,7 @@ def merge_points(
     """
     for participant, participant_team in participant_teams.items():
         merge_cols = ['Player', 'Team']
-        if 'PROJ_Position' in participant_team:
+        if ('PROJ_Position' in participant_team) and ('PROJ_Position' in pts_df):
             merge_cols.append('PROJ_Position')
         merged = pd.merge(participant_team, pts_df, how='left', on=merge_cols)
 
