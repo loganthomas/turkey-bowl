@@ -1,6 +1,7 @@
 """
 Thanksgiving Football module
 """
+
 import logging
 import sys
 from pathlib import Path
@@ -16,12 +17,11 @@ logger = logging.getLogger(__name__)
 
 
 def main():
-
     # Set option for nice DataFrame display
     pd.options.display.width = None
 
     year = utils.get_current_year()
-    logger.info(f"\n{'-'*5} {year} Turkey Bowl {'-'*5}")
+    logger.info(f"\n{'-' * 5} {year} Turkey Bowl {'-' * 5}")
 
     draft = Draft(year)
     draft.setup()
@@ -32,7 +32,7 @@ def main():
     week = scraper.nfl_thanksgiving_calendar_week
 
     projected_player_pts_path = Path(
-        f"{draft.dir_config.output_dir}/{year}_{week}_projected_player_pts.csv"
+        f'{draft.dir_config.output_dir}/{year}_{week}_projected_player_pts.csv'
     )
     if aggregate.projected_player_pts_pulled(year, week, savepath=projected_player_pts_path):
         projected_player_pts_df = pd.read_csv(projected_player_pts_path, index_col=0)
@@ -51,7 +51,7 @@ def main():
     # Check done after projected_player_pts so that projected points
     #   are pulled during draft.
     if not draft.check_players_have_been_drafted(participant_teams):
-        logger.info(f"Not all players have been drafted yet! Please complete the draft for {year}.")
+        logger.info(f'Not all players have been drafted yet! Please complete the draft for {year}.')
         sys.exit()
 
     actual_player_pts = scraper.get_actual_player_pts()
@@ -61,8 +61,8 @@ def main():
             year=year, week=week, player_pts=actual_player_pts, savepath=None
         )
     else:
-        actual_player_pts_df = projected_player_pts_df[["Player", "Team"]].copy()
-        actual_player_pts_df["ACTUAL_pts"] = 0.0
+        actual_player_pts_df = projected_player_pts_df[['Player', 'Team']].copy()
+        actual_player_pts_df['ACTUAL_pts'] = 0.0
 
     # Merge points to teams
     participant_teams = aggregate.merge_points(
@@ -80,14 +80,14 @@ def main():
     aggregate.write_robust_participant_team_scores(
         participant_teams=participant_teams,
         savepath=Path(
-            f"{draft.dir_config.output_dir}/{year}_{week}_robust_participant_player_pts.xlsx"
+            f'{draft.dir_config.output_dir}/{year}_{week}_robust_participant_player_pts.xlsx'
         ),
     )
 
     board = LeaderBoard(year, participant_teams)
     board.display()
-    board.save(f"{draft.dir_config.output_dir}/{year}_leader_board.xlsx")
+    board.save(f'{draft.dir_config.output_dir}/{year}_leader_board.xlsx')
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     main()

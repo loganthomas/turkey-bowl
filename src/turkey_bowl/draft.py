@@ -1,12 +1,12 @@
 """
 Draft functions
 """
+
 import itertools
 import json
 import logging
 import random
 import time
-from pathlib import Path
 from typing import Dict, Optional
 
 import click_spinner
@@ -23,10 +23,10 @@ class Draft:
         self.year = year
 
     def __repr__(self):
-        return f"Draft({self.year})"
+        return f'Draft({self.year})'
 
     def __str__(self):
-        return f"Turkey Bowl Draft: {self.year}"
+        return f'Turkey Bowl Draft: {self.year}'
 
     def setup(self) -> None:
         """Instantiate draft with attributes, files, and directories."""
@@ -34,53 +34,53 @@ class Draft:
             self.dir_config.output_dir.mkdir()
 
         if not self.dir_config.draft_order_path.exists():
-            participant_list = input("Please enter participants separated by a comma: ").split(",")
+            participant_list = input('Please enter participants separated by a comma: ').split(',')
 
             self.participant_list = [*map(str.strip, participant_list)]
 
             self.draft_order = random.sample(self.participant_list, len(self.participant_list))
 
             for i, participant in enumerate(self.draft_order, 1):
-                logger.info(f"Drafting in slot {i}...")
+                logger.info(f'Drafting in slot {i}...')
                 with click_spinner.spinner():
                     time.sleep(3)
-                logger.info(f"{participant}\n")
+                logger.info(f'{participant}\n')
 
-            logger.info(f"Draft Order: {self.draft_order}")
+            logger.info(f'Draft Order: {self.draft_order}')
 
             draft_order_dict = {p: i for i, p in enumerate(self.draft_order, 1)}
 
-            with open(self.dir_config.draft_order_path, "w") as draft_order_file:
+            with open(self.dir_config.draft_order_path, 'w') as draft_order_file:
                 json.dump(draft_order_dict, draft_order_file)
 
-            logger.info(f"Saved draft order to {self.dir_config.draft_order_path}")
+            logger.info(f'Saved draft order to {self.dir_config.draft_order_path}')
 
         else:
-            logger.info(f"Draft order already exists at {self.dir_config.draft_order_path}")
-            with open(self.dir_config.draft_order_path, "r") as draft_order_file:
+            logger.info(f'Draft order already exists at {self.dir_config.draft_order_path}')
+            with open(self.dir_config.draft_order_path, 'r') as draft_order_file:
                 draft_order_dict = json.load(draft_order_file)
 
             self.participant_list = list(draft_order_dict.keys())
             self.draft_order = list(draft_order_dict.keys())
 
-            logger.info(f"Draft Order: {self.draft_order}")
+            logger.info(f'Draft Order: {self.draft_order}')
 
         if not self.dir_config.draft_sheet_path.exists():
             draft_info = {
-                "Position": [
-                    "QB",
-                    "RB_1",
-                    "RB_2",
-                    "WR_1",
-                    "WR_2",
-                    "TE",
-                    "Flex (RB/WR/TE)",
-                    "K",
-                    "Defense (Team Name)",
-                    "Bench (RB/WR/TE)",
+                'Position': [
+                    'QB',
+                    'RB_1',
+                    'RB_2',
+                    'WR_1',
+                    'WR_2',
+                    'TE',
+                    'Flex (RB/WR/TE)',
+                    'K',
+                    'Defense (Team Name)',
+                    'Bench (RB/WR/TE)',
                 ],
-                "Player": [" "] * 10,  # intentional space so strip works in load
-                "Team": [" "] * 10,  # intentional space so strip works in load
+                'Player': [' '] * 10,  # intentional space so strip works in load
+                'Team': [' '] * 10,  # intentional space so strip works in load
             }
             draft_df = pd.DataFrame(draft_info)
 
@@ -90,7 +90,7 @@ class Draft:
 
                     # Ensure Position text is correct spacing length
                     worksheet = writer.sheets[participant.title()]
-                    max_len = max(map(len, draft_info["Position"]))
+                    max_len = max(map(len, draft_info['Position']))
                     worksheet.set_column(0, 0, max_len)
 
     def load(self) -> Dict[str, pd.DataFrame]:
@@ -110,7 +110,7 @@ class Draft:
             'Bench (RB/WR/TE)'.
         """
         participant_teams = pd.read_excel(
-            self.dir_config.draft_sheet_path, sheet_name=None, engine="openpyxl"
+            self.dir_config.draft_sheet_path, sheet_name=None, engine='openpyxl'
         )
 
         # Strip all whitespace
@@ -128,11 +128,11 @@ class Draft:
         then no players have been drafted and the process should end.
         """
         drafted_players = [
-            participant_team["Player"].tolist() for participant_team in participant_teams.values()
+            participant_team['Player'].tolist() for participant_team in participant_teams.values()
         ]
 
-        drafted_players = [player for player in itertools.chain.from_iterable(drafted_players)]
+        drafted_players = list(itertools.chain.from_iterable(drafted_players))
 
-        players_have_been_drafted = all(player != "" for player in drafted_players)
+        players_have_been_drafted = all(player != '' for player in drafted_players)
 
         return players_have_been_drafted
