@@ -8255,5 +8255,47 @@
     "position": "LB",
     "team": "LAC",
     "injury": "Injured Reserve"
+  },
+  "2555365": {
+    "name": "Brandon Allen",
+    "position": "QB",
+    "team": "SF",
+    "injury": null
+  },
+  "2571753": {
+    "name": "Josh Butler",
+    "position": "DB",
+    "team": "DAL",
+    "injury": null
+  },
+  "2572126": {
+    "name": "Jonah Laulu",
+    "position": "DL",
+    "team": "LV",
+    "injury": null
+  },
+  "2566553": {
+    "name": "Dee Eskridge",
+    "position": "WR",
+    "team": "MIA",
+    "injury": "Inactive"
+  },
+  "2568804": {
+    "name": "Julius Chestnut",
+    "position": "RB",
+    "team": "TEN",
+    "injury": null
+  },
+  "2570125": {
+    "name": "Chad Ryland",
+    "position": "K",
+    "team": "ARI",
+    "injury": null
+  },
+  "2570918": {
+    "name": "Art Green",
+    "position": "DB",
+    "team": "NYG",
+    "injury": null
   }
 }
