@@ -6971,5 +6971,23 @@
     "position": "WR",
     "team": "CHI",
     "injury": null
+  },
+  "2565666": {
+    "name": "DJ Turner",
+    "position": "WR",
+    "team": "LV",
+    "injury": null
+  },
+  "2572789": {
+    "name": "Dee Williams",
+    "position": "WR",
+    "team": "SEA",
+    "injury": null
+  },
+  "2552636": {
+    "name": "Michael Burton",
+    "position": "RB",
+    "team": "DEN",
+    "injury": null
   }
 }

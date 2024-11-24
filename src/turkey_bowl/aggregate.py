@@ -175,10 +175,10 @@ def merge_points(
     ``pts_df`` can be projected or actual points scraped.
     """
     for participant, participant_team in participant_teams.items():
-        if 'PROJ_position' in pts_df.columns:
-            pts_df = pts_df.drop('PROJ_position')
-
-        merged = pd.merge(participant_team, pts_df, how='left', on=['Player', 'Team'])
+        merge_cols = ['Player', 'Team']
+        if 'PROJ_Position' in participant_team:
+            merge_cols.append('PROJ_Position')
+        merged = pd.merge(participant_team, pts_df, how='left', on=merge_cols)
 
         # Drop columns where projected or actual points are 0.0
         # Leave ACTUAL_pts in case they are all 0.0 at start
