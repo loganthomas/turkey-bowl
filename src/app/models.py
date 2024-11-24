@@ -1,3 +1,4 @@
+import datetime
 from typing import Optional
 
 import sqlalchemy as sa
@@ -14,3 +15,17 @@ class User(db.Model):
 
     def __repr__(self):
         return f'<User {self.username}>'
+
+
+# TODOS
+# - Add user to result like author
+class Result(db.Model):
+    id: so.Mapped[int] = so.mapped_column(primary_key=True)
+    year: so.Mapped[datetime.datetime] = so.mapped_column(
+        index=True, default=lambda: datetime.datetime.now(datetime.UTC).year
+    )
+    points: so.Mapped[float] = so.mapped_column(sa.Float(), index=True)
+    user_id: so.Mapped[int] = so.mapped_column(sa.ForeignKey(User.id), index=True)
+
+    def __repr__(self):
+        return f'<Result {self.year} {self.user_id} {self.points}>'
