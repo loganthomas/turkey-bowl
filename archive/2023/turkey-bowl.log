@@ -1,0 +1,2632 @@
+2023-11-20 12:30:41 INFO turkey_bowl.cli -
+
+--------------------------- 2023 Turkey Bowl ---------------------------
+turkey-bowl version: 2022.1
+
+2023-11-20 12:31:15 INFO turkey_bowl.draft - Drafting in slot 1...
+2023-11-20 12:31:18 INFO turkey_bowl.draft - logan
+
+2023-11-20 12:31:18 INFO turkey_bowl.draft - Drafting in slot 2...
+2023-11-20 12:31:21 INFO turkey_bowl.draft - yeager
+
+2023-11-20 12:31:21 INFO turkey_bowl.draft - Drafting in slot 3...
+2023-11-20 12:31:24 INFO turkey_bowl.draft - cindy
+
+2023-11-20 12:31:24 INFO turkey_bowl.draft - Drafting in slot 4...
+2023-11-20 12:31:27 INFO turkey_bowl.draft - dodd
+
+2023-11-20 12:31:27 INFO turkey_bowl.draft - Drafting in slot 5...
+2023-11-20 12:31:30 INFO turkey_bowl.draft - becca_hud
+
+2023-11-20 12:31:30 INFO turkey_bowl.draft - Draft Order: ['logan', 'yeager', 'cindy', 'dodd', 'becca_hud']
+2023-11-20 12:31:30 INFO turkey_bowl.draft - Saved draft order to /Users/logan/Desktop/repos/turkey-bowl/archive/2023/2023_draft_order.json
+2023-11-20 12:34:16 INFO turkey_bowl.cli -
+
+------------------- Scraping Player Projected Points -------------------
+
+2023-11-20 12:34:16 INFO turkey_bowl.scrape - Collecting projected player points...
+2023-11-20 12:34:17 INFO turkey_bowl.scrape - Successful API response obtained for: https://api.fantasy.nfl.com/v2/players/weekprojectedstats?season=2023&week=12
+2023-11-20 12:39:11 INFO turkey_bowl.aggregate - All player ids in pulled player points exist in player_ids.json
+2023-11-20 12:39:11 INFO turkey_bowl.aggregate - Writing projected player stats to /Users/logan/Desktop/repos/turkey-bowl/archive/2023/2023_12_projected_player_pts.csv...
+2023-11-21 15:38:50 INFO turkey_bowl.cli -
+
+------------------- Scraping Player Projected Points -------------------
+
+2023-11-21 15:38:50 INFO turkey_bowl.aggregate - Projected player data already exists at /Users/logan/Desktop/repos/turkey-bowl/archive/2023/2023_12_projected_player_pts.csv
+2023-11-21 15:39:14 INFO turkey_bowl.cli -
+
+------------------- Scraping Player Projected Points -------------------
+
+2023-11-21 15:39:14 INFO turkey_bowl.scrape - Collecting projected player points...
+2023-11-21 15:39:16 INFO turkey_bowl.scrape - Successful API response obtained for: https://api.fantasy.nfl.com/v2/players/weekprojectedstats?season=2023&week=12
+2023-11-21 15:39:16 INFO turkey_bowl.scrape - Player ids are up to date at /Users/logan/Desktop/repos/turkey-bowl/assets/player_ids.json
+2023-11-21 15:39:16 INFO turkey_bowl.aggregate - Undocumented player 2569339: Kingsley Jonathan
+2023-11-21 15:39:16 INFO turkey_bowl.aggregate - Undocumented player 2567628: Samori Toure
+2023-11-21 15:39:17 INFO turkey_bowl.aggregate - Undocumented player 2569963: Zach Evans
+2023-11-21 15:39:18 INFO turkey_bowl.aggregate - Undocumented player 2570329: Derick Hall
+2023-11-21 15:39:18 INFO turkey_bowl.aggregate - Undocumented player 2564043: Darrynton Evans
+2023-11-21 15:39:19 INFO turkey_bowl.aggregate - Undocumented player 2569245: Tayler Hawkins
+2023-11-21 15:39:19 INFO turkey_bowl.aggregate - Undocumented player 2562798: David Long
+2023-11-21 15:39:20 INFO turkey_bowl.aggregate - Undocumented player 2562464: Ugo Amadi
+2023-11-21 15:39:20 INFO turkey_bowl.aggregate - Undocumented player 2570635: Brady Russell
+2023-11-21 15:39:21 INFO turkey_bowl.aggregate - Undocumented player 2570230: Kei'Trel Clark
+2023-11-21 15:39:21 INFO turkey_bowl.aggregate - Undocumented player 2570185: Zaire Barnes
+2023-11-21 15:39:22 INFO turkey_bowl.aggregate - Undocumented player 2568108: Keaontay Ingram
+2023-11-21 15:39:22 INFO turkey_bowl.aggregate - Undocumented player 2562472: Cody Barton
+2023-11-21 15:39:23 INFO turkey_bowl.aggregate - Undocumented player 2570608: Jason Brownlee
+2023-11-21 15:39:23 INFO turkey_bowl.aggregate - Undocumented player 2570314: Kenny McIntosh
+2023-11-21 15:39:24 INFO turkey_bowl.aggregate - Undocumented player 2569696: Jalen Brooks
+2023-11-21 15:39:25 INFO turkey_bowl.aggregate - Undocumented player 2566980: Dicaprio Bootle
+2023-11-21 15:39:25 INFO turkey_bowl.aggregate - Undocumented player 2556462: Robbie Chosen
+2023-11-21 15:39:26 INFO turkey_bowl.aggregate - Undocumented player 2564040: Patrick Taylor
+2023-11-21 15:39:26 INFO turkey_bowl.aggregate - Undocumented player 2565615: Mike Strachan
+2023-11-21 15:39:27 INFO turkey_bowl.aggregate - Undocumented player 2565310: Marquez Callaway
+2023-11-21 15:39:27 INFO turkey_bowl.aggregate - Undocumented player 2564223: James Robinson
+2023-11-21 15:39:28 INFO turkey_bowl.aggregate - Undocumented player 2560894: Ian Thomas
+2023-11-21 15:39:28 INFO turkey_bowl.aggregate - Undocumented player 2563220: Nik Needham
+2023-11-21 15:39:29 INFO turkey_bowl.aggregate - Undocumented player 2570071: Cam Smith
+2023-11-21 15:39:29 INFO turkey_bowl.aggregate - Undocumented player 2569735: Brodric Martin
+2023-11-21 15:39:30 INFO turkey_bowl.aggregate - Writing projected player stats to /Users/logan/Desktop/repos/turkey-bowl/archive/2023/2023_12_projected_player_pts.csv...
+2023-11-21 15:59:45 INFO turkey_bowl.cli -
+
+------------------- Scraping Player Projected Points -------------------
+
+2023-11-21 15:59:45 INFO turkey_bowl.scrape - Collecting projected player points...
+2023-11-21 15:59:46 INFO turkey_bowl.scrape - Successful API response obtained for: https://api.fantasy.nfl.com/v2/players/weekprojectedstats?season=2023&week=12
+2023-11-21 15:59:46 INFO turkey_bowl.scrape - Player ids are up to date at /Users/logan/Desktop/repos/turkey-bowl/assets/player_ids.json
+2023-11-21 15:59:46 INFO turkey_bowl.aggregate - All player ids in pulled player points exist in player_ids.json
+2023-11-21 15:59:46 INFO turkey_bowl.aggregate - Writing projected player stats to /Users/logan/Desktop/repos/turkey-bowl/archive/2023/2023_12_projected_player_pts.csv...
+2023-11-23 06:59:00 INFO turkey_bowl.cli -
+
+------------------- Scraping Player Projected Points -------------------
+
+2023-11-23 06:59:00 INFO turkey_bowl.aggregate - Projected player data already exists at /Users/logan/Desktop/repos/turkey-bowl/archive/2023/2023_12_projected_player_pts.csv
+2023-11-23 06:59:22 INFO turkey_bowl.cli -
+
+-------------------- Scraping Player Actual Points ---------------------
+
+2023-11-23 06:59:22 INFO turkey_bowl.scrape - Collecting actual player points...
+2023-11-23 06:59:22 INFO turkey_bowl.scrape - Successful API response obtained for: https://api.fantasy.nfl.com/v2/players/weekstats?season=2023&week=12
+2023-11-23 07:00:51 INFO turkey_bowl.cli -
+
+-------------------- Scraping Player Actual Points ---------------------
+
+2023-11-23 07:00:51 INFO turkey_bowl.scrape - Collecting actual player points...
+2023-11-23 07:00:51 INFO turkey_bowl.scrape - Successful API response obtained for: https://api.fantasy.nfl.com/v2/players/weekstats?season=2023&week=12
+2023-11-23 07:05:03 INFO turkey_bowl.cli -
+
+-------------------- Scraping Player Actual Points ---------------------
+
+2023-11-23 07:05:03 INFO turkey_bowl.scrape - Collecting actual player points...
+2023-11-23 07:05:03 INFO turkey_bowl.scrape - Successful API response obtained for: https://api.fantasy.nfl.com/v2/players/weekstats?season=2023&week=12
+2023-11-23 07:05:03 INFO turkey_bowl.aggregate - WARNING: Logan has players with NaN values: ['Christian McCaffrey', 'Brian Robinson', 'TJ Lockett', 'Romeo Doubs', 'Michael Gallup', 'Brandin Aubrey', 'SEATTLE DEFENSE', 'Antonio Gibson']
+2023-11-23 07:05:03 INFO turkey_bowl.aggregate - WARNING: Yeager has players with NaN values: ['Zach Charbonnet', 'David Montgomery', 'CeeDee Lamb', 'Jayden Reed', 'Jahan Dotson', 'DETROIT DEFENSE', 'Curtis Samuel']
+2023-11-23 07:05:03 INFO turkey_bowl.aggregate - WARNING: Cindy has players with NaN values: ['DeeJay Dallas', 'Chris Rodriguez', 'DK Metcalf', 'Jaxon Smith-Njigba', 'Jameson Williams', 'GREEN BAY DEFENSE', 'Jauan Jennings']
+2023-11-23 07:05:03 INFO turkey_bowl.aggregate - WARNING: Dodd has players with NaN values: ['Jahmyr Gibbs', 'Rico Dowdle', 'Brandon Aiyuk', 'Terry McLaurin', 'Brandin Cooks', 'DALLAS DEFENSE', 'Elijah Mitchell']
+2023-11-23 07:05:03 INFO turkey_bowl.aggregate - WARNING: Becca_Hud has players with NaN values: ['Tony Pollard', 'AJ Dillon', 'Amon-Ra St. Brown', 'Deebo Samuel', 'Christian Watson', 'SF DEFENSE', 'Josh Reynolds']
+2023-11-23 07:05:03 INFO turkey_bowl.aggregate - Writing robust player points summary to /Users/logan/Desktop/repos/turkey-bowl/archive/2023/2023_12_robust_participant_player_pts.xlsx...
+2023-11-23 07:05:03 INFO turkey_bowl.leader_board -
+
+### LOGAN stats ###
+              Position               Player Team  ACTUAL_pts  PROJ_pts
+0                   QB           Jared Goff  DET         0.0     18.62
+1                 RB_1  Christian McCaffrey   SF         NaN       NaN
+2                 RB_2       Brian Robinson  WAS         NaN       NaN
+3                 WR_1           TJ Lockett  SEA         NaN       NaN
+4                 WR_2          Romeo Doubs   GB         NaN       NaN
+5                   TE        George Kittle   SF         0.0     14.78
+6      Flex (RB/WR/TE)       Michael Gallup  DAL         NaN       NaN
+7                    K       Brandin Aubrey  DAL         NaN       NaN
+8  Defense (Team Name)      SEATTLE DEFENSE  SEA         NaN       NaN
+9     Bench (RB/WR/TE)       Antonio Gibson  WAS         NaN       NaN
+
+2023-11-23 07:05:03 INFO turkey_bowl.leader_board -
+
+### YEAGER stats ###
+              Position            Player Team  ACTUAL_pts  PROJ_pts
+0                   QB       Brock Purdy   SF         0.0     18.91
+1                 RB_1   Zach Charbonnet  SEA         NaN       NaN
+2                 RB_2  David Montgomery  DET         NaN       NaN
+3                 WR_1       CeeDee Lamb  DAL         NaN       NaN
+4                 WR_2       Jayden Reed   GB         NaN       NaN
+5                   TE       Sam LaPorta  DET         0.0     10.58
+6      Flex (RB/WR/TE)      Jahan Dotson  WAS         NaN       NaN
+7                    K    Anders Carlson   GB         0.0      5.08
+8  Defense (Team Name)   DETROIT DEFENSE  DET         NaN       NaN
+9     Bench (RB/WR/TE)     Curtis Samuel  WAS         NaN       NaN
+
+2023-11-23 07:05:03 INFO turkey_bowl.leader_board -
+
+### CINDY stats ###
+              Position              Player Team  ACTUAL_pts  PROJ_pts
+0                   QB        Dak Prescott  DAL         0.0     20.32
+1                 RB_1       DeeJay Dallas  SEA         NaN       NaN
+2                 RB_2     Chris Rodriguez  WAS         NaN       NaN
+3                 WR_1          DK Metcalf  SEA         NaN       NaN
+4                 WR_2  Jaxon Smith-Njigba  SEA         NaN       NaN
+5                   TE       Jake Ferguson  DAL         0.0      9.31
+6      Flex (RB/WR/TE)    Jameson Williams  DET         NaN       NaN
+7                    K         Jason Myers  SEA         0.0      6.40
+8  Defense (Team Name)   GREEN BAY DEFENSE   GB         NaN       NaN
+9     Bench (RB/WR/TE)      Jauan Jennings   SF         NaN       NaN
+
+2023-11-23 07:05:03 INFO turkey_bowl.leader_board -
+
+### DODD stats ###
+              Position           Player Team  ACTUAL_pts  PROJ_pts
+0                   QB      Jordan Love   GB         0.0     16.14
+1                 RB_1     Jahmyr Gibbs  DET         NaN       NaN
+2                 RB_2      Rico Dowdle  DAL         NaN       NaN
+3                 WR_1    Brandon Aiyuk   SF         NaN       NaN
+4                 WR_2   Terry McLaurin  WAS         NaN       NaN
+5                   TE     Logan Thomas  WAS         0.0      8.10
+6      Flex (RB/WR/TE)    Brandin Cooks  DAL         NaN       NaN
+7                    K       Jake Moody   SF         0.0      6.13
+8  Defense (Team Name)   DALLAS DEFENSE  DAL         NaN       NaN
+9     Bench (RB/WR/TE)  Elijah Mitchell   RB         NaN       NaN
+
+2023-11-23 07:05:03 INFO turkey_bowl.leader_board -
+
+### BECCA_HUD stats ###
+              Position             Player Team  ACTUAL_pts  PROJ_pts
+0                   QB         Sam Howell  WAS         0.0     17.69
+1                 RB_1       Tony Pollard  DAL         NaN       NaN
+2                 RB_2          AJ Dillon   GB         NaN       NaN
+3                 WR_1  Amon-Ra St. Brown  DET         NaN       NaN
+4                 WR_2       Deebo Samuel   SF         NaN       NaN
+5                   TE          Noah Fant  SEA         0.0      4.95
+6      Flex (RB/WR/TE)   Christian Watson   GB         NaN       NaN
+7                    K    Riley Patterson  DET         0.0      6.47
+8  Defense (Team Name)         SF DEFENSE   SF         NaN       NaN
+9     Bench (RB/WR/TE)      Josh Reynolds  DET         NaN       NaN
+
+2023-11-23 07:05:03 INFO turkey_bowl.leader_board - Logan winning with 0.0 pts
+           PTS  margin  pts_back
+Logan      0.0     0.0       0.0
+Yeager     0.0     0.0       0.0
+Cindy      0.0     0.0       0.0
+Dodd       0.0     0.0       0.0
+Becca_Hud  0.0     NaN       0.0
+
+2023-11-23 07:05:03 INFO turkey_bowl.leader_board - Saving LeaderBoard to /Users/logan/Desktop/repos/turkey-bowl/archive/2023/2023_leader_board.xlsx...
+2023-11-23 07:14:32 INFO turkey_bowl.cli -
+
+-------------------- Scraping Player Actual Points ---------------------
+
+2023-11-23 07:14:33 INFO turkey_bowl.scrape - Collecting actual player points...
+2023-11-23 07:14:33 INFO turkey_bowl.scrape - Successful API response obtained for: https://api.fantasy.nfl.com/v2/players/weekstats?season=2023&week=12
+2023-11-23 07:20:12 INFO turkey_bowl.cli -
+
+------------------- Scraping Player Projected Points -------------------
+
+2023-11-23 07:20:12 INFO turkey_bowl.scrape - Collecting projected player points...
+2023-11-23 07:20:13 INFO turkey_bowl.scrape - Successful API response obtained for: https://api.fantasy.nfl.com/v2/players/weekprojectedstats?season=2023&week=12
+2023-11-23 07:20:13 INFO turkey_bowl.scrape - Player ids are up to date at /Users/logan/Desktop/repos/turkey-bowl/assets/player_ids.json
+2023-11-23 07:20:13 INFO turkey_bowl.aggregate - Undocumented player 2570512: Henry Pearson
+2023-11-23 07:20:13 INFO turkey_bowl.aggregate - Undocumented player 2570176: Jarrick Bernard-Converse
+2023-11-23 07:20:13 INFO turkey_bowl.aggregate - Undocumented player 2533444: Randy Bullock
+2023-11-23 07:20:14 INFO turkey_bowl.aggregate - Undocumented player 2565995: Quinton Bohanna
+2023-11-23 07:20:14 INFO turkey_bowl.aggregate - Undocumented player 2570284: Scott Matlock
+2023-11-23 07:20:14 INFO turkey_bowl.aggregate - Undocumented player 2558979: Nick Mullens
+2023-11-23 07:20:14 INFO turkey_bowl.aggregate - Undocumented player 2570347: SirVocea Dennis
+2023-11-23 07:20:15 INFO turkey_bowl.aggregate - Undocumented player 2564865: Noah Togiai
+2023-11-23 07:20:15 INFO turkey_bowl.aggregate - Undocumented player 2566130: Brevin Jordan
+2023-11-23 07:20:15 INFO turkey_bowl.aggregate - Undocumented player 2567667: Malik Willis
+2023-11-23 07:20:16 INFO turkey_bowl.aggregate - Undocumented player 2569723: Riley Moss
+2023-11-23 07:20:16 INFO turkey_bowl.aggregate - Undocumented player 2569612: Travis Bell
+2023-11-23 07:20:16 INFO turkey_bowl.aggregate - Undocumented player 2555227: Jonathan Williams
+2023-11-23 07:20:16 INFO turkey_bowl.aggregate - Undocumented player 2569624: Zacch Pickens
+2023-11-23 07:20:17 INFO turkey_bowl.aggregate - Undocumented player 2556118: Dwayne Washington
+2023-11-23 07:20:17 INFO turkey_bowl.aggregate - Undocumented player 2562667: Albert Huggins
+2023-11-23 07:20:17 INFO turkey_bowl.aggregate - Undocumented player 2562711: Sheldrick Redwine
+2023-11-23 07:20:17 INFO turkey_bowl.aggregate - Undocumented player 2569849: Will Mallory
+2023-11-23 07:20:18 INFO turkey_bowl.aggregate - Undocumented player 2570137: A.T. Perry
+2023-11-23 07:20:18 INFO turkey_bowl.aggregate - Undocumented player 2562435: Tyree Jackson
+2023-11-23 07:20:18 INFO turkey_bowl.aggregate - Undocumented player 2569041: Ben Stille
+2023-11-23 07:20:18 INFO turkey_bowl.aggregate - Undocumented player 2564562: Blake Lynch
+2023-11-23 07:20:19 INFO turkey_bowl.aggregate - Undocumented player 2566367: Azeez Ojulari
+2023-11-23 07:20:19 INFO turkey_bowl.aggregate - Undocumented player 2562285: Justin Hollins
+2023-11-23 07:20:19 INFO turkey_bowl.aggregate - Undocumented player 2568261: Bo Melton
+2023-11-23 07:20:20 INFO turkey_bowl.aggregate - Undocumented player 2570134: Isaiah Foskey
+2023-11-23 07:20:20 INFO turkey_bowl.aggregate - Undocumented player 2569155: Trenton Thompson
+2023-11-23 07:20:20 INFO turkey_bowl.aggregate - Undocumented player 2565857: Tylan Wallace
+2023-11-23 07:20:20 INFO turkey_bowl.aggregate - Undocumented player 2571629: Sean Tucker
+2023-11-23 07:20:21 INFO turkey_bowl.aggregate - Undocumented player 2569888: Parker Washington
+2023-11-23 07:20:21 INFO turkey_bowl.aggregate - Undocumented player 2570092: Kayshon Boutte
+2023-11-23 07:20:21 INFO turkey_bowl.aggregate - Undocumented player 2562732: David Sills
+2023-11-23 07:20:21 INFO turkey_bowl.aggregate - Undocumented player 2569636: Terell Smith
+2023-11-23 07:20:22 INFO turkey_bowl.aggregate - Undocumented player 2569050: Mike Brown
+2023-11-23 07:20:22 INFO turkey_bowl.aggregate - Undocumented player 2569801: Colton Dowell
+2023-11-23 07:20:22 INFO turkey_bowl.aggregate - Writing projected player stats to /Users/logan/Desktop/repos/turkey-bowl/archive/2023/2023_12_projected_player_pts.csv...
+2023-11-23 07:20:53 INFO turkey_bowl.cli -
+
+-------------------- Scraping Player Actual Points ---------------------
+
+2023-11-23 07:20:53 INFO turkey_bowl.scrape - Collecting actual player points...
+2023-11-23 07:20:54 INFO turkey_bowl.scrape - Successful API response obtained for: https://api.fantasy.nfl.com/v2/players/weekstats?season=2023&week=12
+2023-11-23 07:24:11 INFO turkey_bowl.cli -
+
+-------------------- Scraping Player Actual Points ---------------------
+
+2023-11-23 07:24:11 INFO turkey_bowl.scrape - Collecting actual player points...
+2023-11-23 07:24:11 INFO turkey_bowl.scrape - Successful API response obtained for: https://api.fantasy.nfl.com/v2/players/weekstats?season=2023&week=12
+2023-11-23 07:32:57 INFO turkey_bowl.cli -
+
+-------------------- Scraping Player Actual Points ---------------------
+
+2023-11-23 07:32:57 INFO turkey_bowl.scrape - Collecting actual player points...
+2023-11-23 07:32:58 INFO turkey_bowl.scrape - Successful API response obtained for: https://api.fantasy.nfl.com/v2/players/weekstats?season=2023&week=12
+2023-11-23 07:32:58 INFO turkey_bowl.aggregate - WARNING: Logan has players with NaN values: ['TJ Lockett', 'Brandin Aubrey', 'SEATTLE DEFENSE', 'Antonio Gibson']
+2023-11-23 07:32:58 INFO turkey_bowl.aggregate - WARNING: Yeager has players with NaN values: ['DETROIT DEFENSE']
+2023-11-23 07:32:58 INFO turkey_bowl.aggregate - WARNING: Cindy has players with NaN values: ['Chris Rodriguez', 'GREEN BAY DEFENSE']
+2023-11-23 07:32:58 INFO turkey_bowl.aggregate - WARNING: Dodd has players with NaN values: ['DALLAS DEFENSE', 'Elijah Mitchell']
+2023-11-23 07:32:58 INFO turkey_bowl.aggregate - WARNING: Becca_Hud has players with NaN values: ['SF DEFENSE']
+2023-11-23 07:32:58 INFO turkey_bowl.aggregate - Writing robust player points summary to /Users/logan/Desktop/repos/turkey-bowl/archive/2023/2023_12_robust_participant_player_pts.xlsx...
+2023-11-23 07:32:58 INFO turkey_bowl.leader_board -
+
+### LOGAN stats ###
+              Position               Player Team  ACTUAL_pts  PROJ_pts
+0                   QB           Jared Goff  DET         0.0     18.62
+1                 RB_1  Christian McCaffrey   SF         0.0     20.92
+2                 RB_2       Brian Robinson  WAS         0.0     16.83
+3                 WR_1           TJ Lockett  SEA         NaN       NaN
+4                 WR_2          Romeo Doubs   GB         0.0     11.43
+5                   TE        George Kittle   SF         0.0     14.78
+6      Flex (RB/WR/TE)       Michael Gallup  DAL         0.0      8.75
+7                    K       Brandin Aubrey  DAL         NaN       NaN
+8  Defense (Team Name)      SEATTLE DEFENSE  SEA         NaN       NaN
+9     Bench (RB/WR/TE)       Antonio Gibson  WAS         NaN       NaN
+
+2023-11-23 07:32:58 INFO turkey_bowl.leader_board -
+
+### YEAGER stats ###
+              Position            Player Team  ACTUAL_pts  PROJ_pts
+0                   QB       Brock Purdy   SF         0.0     18.91
+1                 RB_1   Zach Charbonnet  SEA         0.0     12.34
+2                 RB_2  David Montgomery  DET         0.0     11.31
+3                 WR_1       CeeDee Lamb  DAL         0.0     21.78
+4                 WR_2       Jayden Reed   GB         0.0     12.54
+5                   TE       Sam LaPorta  DET         0.0     10.58
+6      Flex (RB/WR/TE)      Jahan Dotson  WAS         0.0      9.48
+7                    K    Anders Carlson   GB         0.0      5.08
+8  Defense (Team Name)   DETROIT DEFENSE  DET         NaN       NaN
+9     Bench (RB/WR/TE)     Curtis Samuel  WAS         0.0      7.83
+
+2023-11-23 07:32:58 INFO turkey_bowl.leader_board -
+
+### CINDY stats ###
+              Position              Player Team  ACTUAL_pts  PROJ_pts
+0                   QB        Dak Prescott  DAL         0.0     20.32
+1                 RB_1       DeeJay Dallas  SEA         0.0      2.14
+2                 RB_2     Chris Rodriguez  WAS         NaN       NaN
+3                 WR_1          DK Metcalf  SEA         0.0     13.89
+4                 WR_2  Jaxon Smith-Njigba  SEA         0.0     10.09
+5                   TE       Jake Ferguson  DAL         0.0      9.31
+6      Flex (RB/WR/TE)    Jameson Williams  DET         0.0      5.56
+7                    K         Jason Myers  SEA         0.0      6.40
+8  Defense (Team Name)   GREEN BAY DEFENSE   GB         NaN       NaN
+9     Bench (RB/WR/TE)      Jauan Jennings   SF         0.0      3.59
+
+2023-11-23 07:32:58 INFO turkey_bowl.leader_board -
+
+### DODD stats ###
+              Position           Player Team  ACTUAL_pts  PROJ_pts
+0                   QB      Jordan Love   GB         0.0     16.14
+1                 RB_1     Jahmyr Gibbs  DET         0.0      8.40
+2                 RB_2      Rico Dowdle  DAL         0.0      5.14
+3                 WR_1    Brandon Aiyuk   SF         0.0     16.94
+4                 WR_2   Terry McLaurin  WAS         0.0     11.14
+5                   TE     Logan Thomas  WAS         0.0      8.45
+6      Flex (RB/WR/TE)    Brandin Cooks  DAL         0.0     11.94
+7                    K       Jake Moody   SF         0.0      6.13
+8  Defense (Team Name)   DALLAS DEFENSE  DAL         NaN       NaN
+9     Bench (RB/WR/TE)  Elijah Mitchell   RB         NaN       NaN
+
+2023-11-23 07:32:58 INFO turkey_bowl.leader_board -
+
+### BECCA_HUD stats ###
+              Position             Player Team  ACTUAL_pts  PROJ_pts
+0                   QB         Sam Howell  WAS         0.0     17.69
+1                 RB_1       Tony Pollard  DAL         0.0     13.81
+2                 RB_2          AJ Dillon   GB         0.0     10.94
+3                 WR_1  Amon-Ra St. Brown  DET         0.0     17.57
+4                 WR_2       Deebo Samuel   SF         0.0     12.84
+5                   TE          Noah Fant  SEA         0.0      4.95
+6      Flex (RB/WR/TE)   Christian Watson   GB         0.0     10.76
+7                    K    Riley Patterson  DET         0.0      6.47
+8  Defense (Team Name)         SF DEFENSE   SF         NaN       NaN
+9     Bench (RB/WR/TE)      Josh Reynolds  DET         0.0      6.04
+
+2023-11-23 07:32:58 INFO turkey_bowl.leader_board - Logan winning with 0.0 pts
+           PTS  margin  pts_back
+Logan      0.0     0.0       0.0
+Yeager     0.0     0.0       0.0
+Cindy      0.0     0.0       0.0
+Dodd       0.0     0.0       0.0
+Becca_Hud  0.0     NaN       0.0
+
+2023-11-23 07:32:58 INFO turkey_bowl.leader_board - Saving LeaderBoard to /Users/logan/Desktop/repos/turkey-bowl/archive/2023/2023_leader_board.xlsx...
+2023-11-23 07:33:52 INFO turkey_bowl.cli -
+
+------------------- Scraping Player Projected Points -------------------
+
+2023-11-23 07:33:52 INFO turkey_bowl.scrape - Collecting projected player points...
+2023-11-23 07:33:52 INFO turkey_bowl.scrape - Successful API response obtained for: https://api.fantasy.nfl.com/v2/players/weekprojectedstats?season=2023&week=12
+2023-11-23 07:33:52 INFO turkey_bowl.scrape - Player ids are up to date at /Users/logan/Desktop/repos/turkey-bowl/assets/player_ids.json
+2023-11-23 07:33:52 INFO turkey_bowl.aggregate - All player ids in pulled player points exist in player_ids.json
+2023-11-23 07:33:52 INFO turkey_bowl.aggregate - Writing projected player stats to /Users/logan/Desktop/repos/turkey-bowl/archive/2023/2023_12_projected_player_pts.csv...
+2023-11-23 07:34:16 INFO turkey_bowl.cli -
+
+-------------------- Scraping Player Actual Points ---------------------
+
+2023-11-23 07:34:16 INFO turkey_bowl.scrape - Collecting actual player points...
+2023-11-23 07:34:16 INFO turkey_bowl.scrape - Successful API response obtained for: https://api.fantasy.nfl.com/v2/players/weekstats?season=2023&week=12
+2023-11-23 07:34:16 INFO turkey_bowl.aggregate - WARNING: Logan has players with NaN values: ['TJ Lockett', 'Brandin Aubrey', 'SEATTLE DEFENSE', 'Antonio Gibson']
+2023-11-23 07:34:16 INFO turkey_bowl.aggregate - WARNING: Yeager has players with NaN values: ['DETROIT DEFENSE']
+2023-11-23 07:34:16 INFO turkey_bowl.aggregate - WARNING: Cindy has players with NaN values: ['Chris Rodriguez', 'GREEN BAY DEFENSE']
+2023-11-23 07:34:16 INFO turkey_bowl.aggregate - WARNING: Dodd has players with NaN values: ['DALLAS DEFENSE', 'Elijah Mitchell']
+2023-11-23 07:34:16 INFO turkey_bowl.aggregate - WARNING: Becca_Hud has players with NaN values: ['SF DEFENSE']
+2023-11-23 07:34:16 INFO turkey_bowl.aggregate - Writing robust player points summary to /Users/logan/Desktop/repos/turkey-bowl/archive/2023/2023_12_robust_participant_player_pts.xlsx...
+2023-11-23 07:34:16 INFO turkey_bowl.leader_board -
+
+### LOGAN stats ###
+              Position               Player Team  ACTUAL_pts  PROJ_pts
+0                   QB           Jared Goff  DET         0.0     18.62
+1                 RB_1  Christian McCaffrey   SF         0.0     20.92
+2                 RB_2       Brian Robinson  WAS         0.0     16.83
+3                 WR_1           TJ Lockett  SEA         NaN       NaN
+4                 WR_2          Romeo Doubs   GB         0.0     11.43
+5                   TE        George Kittle   SF         0.0     14.78
+6      Flex (RB/WR/TE)       Michael Gallup  DAL         0.0      8.75
+7                    K       Brandin Aubrey  DAL         NaN       NaN
+8  Defense (Team Name)      SEATTLE DEFENSE  SEA         NaN       NaN
+9     Bench (RB/WR/TE)       Antonio Gibson  WAS         NaN       NaN
+
+2023-11-23 07:34:16 INFO turkey_bowl.leader_board -
+
+### YEAGER stats ###
+              Position            Player Team  ACTUAL_pts  PROJ_pts
+0                   QB       Brock Purdy   SF         0.0     18.91
+1                 RB_1   Zach Charbonnet  SEA         0.0     12.34
+2                 RB_2  David Montgomery  DET         0.0     11.31
+3                 WR_1       CeeDee Lamb  DAL         0.0     21.78
+4                 WR_2       Jayden Reed   GB         0.0     12.54
+5                   TE       Sam LaPorta  DET         0.0     10.58
+6      Flex (RB/WR/TE)      Jahan Dotson  WAS         0.0      9.48
+7                    K    Anders Carlson   GB         0.0      5.08
+8  Defense (Team Name)   DETROIT DEFENSE  DET         NaN       NaN
+9     Bench (RB/WR/TE)     Curtis Samuel  WAS         0.0      7.83
+
+2023-11-23 07:34:16 INFO turkey_bowl.leader_board -
+
+### CINDY stats ###
+              Position              Player Team  ACTUAL_pts  PROJ_pts
+0                   QB        Dak Prescott  DAL         0.0     20.32
+1                 RB_1       DeeJay Dallas  SEA         0.0      2.14
+2                 RB_2     Chris Rodriguez  WAS         NaN       NaN
+3                 WR_1          DK Metcalf  SEA         0.0     13.89
+4                 WR_2  Jaxon Smith-Njigba  SEA         0.0     10.09
+5                   TE       Jake Ferguson  DAL         0.0      9.31
+6      Flex (RB/WR/TE)    Jameson Williams  DET         0.0      5.56
+7                    K         Jason Myers  SEA         0.0      6.40
+8  Defense (Team Name)   GREEN BAY DEFENSE   GB         NaN       NaN
+9     Bench (RB/WR/TE)      Jauan Jennings   SF         0.0      3.59
+
+2023-11-23 07:34:16 INFO turkey_bowl.leader_board -
+
+### DODD stats ###
+              Position           Player Team  ACTUAL_pts  PROJ_pts
+0                   QB      Jordan Love   GB         0.0     16.14
+1                 RB_1     Jahmyr Gibbs  DET         0.0      8.40
+2                 RB_2      Rico Dowdle  DAL         0.0      5.14
+3                 WR_1    Brandon Aiyuk   SF         0.0     16.94
+4                 WR_2   Terry McLaurin  WAS         0.0     11.14
+5                   TE     Logan Thomas  WAS         0.0      8.45
+6      Flex (RB/WR/TE)    Brandin Cooks  DAL         0.0     11.94
+7                    K       Jake Moody   SF         0.0      6.13
+8  Defense (Team Name)   DALLAS DEFENSE  DAL         NaN       NaN
+9     Bench (RB/WR/TE)  Elijah Mitchell   RB         NaN       NaN
+
+2023-11-23 07:34:16 INFO turkey_bowl.leader_board -
+
+### BECCA_HUD stats ###
+              Position             Player Team  ACTUAL_pts  PROJ_pts
+0                   QB         Sam Howell  WAS         0.0     17.69
+1                 RB_1       Tony Pollard  DAL         0.0     13.81
+2                 RB_2          AJ Dillon   GB         0.0     10.94
+3                 WR_1  Amon-Ra St. Brown  DET         0.0     17.57
+4                 WR_2       Deebo Samuel   SF         0.0     12.84
+5                   TE          Noah Fant  SEA         0.0      4.95
+6      Flex (RB/WR/TE)   Christian Watson   GB         0.0     10.76
+7                    K    Riley Patterson  DET         0.0      6.47
+8  Defense (Team Name)         SF DEFENSE   SF         NaN       NaN
+9     Bench (RB/WR/TE)      Josh Reynolds  DET         0.0      6.04
+
+2023-11-23 07:34:16 INFO turkey_bowl.leader_board - Logan winning with 0.0 pts
+           PTS  margin  pts_back
+Logan      0.0     0.0       0.0
+Yeager     0.0     0.0       0.0
+Cindy      0.0     0.0       0.0
+Dodd       0.0     0.0       0.0
+Becca_Hud  0.0     NaN       0.0
+
+2023-11-23 07:34:16 INFO turkey_bowl.leader_board - Saving LeaderBoard to /Users/logan/Desktop/repos/turkey-bowl/archive/2023/2023_leader_board.xlsx...
+2023-11-23 07:39:39 INFO turkey_bowl.cli -
+
+-------------------- Scraping Player Actual Points ---------------------
+
+2023-11-23 07:39:39 INFO turkey_bowl.scrape - Collecting actual player points...
+2023-11-23 07:39:40 INFO turkey_bowl.scrape - Successful API response obtained for: https://api.fantasy.nfl.com/v2/players/weekstats?season=2023&week=12
+2023-11-23 07:39:40 INFO turkey_bowl.aggregate - WARNING: Logan has players with NaN values: ['Antonio Gibson']
+2023-11-23 07:39:40 INFO turkey_bowl.aggregate - WARNING: Yeager has players with NaN values: ['DETROIT DEFENSE']
+2023-11-23 07:39:40 INFO turkey_bowl.aggregate - WARNING: Cindy has players with NaN values: ['Chris Rodriguez', 'GREEN BAY DEFENSE']
+2023-11-23 07:39:40 INFO turkey_bowl.aggregate - WARNING: Dodd has players with NaN values: ['DALLAS DEFENSE', 'Elijah Mitchell']
+2023-11-23 07:39:40 INFO turkey_bowl.aggregate - WARNING: Becca_Hud has players with NaN values: ['SF DEFENSE']
+2023-11-23 07:39:40 INFO turkey_bowl.aggregate - Writing robust player points summary to /Users/logan/Desktop/repos/turkey-bowl/archive/2023/2023_12_robust_participant_player_pts.xlsx...
+2023-11-23 07:39:40 INFO turkey_bowl.leader_board -
+
+### LOGAN stats ###
+              Position               Player Team  ACTUAL_pts  PROJ_pts
+0                   QB           Jared Goff  DET         0.0     18.62
+1                 RB_1  Christian McCaffrey   SF         0.0     20.92
+2                 RB_2       Brian Robinson  WAS         0.0     16.83
+3                 WR_1        Tyler Lockett  SEA         0.0     14.04
+4                 WR_2          Romeo Doubs   GB         0.0     11.43
+5                   TE        George Kittle   SF         0.0     14.78
+6      Flex (RB/WR/TE)       Michael Gallup  DAL         0.0      8.75
+7                    K       Brandon Aubrey  DAL         0.0      6.35
+8  Defense (Team Name)     Seattle Seahawks  SEA         0.0      6.26
+9     Bench (RB/WR/TE)       Antonio Gibson  WAS         NaN       NaN
+
+2023-11-23 07:39:40 INFO turkey_bowl.leader_board -
+
+### YEAGER stats ###
+              Position            Player Team  ACTUAL_pts  PROJ_pts
+0                   QB       Brock Purdy   SF         0.0     18.91
+1                 RB_1   Zach Charbonnet  SEA         0.0     12.34
+2                 RB_2  David Montgomery  DET         0.0     11.31
+3                 WR_1       CeeDee Lamb  DAL         0.0     21.78
+4                 WR_2       Jayden Reed   GB         0.0     12.54
+5                   TE       Sam LaPorta  DET         0.0     10.58
+6      Flex (RB/WR/TE)      Jahan Dotson  WAS         0.0      9.48
+7                    K    Anders Carlson   GB         0.0      5.08
+8  Defense (Team Name)   DETROIT DEFENSE  DET         NaN       NaN
+9     Bench (RB/WR/TE)     Curtis Samuel  WAS         0.0      7.83
+
+2023-11-23 07:39:40 INFO turkey_bowl.leader_board -
+
+### CINDY stats ###
+              Position              Player Team  ACTUAL_pts  PROJ_pts
+0                   QB        Dak Prescott  DAL         0.0     20.32
+1                 RB_1       DeeJay Dallas  SEA         0.0      2.14
+2                 RB_2     Chris Rodriguez  WAS         NaN       NaN
+3                 WR_1          DK Metcalf  SEA         0.0     13.89
+4                 WR_2  Jaxon Smith-Njigba  SEA         0.0     10.09
+5                   TE       Jake Ferguson  DAL         0.0      9.31
+6      Flex (RB/WR/TE)    Jameson Williams  DET         0.0      5.56
+7                    K         Jason Myers  SEA         0.0      6.40
+8  Defense (Team Name)   GREEN BAY DEFENSE   GB         NaN       NaN
+9     Bench (RB/WR/TE)      Jauan Jennings   SF         0.0      3.59
+
+2023-11-23 07:39:40 INFO turkey_bowl.leader_board -
+
+### DODD stats ###
+              Position           Player Team  ACTUAL_pts  PROJ_pts
+0                   QB      Jordan Love   GB         0.0     16.14
+1                 RB_1     Jahmyr Gibbs  DET         0.0      8.40
+2                 RB_2      Rico Dowdle  DAL         0.0      5.14
+3                 WR_1    Brandon Aiyuk   SF         0.0     16.94
+4                 WR_2   Terry McLaurin  WAS         0.0     11.14
+5                   TE     Logan Thomas  WAS         0.0      8.45
+6      Flex (RB/WR/TE)    Brandin Cooks  DAL         0.0     11.94
+7                    K       Jake Moody   SF         0.0      6.13
+8  Defense (Team Name)   DALLAS DEFENSE  DAL         NaN       NaN
+9     Bench (RB/WR/TE)  Elijah Mitchell   RB         NaN       NaN
+
+2023-11-23 07:39:40 INFO turkey_bowl.leader_board -
+
+### BECCA_HUD stats ###
+              Position             Player Team  ACTUAL_pts  PROJ_pts
+0                   QB         Sam Howell  WAS         0.0     17.69
+1                 RB_1       Tony Pollard  DAL         0.0     13.81
+2                 RB_2          AJ Dillon   GB         0.0     10.94
+3                 WR_1  Amon-Ra St. Brown  DET         0.0     17.57
+4                 WR_2       Deebo Samuel   SF         0.0     12.84
+5                   TE          Noah Fant  SEA         0.0      4.95
+6      Flex (RB/WR/TE)   Christian Watson   GB         0.0     10.76
+7                    K    Riley Patterson  DET         0.0      6.47
+8  Defense (Team Name)         SF DEFENSE   SF         NaN       NaN
+9     Bench (RB/WR/TE)      Josh Reynolds  DET         0.0      6.04
+
+2023-11-23 07:39:40 INFO turkey_bowl.leader_board - Logan winning with 0.0 pts
+           PTS  margin  pts_back
+Logan      0.0     0.0       0.0
+Yeager     0.0     0.0       0.0
+Cindy      0.0     0.0       0.0
+Dodd       0.0     0.0       0.0
+Becca_Hud  0.0     NaN       0.0
+
+2023-11-23 07:39:40 INFO turkey_bowl.leader_board - Saving LeaderBoard to /Users/logan/Desktop/repos/turkey-bowl/archive/2023/2023_leader_board.xlsx...
+2023-11-23 07:40:48 INFO turkey_bowl.cli -
+
+-------------------- Scraping Player Actual Points ---------------------
+
+2023-11-23 07:40:48 INFO turkey_bowl.scrape - Collecting actual player points...
+2023-11-23 07:40:48 INFO turkey_bowl.scrape - Successful API response obtained for: https://api.fantasy.nfl.com/v2/players/weekstats?season=2023&week=12
+2023-11-23 07:40:48 INFO turkey_bowl.aggregate - WARNING: Logan has players with NaN values: ['Antonio Gibson']
+2023-11-23 07:40:48 INFO turkey_bowl.aggregate - WARNING: Yeager has players with NaN values: ['DETROIT DEFENSE']
+2023-11-23 07:40:48 INFO turkey_bowl.aggregate - WARNING: Cindy has players with NaN values: ['Chris Rodriguez', 'GREEN BAY DEFENSE']
+2023-11-23 07:40:48 INFO turkey_bowl.aggregate - WARNING: Dodd has players with NaN values: ['DALLAS DEFENSE', 'Elijah Mitchell']
+2023-11-23 07:40:48 INFO turkey_bowl.aggregate - WARNING: Becca_Hud has players with NaN values: ['SF DEFENSE']
+2023-11-23 07:40:48 INFO turkey_bowl.aggregate - Writing robust player points summary to /Users/logan/Desktop/repos/turkey-bowl/archive/2023/2023_12_robust_participant_player_pts.xlsx...
+2023-11-23 07:40:49 INFO turkey_bowl.leader_board -
+
+### LOGAN stats ###
+              Position               Player Team  ACTUAL_pts  PROJ_pts
+0                   QB           Jared Goff  DET         0.0     18.62
+1                 RB_1  Christian McCaffrey   SF         0.0     20.92
+2                 RB_2       Brian Robinson  WAS         0.0     16.83
+3                 WR_1        Tyler Lockett  SEA         0.0     14.04
+4                 WR_2          Romeo Doubs   GB         0.0     11.43
+5                   TE        George Kittle   SF         0.0     14.78
+6      Flex (RB/WR/TE)       Michael Gallup  DAL         0.0      8.75
+7                    K       Brandon Aubrey  DAL         0.0      6.35
+8  Defense (Team Name)     Seattle Seahawks  SEA         0.0      6.26
+9     Bench (RB/WR/TE)       Antonio Gibson  WAS         NaN       NaN
+
+2023-11-23 07:40:49 INFO turkey_bowl.leader_board -
+
+### YEAGER stats ###
+              Position            Player Team  ACTUAL_pts  PROJ_pts
+0                   QB       Brock Purdy   SF         0.0     18.91
+1                 RB_1   Zach Charbonnet  SEA         0.0     12.34
+2                 RB_2  David Montgomery  DET         0.0     11.31
+3                 WR_1       CeeDee Lamb  DAL         0.0     21.78
+4                 WR_2       Jayden Reed   GB         0.0     12.54
+5                   TE       Sam LaPorta  DET         0.0     10.58
+6      Flex (RB/WR/TE)      Jahan Dotson  WAS         0.0      9.48
+7                    K    Anders Carlson   GB         0.0      5.08
+8  Defense (Team Name)   DETROIT DEFENSE  DET         NaN       NaN
+9     Bench (RB/WR/TE)     Curtis Samuel  WAS         0.0      7.83
+
+2023-11-23 07:40:49 INFO turkey_bowl.leader_board -
+
+### CINDY stats ###
+              Position              Player Team  ACTUAL_pts  PROJ_pts
+0                   QB        Dak Prescott  DAL         0.0     20.32
+1                 RB_1       DeeJay Dallas  SEA         0.0      2.14
+2                 RB_2     Chris Rodriguez  WAS         NaN       NaN
+3                 WR_1          DK Metcalf  SEA         0.0     13.89
+4                 WR_2  Jaxon Smith-Njigba  SEA         0.0     10.09
+5                   TE       Jake Ferguson  DAL         0.0      9.31
+6      Flex (RB/WR/TE)    Jameson Williams  DET         0.0      5.56
+7                    K         Jason Myers  SEA         0.0      6.40
+8  Defense (Team Name)   GREEN BAY DEFENSE   GB         NaN       NaN
+9     Bench (RB/WR/TE)      Jauan Jennings   SF         0.0      3.59
+
+2023-11-23 07:40:49 INFO turkey_bowl.leader_board -
+
+### DODD stats ###
+              Position           Player Team  ACTUAL_pts  PROJ_pts
+0                   QB      Jordan Love   GB         0.0     16.14
+1                 RB_1     Jahmyr Gibbs  DET         0.0      8.40
+2                 RB_2      Rico Dowdle  DAL         0.0      5.14
+3                 WR_1    Brandon Aiyuk   SF         0.0     16.94
+4                 WR_2   Terry McLaurin  WAS         0.0     11.14
+5                   TE     Logan Thomas  WAS         0.0      8.45
+6      Flex (RB/WR/TE)    Brandin Cooks  DAL         0.0     11.94
+7                    K       Jake Moody   SF         0.0      6.13
+8  Defense (Team Name)   DALLAS DEFENSE  DAL         NaN       NaN
+9     Bench (RB/WR/TE)  Elijah Mitchell   RB         NaN       NaN
+
+2023-11-23 07:40:49 INFO turkey_bowl.leader_board -
+
+### BECCA_HUD stats ###
+              Position             Player Team  ACTUAL_pts  PROJ_pts
+0                   QB         Sam Howell  WAS         0.0     17.69
+1                 RB_1       Tony Pollard  DAL         0.0     13.81
+2                 RB_2          AJ Dillon   GB         0.0     10.94
+3                 WR_1  Amon-Ra St. Brown  DET         0.0     17.57
+4                 WR_2       Deebo Samuel   SF         0.0     12.84
+5                   TE          Noah Fant  SEA         0.0      4.95
+6      Flex (RB/WR/TE)   Christian Watson   GB         0.0     10.76
+7                    K    Riley Patterson  DET         0.0      6.47
+8  Defense (Team Name)         SF DEFENSE   SF         NaN       NaN
+9     Bench (RB/WR/TE)      Josh Reynolds  DET         0.0      6.04
+
+2023-11-23 07:40:49 INFO turkey_bowl.leader_board - Logan winning with 0.0 pts
+           PTS  margin  pts_back
+Logan      0.0     0.0       0.0
+Yeager     0.0     0.0       0.0
+Cindy      0.0     0.0       0.0
+Dodd       0.0     0.0       0.0
+Becca_Hud  0.0     NaN       0.0
+
+2023-11-23 07:40:49 INFO turkey_bowl.leader_board - Saving LeaderBoard to /Users/logan/Desktop/repos/turkey-bowl/archive/2023/2023_leader_board.xlsx...
+2023-11-23 07:42:02 INFO turkey_bowl.cli -
+
+-------------------- Scraping Player Actual Points ---------------------
+
+2023-11-23 07:42:02 INFO turkey_bowl.scrape - Collecting actual player points...
+2023-11-23 07:42:02 INFO turkey_bowl.scrape - Successful API response obtained for: https://api.fantasy.nfl.com/v2/players/weekstats?season=2023&week=12
+2023-11-23 07:42:02 INFO turkey_bowl.aggregate - WARNING: Logan has players with NaN values: ['Antonio Gibson']
+2023-11-23 07:42:02 INFO turkey_bowl.aggregate - WARNING: Cindy has players with NaN values: ['Chris Rodriguez', 'GREEN BAY DEFENSE']
+2023-11-23 07:42:02 INFO turkey_bowl.aggregate - WARNING: Dodd has players with NaN values: ['DALLAS DEFENSE', 'Elijah Mitchell']
+2023-11-23 07:42:02 INFO turkey_bowl.aggregate - WARNING: Becca_Hud has players with NaN values: ['SF DEFENSE']
+2023-11-23 07:42:02 INFO turkey_bowl.aggregate - Writing robust player points summary to /Users/logan/Desktop/repos/turkey-bowl/archive/2023/2023_12_robust_participant_player_pts.xlsx...
+2023-11-23 07:42:02 INFO turkey_bowl.leader_board -
+
+### LOGAN stats ###
+              Position               Player Team  ACTUAL_pts  PROJ_pts
+0                   QB           Jared Goff  DET         0.0     18.62
+1                 RB_1  Christian McCaffrey   SF         0.0     20.92
+2                 RB_2       Brian Robinson  WAS         0.0     16.83
+3                 WR_1        Tyler Lockett  SEA         0.0     14.04
+4                 WR_2          Romeo Doubs   GB         0.0     11.43
+5                   TE        George Kittle   SF         0.0     14.78
+6      Flex (RB/WR/TE)       Michael Gallup  DAL         0.0      8.75
+7                    K       Brandon Aubrey  DAL         0.0      6.35
+8  Defense (Team Name)     Seattle Seahawks  SEA         0.0      6.26
+9     Bench (RB/WR/TE)       Antonio Gibson  WAS         NaN       NaN
+
+2023-11-23 07:42:02 INFO turkey_bowl.leader_board -
+
+### YEAGER stats ###
+              Position            Player Team  ACTUAL_pts  PROJ_pts
+0                   QB       Brock Purdy   SF         0.0     18.91
+1                 RB_1   Zach Charbonnet  SEA         0.0     12.34
+2                 RB_2  David Montgomery  DET         0.0     11.31
+3                 WR_1       CeeDee Lamb  DAL         0.0     21.78
+4                 WR_2       Jayden Reed   GB         0.0     12.54
+5                   TE       Sam LaPorta  DET         0.0     10.58
+6      Flex (RB/WR/TE)      Jahan Dotson  WAS         0.0      9.48
+7                    K    Anders Carlson   GB         0.0      5.08
+8  Defense (Team Name)     Detroit Lions  DET         0.0      6.56
+9     Bench (RB/WR/TE)     Curtis Samuel  WAS         0.0      7.83
+
+2023-11-23 07:42:02 INFO turkey_bowl.leader_board -
+
+### CINDY stats ###
+              Position              Player Team  ACTUAL_pts  PROJ_pts
+0                   QB        Dak Prescott  DAL         0.0     20.32
+1                 RB_1       DeeJay Dallas  SEA         0.0      2.14
+2                 RB_2     Chris Rodriguez  WAS         NaN       NaN
+3                 WR_1          DK Metcalf  SEA         0.0     13.89
+4                 WR_2  Jaxon Smith-Njigba  SEA         0.0     10.09
+5                   TE       Jake Ferguson  DAL         0.0      9.31
+6      Flex (RB/WR/TE)    Jameson Williams  DET         0.0      5.56
+7                    K         Jason Myers  SEA         0.0      6.40
+8  Defense (Team Name)   GREEN BAY DEFENSE   GB         NaN       NaN
+9     Bench (RB/WR/TE)      Jauan Jennings   SF         0.0      3.59
+
+2023-11-23 07:42:02 INFO turkey_bowl.leader_board -
+
+### DODD stats ###
+              Position           Player Team  ACTUAL_pts  PROJ_pts
+0                   QB      Jordan Love   GB         0.0     16.14
+1                 RB_1     Jahmyr Gibbs  DET         0.0      8.40
+2                 RB_2      Rico Dowdle  DAL         0.0      5.14
+3                 WR_1    Brandon Aiyuk   SF         0.0     16.94
+4                 WR_2   Terry McLaurin  WAS         0.0     11.14
+5                   TE     Logan Thomas  WAS         0.0      8.45
+6      Flex (RB/WR/TE)    Brandin Cooks  DAL         0.0     11.94
+7                    K       Jake Moody   SF         0.0      6.13
+8  Defense (Team Name)   DALLAS DEFENSE  DAL         NaN       NaN
+9     Bench (RB/WR/TE)  Elijah Mitchell   RB         NaN       NaN
+
+2023-11-23 07:42:02 INFO turkey_bowl.leader_board -
+
+### BECCA_HUD stats ###
+              Position             Player Team  ACTUAL_pts  PROJ_pts
+0                   QB         Sam Howell  WAS         0.0     17.69
+1                 RB_1       Tony Pollard  DAL         0.0     13.81
+2                 RB_2          AJ Dillon   GB         0.0     10.94
+3                 WR_1  Amon-Ra St. Brown  DET         0.0     17.57
+4                 WR_2       Deebo Samuel   SF         0.0     12.84
+5                   TE          Noah Fant  SEA         0.0      4.95
+6      Flex (RB/WR/TE)   Christian Watson   GB         0.0     10.76
+7                    K    Riley Patterson  DET         0.0      6.47
+8  Defense (Team Name)         SF DEFENSE   SF         NaN       NaN
+9     Bench (RB/WR/TE)      Josh Reynolds  DET         0.0      6.04
+
+2023-11-23 07:42:02 INFO turkey_bowl.leader_board - Logan winning with 0.0 pts
+           PTS  margin  pts_back
+Logan      0.0     0.0       0.0
+Yeager     0.0     0.0       0.0
+Cindy      0.0     0.0       0.0
+Dodd       0.0     0.0       0.0
+Becca_Hud  0.0     NaN       0.0
+
+2023-11-23 07:42:02 INFO turkey_bowl.leader_board - Saving LeaderBoard to /Users/logan/Desktop/repos/turkey-bowl/archive/2023/2023_leader_board.xlsx...
+2023-11-23 07:42:22 INFO turkey_bowl.cli -
+
+-------------------- Scraping Player Actual Points ---------------------
+
+2023-11-23 07:42:22 INFO turkey_bowl.scrape - Collecting actual player points...
+2023-11-23 07:42:22 INFO turkey_bowl.scrape - Successful API response obtained for: https://api.fantasy.nfl.com/v2/players/weekstats?season=2023&week=12
+2023-11-23 07:42:22 INFO turkey_bowl.aggregate - WARNING: Logan has players with NaN values: ['Antonio Gibson']
+2023-11-23 07:42:22 INFO turkey_bowl.aggregate - WARNING: Cindy has players with NaN values: ['Chris Rodriguez']
+2023-11-23 07:42:22 INFO turkey_bowl.aggregate - WARNING: Dodd has players with NaN values: ['DALLAS DEFENSE', 'Elijah Mitchell']
+2023-11-23 07:42:22 INFO turkey_bowl.aggregate - WARNING: Becca_Hud has players with NaN values: ['SF DEFENSE']
+2023-11-23 07:42:22 INFO turkey_bowl.aggregate - Writing robust player points summary to /Users/logan/Desktop/repos/turkey-bowl/archive/2023/2023_12_robust_participant_player_pts.xlsx...
+2023-11-23 07:42:22 INFO turkey_bowl.leader_board -
+
+### LOGAN stats ###
+              Position               Player Team  ACTUAL_pts  PROJ_pts
+0                   QB           Jared Goff  DET         0.0     18.62
+1                 RB_1  Christian McCaffrey   SF         0.0     20.92
+2                 RB_2       Brian Robinson  WAS         0.0     16.83
+3                 WR_1        Tyler Lockett  SEA         0.0     14.04
+4                 WR_2          Romeo Doubs   GB         0.0     11.43
+5                   TE        George Kittle   SF         0.0     14.78
+6      Flex (RB/WR/TE)       Michael Gallup  DAL         0.0      8.75
+7                    K       Brandon Aubrey  DAL         0.0      6.35
+8  Defense (Team Name)     Seattle Seahawks  SEA         0.0      6.26
+9     Bench (RB/WR/TE)       Antonio Gibson  WAS         NaN       NaN
+
+2023-11-23 07:42:22 INFO turkey_bowl.leader_board -
+
+### YEAGER stats ###
+              Position            Player Team  ACTUAL_pts  PROJ_pts
+0                   QB       Brock Purdy   SF         0.0     18.91
+1                 RB_1   Zach Charbonnet  SEA         0.0     12.34
+2                 RB_2  David Montgomery  DET         0.0     11.31
+3                 WR_1       CeeDee Lamb  DAL         0.0     21.78
+4                 WR_2       Jayden Reed   GB         0.0     12.54
+5                   TE       Sam LaPorta  DET         0.0     10.58
+6      Flex (RB/WR/TE)      Jahan Dotson  WAS         0.0      9.48
+7                    K    Anders Carlson   GB         0.0      5.08
+8  Defense (Team Name)     Detroit Lions  DET         0.0      6.56
+9     Bench (RB/WR/TE)     Curtis Samuel  WAS         0.0      7.83
+
+2023-11-23 07:42:22 INFO turkey_bowl.leader_board -
+
+### CINDY stats ###
+              Position              Player Team  ACTUAL_pts  PROJ_pts
+0                   QB        Dak Prescott  DAL         0.0     20.32
+1                 RB_1       DeeJay Dallas  SEA         0.0      2.14
+2                 RB_2     Chris Rodriguez  WAS         NaN       NaN
+3                 WR_1          DK Metcalf  SEA         0.0     13.89
+4                 WR_2  Jaxon Smith-Njigba  SEA         0.0     10.09
+5                   TE       Jake Ferguson  DAL         0.0      9.31
+6      Flex (RB/WR/TE)    Jameson Williams  DET         0.0      5.56
+7                    K         Jason Myers  SEA         0.0      6.40
+8  Defense (Team Name)   Green Bay Packers   GB         0.0      6.37
+9     Bench (RB/WR/TE)      Jauan Jennings   SF         0.0      3.59
+
+2023-11-23 07:42:22 INFO turkey_bowl.leader_board -
+
+### DODD stats ###
+              Position           Player Team  ACTUAL_pts  PROJ_pts
+0                   QB      Jordan Love   GB         0.0     16.14
+1                 RB_1     Jahmyr Gibbs  DET         0.0      8.40
+2                 RB_2      Rico Dowdle  DAL         0.0      5.14
+3                 WR_1    Brandon Aiyuk   SF         0.0     16.94
+4                 WR_2   Terry McLaurin  WAS         0.0     11.14
+5                   TE     Logan Thomas  WAS         0.0      8.45
+6      Flex (RB/WR/TE)    Brandin Cooks  DAL         0.0     11.94
+7                    K       Jake Moody   SF         0.0      6.13
+8  Defense (Team Name)   DALLAS DEFENSE  DAL         NaN       NaN
+9     Bench (RB/WR/TE)  Elijah Mitchell   RB         NaN       NaN
+
+2023-11-23 07:42:22 INFO turkey_bowl.leader_board -
+
+### BECCA_HUD stats ###
+              Position             Player Team  ACTUAL_pts  PROJ_pts
+0                   QB         Sam Howell  WAS         0.0     17.69
+1                 RB_1       Tony Pollard  DAL         0.0     13.81
+2                 RB_2          AJ Dillon   GB         0.0     10.94
+3                 WR_1  Amon-Ra St. Brown  DET         0.0     17.57
+4                 WR_2       Deebo Samuel   SF         0.0     12.84
+5                   TE          Noah Fant  SEA         0.0      4.95
+6      Flex (RB/WR/TE)   Christian Watson   GB         0.0     10.76
+7                    K    Riley Patterson  DET         0.0      6.47
+8  Defense (Team Name)         SF DEFENSE   SF         NaN       NaN
+9     Bench (RB/WR/TE)      Josh Reynolds  DET         0.0      6.04
+
+2023-11-23 07:42:22 INFO turkey_bowl.leader_board - Logan winning with 0.0 pts
+           PTS  margin  pts_back
+Logan      0.0     0.0       0.0
+Yeager     0.0     0.0       0.0
+Cindy      0.0     0.0       0.0
+Dodd       0.0     0.0       0.0
+Becca_Hud  0.0     NaN       0.0
+
+2023-11-23 07:42:22 INFO turkey_bowl.leader_board - Saving LeaderBoard to /Users/logan/Desktop/repos/turkey-bowl/archive/2023/2023_leader_board.xlsx...
+2023-11-23 07:42:52 INFO turkey_bowl.cli -
+
+-------------------- Scraping Player Actual Points ---------------------
+
+2023-11-23 07:42:53 INFO turkey_bowl.scrape - Collecting actual player points...
+2023-11-23 07:42:53 INFO turkey_bowl.scrape - Successful API response obtained for: https://api.fantasy.nfl.com/v2/players/weekstats?season=2023&week=12
+2023-11-23 07:42:53 INFO turkey_bowl.aggregate - WARNING: Logan has players with NaN values: ['Antonio Gibson']
+2023-11-23 07:42:53 INFO turkey_bowl.aggregate - WARNING: Dodd has players with NaN values: ['DALLAS DEFENSE', 'Elijah Mitchell']
+2023-11-23 07:42:53 INFO turkey_bowl.aggregate - WARNING: Becca_Hud has players with NaN values: ['SF DEFENSE']
+2023-11-23 07:42:53 INFO turkey_bowl.aggregate - Writing robust player points summary to /Users/logan/Desktop/repos/turkey-bowl/archive/2023/2023_12_robust_participant_player_pts.xlsx...
+2023-11-23 07:42:53 INFO turkey_bowl.leader_board -
+
+### LOGAN stats ###
+              Position               Player Team  ACTUAL_pts  PROJ_pts
+0                   QB           Jared Goff  DET         0.0     18.62
+1                 RB_1  Christian McCaffrey   SF         0.0     20.92
+2                 RB_2       Brian Robinson  WAS         0.0     16.83
+3                 WR_1        Tyler Lockett  SEA         0.0     14.04
+4                 WR_2          Romeo Doubs   GB         0.0     11.43
+5                   TE        George Kittle   SF         0.0     14.78
+6      Flex (RB/WR/TE)       Michael Gallup  DAL         0.0      8.75
+7                    K       Brandon Aubrey  DAL         0.0      6.35
+8  Defense (Team Name)     Seattle Seahawks  SEA         0.0      6.26
+9     Bench (RB/WR/TE)       Antonio Gibson  WAS         NaN       NaN
+
+2023-11-23 07:42:53 INFO turkey_bowl.leader_board -
+
+### YEAGER stats ###
+              Position            Player Team  ACTUAL_pts  PROJ_pts
+0                   QB       Brock Purdy   SF         0.0     18.91
+1                 RB_1   Zach Charbonnet  SEA         0.0     12.34
+2                 RB_2  David Montgomery  DET         0.0     11.31
+3                 WR_1       CeeDee Lamb  DAL         0.0     21.78
+4                 WR_2       Jayden Reed   GB         0.0     12.54
+5                   TE       Sam LaPorta  DET         0.0     10.58
+6      Flex (RB/WR/TE)      Jahan Dotson  WAS         0.0      9.48
+7                    K    Anders Carlson   GB         0.0      5.08
+8  Defense (Team Name)     Detroit Lions  DET         0.0      6.56
+9     Bench (RB/WR/TE)     Curtis Samuel  WAS         0.0      7.83
+
+2023-11-23 07:42:53 INFO turkey_bowl.leader_board -
+
+### CINDY stats ###
+              Position               Player Team  ACTUAL_pts  PROJ_pts
+0                   QB         Dak Prescott  DAL         0.0     20.32
+1                 RB_1        DeeJay Dallas  SEA         0.0      2.14
+2                 RB_2  Chris Rodriguez Jr.  WAS         0.0      3.47
+3                 WR_1           DK Metcalf  SEA         0.0     13.89
+4                 WR_2   Jaxon Smith-Njigba  SEA         0.0     10.09
+5                   TE        Jake Ferguson  DAL         0.0      9.31
+6      Flex (RB/WR/TE)     Jameson Williams  DET         0.0      5.56
+7                    K          Jason Myers  SEA         0.0      6.40
+8  Defense (Team Name)    Green Bay Packers   GB         0.0      6.37
+9     Bench (RB/WR/TE)       Jauan Jennings   SF         0.0      3.59
+
+2023-11-23 07:42:53 INFO turkey_bowl.leader_board -
+
+### DODD stats ###
+              Position           Player Team  ACTUAL_pts  PROJ_pts
+0                   QB      Jordan Love   GB         0.0     16.14
+1                 RB_1     Jahmyr Gibbs  DET         0.0      8.40
+2                 RB_2      Rico Dowdle  DAL         0.0      5.14
+3                 WR_1    Brandon Aiyuk   SF         0.0     16.94
+4                 WR_2   Terry McLaurin  WAS         0.0     11.14
+5                   TE     Logan Thomas  WAS         0.0      8.45
+6      Flex (RB/WR/TE)    Brandin Cooks  DAL         0.0     11.94
+7                    K       Jake Moody   SF         0.0      6.13
+8  Defense (Team Name)   DALLAS DEFENSE  DAL         NaN       NaN
+9     Bench (RB/WR/TE)  Elijah Mitchell   RB         NaN       NaN
+
+2023-11-23 07:42:53 INFO turkey_bowl.leader_board -
+
+### BECCA_HUD stats ###
+              Position             Player Team  ACTUAL_pts  PROJ_pts
+0                   QB         Sam Howell  WAS         0.0     17.69
+1                 RB_1       Tony Pollard  DAL         0.0     13.81
+2                 RB_2          AJ Dillon   GB         0.0     10.94
+3                 WR_1  Amon-Ra St. Brown  DET         0.0     17.57
+4                 WR_2       Deebo Samuel   SF         0.0     12.84
+5                   TE          Noah Fant  SEA         0.0      4.95
+6      Flex (RB/WR/TE)   Christian Watson   GB         0.0     10.76
+7                    K    Riley Patterson  DET         0.0      6.47
+8  Defense (Team Name)         SF DEFENSE   SF         NaN       NaN
+9     Bench (RB/WR/TE)      Josh Reynolds  DET         0.0      6.04
+
+2023-11-23 07:42:53 INFO turkey_bowl.leader_board - Logan winning with 0.0 pts
+           PTS  margin  pts_back
+Logan      0.0     0.0       0.0
+Yeager     0.0     0.0       0.0
+Cindy      0.0     0.0       0.0
+Dodd       0.0     0.0       0.0
+Becca_Hud  0.0     NaN       0.0
+
+2023-11-23 07:42:53 INFO turkey_bowl.leader_board - Saving LeaderBoard to /Users/logan/Desktop/repos/turkey-bowl/archive/2023/2023_leader_board.xlsx...
+2023-11-23 07:43:51 INFO turkey_bowl.cli -
+
+-------------------- Scraping Player Actual Points ---------------------
+
+2023-11-23 07:43:51 INFO turkey_bowl.scrape - Collecting actual player points...
+2023-11-23 07:43:52 INFO turkey_bowl.scrape - Successful API response obtained for: https://api.fantasy.nfl.com/v2/players/weekstats?season=2023&week=12
+2023-11-23 07:43:52 INFO turkey_bowl.aggregate - WARNING: Logan has players with NaN values: ['Antonio Gibson']
+2023-11-23 07:43:52 INFO turkey_bowl.aggregate - WARNING: Dodd has players with NaN values: ['Elijah Mitchell']
+2023-11-23 07:43:52 INFO turkey_bowl.aggregate - Writing robust player points summary to /Users/logan/Desktop/repos/turkey-bowl/archive/2023/2023_12_robust_participant_player_pts.xlsx...
+2023-11-23 07:43:52 INFO turkey_bowl.leader_board -
+
+### LOGAN stats ###
+              Position               Player Team  ACTUAL_pts  PROJ_pts
+0                   QB           Jared Goff  DET         0.0     18.62
+1                 RB_1  Christian McCaffrey   SF         0.0     20.92
+2                 RB_2       Brian Robinson  WAS         0.0     16.83
+3                 WR_1        Tyler Lockett  SEA         0.0     14.04
+4                 WR_2          Romeo Doubs   GB         0.0     11.43
+5                   TE        George Kittle   SF         0.0     14.78
+6      Flex (RB/WR/TE)       Michael Gallup  DAL         0.0      8.75
+7                    K       Brandon Aubrey  DAL         0.0      6.35
+8  Defense (Team Name)     Seattle Seahawks  SEA         0.0      6.26
+9     Bench (RB/WR/TE)       Antonio Gibson  WAS         NaN       NaN
+
+2023-11-23 07:43:52 INFO turkey_bowl.leader_board -
+
+### YEAGER stats ###
+              Position            Player Team  ACTUAL_pts  PROJ_pts
+0                   QB       Brock Purdy   SF         0.0     18.91
+1                 RB_1   Zach Charbonnet  SEA         0.0     12.34
+2                 RB_2  David Montgomery  DET         0.0     11.31
+3                 WR_1       CeeDee Lamb  DAL         0.0     21.78
+4                 WR_2       Jayden Reed   GB         0.0     12.54
+5                   TE       Sam LaPorta  DET         0.0     10.58
+6      Flex (RB/WR/TE)      Jahan Dotson  WAS         0.0      9.48
+7                    K    Anders Carlson   GB         0.0      5.08
+8  Defense (Team Name)     Detroit Lions  DET         0.0      6.56
+9     Bench (RB/WR/TE)     Curtis Samuel  WAS         0.0      7.83
+
+2023-11-23 07:43:52 INFO turkey_bowl.leader_board -
+
+### CINDY stats ###
+              Position               Player Team  ACTUAL_pts  PROJ_pts
+0                   QB         Dak Prescott  DAL         0.0     20.32
+1                 RB_1        DeeJay Dallas  SEA         0.0      2.14
+2                 RB_2  Chris Rodriguez Jr.  WAS         0.0      3.47
+3                 WR_1           DK Metcalf  SEA         0.0     13.89
+4                 WR_2   Jaxon Smith-Njigba  SEA         0.0     10.09
+5                   TE        Jake Ferguson  DAL         0.0      9.31
+6      Flex (RB/WR/TE)     Jameson Williams  DET         0.0      5.56
+7                    K          Jason Myers  SEA         0.0      6.40
+8  Defense (Team Name)    Green Bay Packers   GB         0.0      6.37
+9     Bench (RB/WR/TE)       Jauan Jennings   SF         0.0      3.59
+
+2023-11-23 07:43:52 INFO turkey_bowl.leader_board -
+
+### DODD stats ###
+              Position           Player Team  ACTUAL_pts  PROJ_pts
+0                   QB      Jordan Love   GB         0.0     16.14
+1                 RB_1     Jahmyr Gibbs  DET         0.0      8.40
+2                 RB_2      Rico Dowdle  DAL         0.0      5.14
+3                 WR_1    Brandon Aiyuk   SF         0.0     16.94
+4                 WR_2   Terry McLaurin  WAS         0.0     11.14
+5                   TE     Logan Thomas  WAS         0.0      8.45
+6      Flex (RB/WR/TE)    Brandin Cooks  DAL         0.0     11.94
+7                    K       Jake Moody   SF         0.0      6.13
+8  Defense (Team Name)   Dallas Cowboys  DAL         0.0      7.44
+9     Bench (RB/WR/TE)  Elijah Mitchell   RB         NaN       NaN
+
+2023-11-23 07:43:52 INFO turkey_bowl.leader_board -
+
+### BECCA_HUD stats ###
+              Position               Player Team  ACTUAL_pts  PROJ_pts
+0                   QB           Sam Howell  WAS         0.0     17.69
+1                 RB_1         Tony Pollard  DAL         0.0     13.81
+2                 RB_2            AJ Dillon   GB         0.0     10.94
+3                 WR_1    Amon-Ra St. Brown  DET         0.0     17.57
+4                 WR_2         Deebo Samuel   SF         0.0     12.84
+5                   TE            Noah Fant  SEA         0.0      4.95
+6      Flex (RB/WR/TE)     Christian Watson   GB         0.0     10.76
+7                    K      Riley Patterson  DET         0.0      6.47
+8  Defense (Team Name)  San Francisco 49ers   SF         0.0      6.76
+9     Bench (RB/WR/TE)        Josh Reynolds  DET         0.0      6.04
+
+2023-11-23 07:43:52 INFO turkey_bowl.leader_board - Logan winning with 0.0 pts
+           PTS  margin  pts_back
+Logan      0.0     0.0       0.0
+Yeager     0.0     0.0       0.0
+Cindy      0.0     0.0       0.0
+Dodd       0.0     0.0       0.0
+Becca_Hud  0.0     NaN       0.0
+
+2023-11-23 07:43:52 INFO turkey_bowl.leader_board - Saving LeaderBoard to /Users/logan/Desktop/repos/turkey-bowl/archive/2023/2023_leader_board.xlsx...
+2023-11-23 07:46:31 INFO turkey_bowl.cli -
+
+-------------------- Scraping Player Actual Points ---------------------
+
+2023-11-23 07:46:31 INFO turkey_bowl.scrape - Collecting actual player points...
+2023-11-23 07:46:31 INFO turkey_bowl.scrape - Successful API response obtained for: https://api.fantasy.nfl.com/v2/players/weekstats?season=2023&week=12
+2023-11-23 07:46:31 INFO turkey_bowl.aggregate - WARNING: Logan has players with NaN values: ['Antonio Gibson']
+2023-11-23 07:46:31 INFO turkey_bowl.aggregate - WARNING: Dodd has players with NaN values: ['Elijah Mitchell']
+2023-11-23 07:46:31 INFO turkey_bowl.aggregate - Writing robust player points summary to /Users/logan/Desktop/repos/turkey-bowl/archive/2023/2023_12_robust_participant_player_pts.xlsx...
+2023-11-23 07:46:31 INFO turkey_bowl.leader_board -
+
+### LOGAN stats ###
+              Position               Player Team  ACTUAL_pts  PROJ_pts
+0                   QB           Jared Goff  DET         0.0     18.62
+1                 RB_1  Christian McCaffrey   SF         0.0     20.92
+2                 RB_2       Brian Robinson  WAS         0.0     16.83
+3                 WR_1        Tyler Lockett  SEA         0.0     14.04
+4                 WR_2          Romeo Doubs   GB         0.0     11.43
+5                   TE        George Kittle   SF         0.0     14.78
+6      Flex (RB/WR/TE)       Michael Gallup  DAL         0.0      8.75
+7                    K       Brandon Aubrey  DAL         0.0      6.35
+8  Defense (Team Name)     Seattle Seahawks  SEA         0.0      6.26
+9     Bench (RB/WR/TE)       Antonio Gibson  WAS         NaN       NaN
+
+2023-11-23 07:46:31 INFO turkey_bowl.leader_board -
+
+### YEAGER stats ###
+              Position            Player Team  ACTUAL_pts  PROJ_pts
+0                   QB       Brock Purdy   SF         0.0     18.91
+1                 RB_1   Zach Charbonnet  SEA         0.0     12.34
+2                 RB_2  David Montgomery  DET         0.0     11.31
+3                 WR_1       CeeDee Lamb  DAL         0.0     21.78
+4                 WR_2       Jayden Reed   GB         0.0     12.54
+5                   TE       Sam LaPorta  DET         0.0     10.58
+6      Flex (RB/WR/TE)      Jahan Dotson  WAS         0.0      9.48
+7                    K    Anders Carlson   GB         0.0      5.08
+8  Defense (Team Name)     Detroit Lions  DET         0.0      6.56
+9     Bench (RB/WR/TE)     Curtis Samuel  WAS         0.0      7.83
+
+2023-11-23 07:46:31 INFO turkey_bowl.leader_board -
+
+### CINDY stats ###
+              Position               Player Team  ACTUAL_pts  PROJ_pts
+0                   QB         Dak Prescott  DAL         0.0     20.32
+1                 RB_1        DeeJay Dallas  SEA         0.0      2.14
+2                 RB_2  Chris Rodriguez Jr.  WAS         0.0      3.47
+3                 WR_1           DK Metcalf  SEA         0.0     13.89
+4                 WR_2   Jaxon Smith-Njigba  SEA         0.0     10.09
+5                   TE        Jake Ferguson  DAL         0.0      9.31
+6      Flex (RB/WR/TE)     Jameson Williams  DET         0.0      5.56
+7                    K          Jason Myers  SEA         0.0      6.40
+8  Defense (Team Name)    Green Bay Packers   GB         0.0      6.37
+9     Bench (RB/WR/TE)       Jauan Jennings   SF         0.0      3.59
+
+2023-11-23 07:46:31 INFO turkey_bowl.leader_board -
+
+### DODD stats ###
+              Position           Player Team  ACTUAL_pts  PROJ_pts
+0                   QB      Jordan Love   GB         0.0     16.14
+1                 RB_1     Jahmyr Gibbs  DET         0.0      8.40
+2                 RB_2      Rico Dowdle  DAL         0.0      5.14
+3                 WR_1    Brandon Aiyuk   SF         0.0     16.94
+4                 WR_2   Terry McLaurin  WAS         0.0     11.14
+5                   TE     Logan Thomas  WAS         0.0      8.45
+6      Flex (RB/WR/TE)    Brandin Cooks  DAL         0.0     11.94
+7                    K       Jake Moody   SF         0.0      6.13
+8  Defense (Team Name)   Dallas Cowboys  DAL         0.0      7.44
+9     Bench (RB/WR/TE)  Elijah Mitchell   RB         NaN       NaN
+
+2023-11-23 07:46:31 INFO turkey_bowl.leader_board -
+
+### BECCA_HUD stats ###
+              Position               Player Team  ACTUAL_pts  PROJ_pts
+0                   QB           Sam Howell  WAS         0.0     17.69
+1                 RB_1         Tony Pollard  DAL         0.0     13.81
+2                 RB_2            AJ Dillon   GB         0.0     10.94
+3                 WR_1    Amon-Ra St. Brown  DET         0.0     17.57
+4                 WR_2         Deebo Samuel   SF         0.0     12.84
+5                   TE            Noah Fant  SEA         0.0      4.95
+6      Flex (RB/WR/TE)     Christian Watson   GB         0.0     10.76
+7                    K      Riley Patterson  DET         0.0      6.47
+8  Defense (Team Name)  San Francisco 49ers   SF         0.0      6.76
+9     Bench (RB/WR/TE)        Josh Reynolds  DET         0.0      6.04
+
+2023-11-23 07:46:31 INFO turkey_bowl.leader_board - Logan winning with 117.98 pts
+              PTS  margin  pts_back
+Logan      117.98    9.40      0.00
+Yeager     108.58    6.79      9.40
+Becca_Hud  101.79   10.07     16.19
+Dodd        91.72   14.17     26.26
+Cindy       77.55     NaN     40.43
+
+2023-11-23 07:46:31 INFO turkey_bowl.leader_board - Saving LeaderBoard to /Users/logan/Desktop/repos/turkey-bowl/archive/2023/2023_leader_board.xlsx...
+2023-11-23 07:53:42 INFO turkey_bowl.cli -
+
+-------------------- Scraping Player Actual Points ---------------------
+
+2023-11-23 07:53:43 INFO turkey_bowl.scrape - Collecting actual player points...
+2023-11-23 07:53:43 INFO turkey_bowl.scrape - Successful API response obtained for: https://api.fantasy.nfl.com/v2/players/weekstats?season=2023&week=12
+2023-11-23 07:53:43 INFO turkey_bowl.aggregate - WARNING: Logan has players with NaN values: ['Antonio Gibson']
+2023-11-23 07:53:43 INFO turkey_bowl.aggregate - WARNING: Dodd has players with NaN values: ['Elijah Mitchell']
+2023-11-23 07:53:43 INFO turkey_bowl.aggregate - Writing robust player points summary to /Users/logan/Desktop/repos/turkey-bowl/archive/2023/2023_12_robust_participant_player_pts.xlsx...
+2023-11-23 07:53:43 INFO turkey_bowl.leader_board -
+
+### LOGAN stats ###
+              Position               Player Team  ACTUAL_pts  PROJ_pts
+0                   QB           Jared Goff  DET         0.0     18.62
+1                 RB_1  Christian McCaffrey   SF         0.0     20.92
+2                 RB_2       Brian Robinson  WAS         0.0     16.83
+3                 WR_1        Tyler Lockett  SEA         0.0     14.04
+4                 WR_2          Romeo Doubs   GB         0.0     11.43
+5                   TE        George Kittle   SF         0.0     14.78
+6      Flex (RB/WR/TE)       Michael Gallup  DAL         0.0      8.75
+7                    K       Brandon Aubrey  DAL         0.0      6.35
+8  Defense (Team Name)     Seattle Seahawks  SEA         0.0      6.26
+9     Bench (RB/WR/TE)       Antonio Gibson  WAS         NaN       NaN
+
+2023-11-23 07:53:43 INFO turkey_bowl.leader_board -
+
+### YEAGER stats ###
+              Position            Player Team  ACTUAL_pts  PROJ_pts
+0                   QB       Brock Purdy   SF         0.0     18.91
+1                 RB_1   Zach Charbonnet  SEA         0.0     12.34
+2                 RB_2  David Montgomery  DET         0.0     11.31
+3                 WR_1       CeeDee Lamb  DAL         0.0     21.78
+4                 WR_2       Jayden Reed   GB         0.0     12.54
+5                   TE       Sam LaPorta  DET         0.0     10.58
+6      Flex (RB/WR/TE)      Jahan Dotson  WAS         0.0      9.48
+7                    K    Anders Carlson   GB         0.0      5.08
+8  Defense (Team Name)     Detroit Lions  DET         0.0      6.56
+9     Bench (RB/WR/TE)     Curtis Samuel  WAS         0.0      7.83
+
+2023-11-23 07:53:43 INFO turkey_bowl.leader_board -
+
+### CINDY stats ###
+              Position               Player Team  ACTUAL_pts  PROJ_pts
+0                   QB         Dak Prescott  DAL         0.0     20.32
+1                 RB_1        DeeJay Dallas  SEA         0.0      2.14
+2                 RB_2  Chris Rodriguez Jr.  WAS         0.0      3.47
+3                 WR_1           DK Metcalf  SEA         0.0     13.89
+4                 WR_2   Jaxon Smith-Njigba  SEA         0.0     10.09
+5                   TE        Jake Ferguson  DAL         0.0      9.31
+6      Flex (RB/WR/TE)     Jameson Williams  DET         0.0      5.56
+7                    K          Jason Myers  SEA         0.0      6.40
+8  Defense (Team Name)    Green Bay Packers   GB         0.0      6.37
+9     Bench (RB/WR/TE)       Jauan Jennings   SF         0.0      3.59
+
+2023-11-23 07:53:43 INFO turkey_bowl.leader_board -
+
+### DODD stats ###
+              Position           Player Team  ACTUAL_pts  PROJ_pts
+0                   QB      Jordan Love   GB         0.0     16.14
+1                 RB_1     Jahmyr Gibbs  DET         0.0      8.40
+2                 RB_2      Rico Dowdle  DAL         0.0      5.14
+3                 WR_1    Brandon Aiyuk   SF         0.0     16.94
+4                 WR_2   Terry McLaurin  WAS         0.0     11.14
+5                   TE     Logan Thomas  WAS         0.0      8.45
+6      Flex (RB/WR/TE)    Brandin Cooks  DAL         0.0     11.94
+7                    K       Jake Moody   SF         0.0      6.13
+8  Defense (Team Name)   Dallas Cowboys  DAL         0.0      7.44
+9     Bench (RB/WR/TE)  Elijah Mitchell   RB         NaN       NaN
+
+2023-11-23 07:53:43 INFO turkey_bowl.leader_board -
+
+### BECCA_HUD stats ###
+              Position               Player Team  ACTUAL_pts  PROJ_pts
+0                   QB           Sam Howell  WAS         0.0     17.69
+1                 RB_1         Tony Pollard  DAL         0.0     13.81
+2                 RB_2            AJ Dillon   GB         0.0     10.94
+3                 WR_1    Amon-Ra St. Brown  DET         0.0     17.57
+4                 WR_2         Deebo Samuel   SF         0.0     12.84
+5                   TE            Noah Fant  SEA         0.0      4.95
+6      Flex (RB/WR/TE)     Christian Watson   GB         0.0     10.76
+7                    K      Riley Patterson  DET         0.0      6.47
+8  Defense (Team Name)  San Francisco 49ers   SF         0.0      6.76
+9     Bench (RB/WR/TE)        Josh Reynolds  DET         0.0      6.04
+
+2023-11-23 07:53:43 INFO turkey_bowl.leader_board - Logan winning with 0.0 pts
+           PTS  margin  pts_back
+Logan      0.0     0.0       0.0
+Yeager     0.0     0.0       0.0
+Cindy      0.0     0.0       0.0
+Dodd       0.0     0.0       0.0
+Becca_Hud  0.0     NaN       0.0
+
+2023-11-23 07:53:43 INFO turkey_bowl.leader_board - Saving LeaderBoard to /Users/logan/Desktop/repos/turkey-bowl/archive/2023/2023_leader_board.xlsx...
+2023-11-23 11:52:34 INFO turkey_bowl.cli -
+
+-------------------- Scraping Player Actual Points ---------------------
+
+2023-11-23 12:03:52 INFO turkey_bowl.cli -
+
+-------------------- Scraping Player Actual Points ---------------------
+
+2023-11-23 12:03:52 INFO turkey_bowl.scrape - Collecting actual player points...
+2023-11-23 12:03:53 INFO turkey_bowl.scrape - Successful API response obtained for: https://api.fantasy.nfl.com/v2/players/weekstats?season=2023&week=12
+2023-11-23 12:03:53 INFO turkey_bowl.aggregate - Undocumented player 2565348: Kristian Welch
+2023-11-23 12:03:53 INFO turkey_bowl.aggregate - WARNING: Logan has players with NaN values: ['TJ Lockett', 'Antonio Gibson']
+2023-11-23 12:03:53 INFO turkey_bowl.aggregate - WARNING: Dodd has players with NaN values: ['Elijah Mitchell']
+2023-11-23 12:03:53 INFO turkey_bowl.aggregate - Writing robust player points summary to /Users/logan/Desktop/repos/turkey-bowl/archive/2023/2023_12_robust_participant_player_pts.xlsx...
+2023-11-23 12:03:53 INFO turkey_bowl.leader_board -
+
+### LOGAN stats ###
+              Position               Player Team  ACTUAL_pts  PROJ_pts
+0                   QB           Jared Goff  DET        6.34     18.62
+1                 RB_1  Christian McCaffrey   SF         NaN     20.92
+2                 RB_2       Brian Robinson  WAS         NaN     16.83
+3                 WR_1           TJ Lockett  SEA         NaN       NaN
+4                 WR_2          Romeo Doubs   GB         NaN     11.43
+5                   TE        George Kittle   SF         NaN     14.78
+6      Flex (RB/WR/TE)       Michael Gallup  DAL         NaN      8.75
+7                    K       Brandon Aubrey  DAL         NaN      6.35
+8  Defense (Team Name)     Seattle Seahawks  SEA         NaN      6.26
+9     Bench (RB/WR/TE)       Antonio Gibson  WAS         NaN       NaN
+
+2023-11-23 12:03:53 INFO turkey_bowl.leader_board -
+
+### YEAGER stats ###
+              Position            Player Team  ACTUAL_pts  PROJ_pts
+0                   QB       Brock Purdy   SF         NaN     18.91
+1                 RB_1   Zach Charbonnet  SEA         NaN     12.34
+2                 RB_2  David Montgomery  DET         0.6     11.31
+3                 WR_1       CeeDee Lamb  DAL         NaN     21.78
+4                 WR_2       Jayden Reed   GB         9.5     12.54
+5                   TE       Sam LaPorta  DET        11.8     10.58
+6      Flex (RB/WR/TE)      Jahan Dotson  WAS         NaN      9.48
+7                    K    Anders Carlson   GB         2.0      5.08
+8  Defense (Team Name)     Detroit Lions  DET         1.0      6.56
+9     Bench (RB/WR/TE)     Curtis Samuel  WAS         NaN      7.83
+
+2023-11-23 12:03:53 INFO turkey_bowl.leader_board -
+
+### CINDY stats ###
+              Position               Player Team  ACTUAL_pts  PROJ_pts
+0                   QB         Dak Prescott  DAL         NaN     20.32
+1                 RB_1        DeeJay Dallas  SEA         NaN      2.14
+2                 RB_2  Chris Rodriguez Jr.  WAS         NaN      3.47
+3                 WR_1           DK Metcalf  SEA         NaN     13.89
+4                 WR_2   Jaxon Smith-Njigba  SEA         NaN     10.09
+5                   TE        Jake Ferguson  DAL         NaN      9.31
+6      Flex (RB/WR/TE)     Jameson Williams  DET         2.3      5.56
+7                    K          Jason Myers  SEA         NaN      6.40
+8  Defense (Team Name)    Green Bay Packers   GB         7.0      6.37
+9     Bench (RB/WR/TE)       Jauan Jennings   SF         NaN      3.59
+
+2023-11-23 12:03:53 INFO turkey_bowl.leader_board -
+
+### DODD stats ###
+              Position           Player Team  ACTUAL_pts  PROJ_pts
+0                   QB      Jordan Love   GB       12.96     16.14
+1                 RB_1     Jahmyr Gibbs  DET         NaN      8.40
+2                 RB_2      Rico Dowdle  DAL         NaN      5.14
+3                 WR_1    Brandon Aiyuk   SF         NaN     16.94
+4                 WR_2   Terry McLaurin  WAS         NaN     11.14
+5                   TE     Logan Thomas  WAS         NaN      8.45
+6      Flex (RB/WR/TE)    Brandin Cooks  DAL         NaN     11.94
+7                    K       Jake Moody   SF         NaN      6.13
+8  Defense (Team Name)   Dallas Cowboys  DAL         NaN      7.44
+9     Bench (RB/WR/TE)  Elijah Mitchell   RB         NaN       NaN
+
+2023-11-23 12:03:53 INFO turkey_bowl.leader_board -
+
+### BECCA_HUD stats ###
+              Position               Player Team  ACTUAL_pts  PROJ_pts
+0                   QB           Sam Howell  WAS         NaN     17.69
+1                 RB_1         Tony Pollard  DAL         NaN     13.81
+2                 RB_2            AJ Dillon   GB         3.2     10.94
+3                 WR_1    Amon-Ra St. Brown  DET         NaN     17.57
+4                 WR_2         Deebo Samuel   SF         NaN     12.84
+5                   TE            Noah Fant  SEA         NaN      4.95
+6      Flex (RB/WR/TE)     Christian Watson   GB        11.8     10.76
+7                    K      Riley Patterson  DET         0.0      6.47
+8  Defense (Team Name)  San Francisco 49ers   SF         NaN      6.76
+9     Bench (RB/WR/TE)        Josh Reynolds  DET         NaN      6.04
+
+2023-11-23 12:03:53 INFO turkey_bowl.leader_board - Yeager winning with 24.9 pts
+             PTS  margin  pts_back
+Yeager     24.90    9.90      0.00
+Becca_Hud  15.00    2.04      9.90
+Dodd       12.96    3.66     11.94
+Cindy       9.30    2.96     15.60
+Logan       6.34     NaN     18.56
+
+2023-11-23 12:03:53 INFO turkey_bowl.leader_board - Saving LeaderBoard to /Users/logan/Desktop/repos/turkey-bowl/archive/2023/2023_leader_board.xlsx...
+2023-11-23 13:02:11 INFO turkey_bowl.cli -
+
+-------------------- Scraping Player Actual Points ---------------------
+
+2023-11-23 13:02:12 INFO turkey_bowl.scrape - Collecting actual player points...
+2023-11-23 13:02:14 INFO turkey_bowl.scrape - Successful API response obtained for: https://api.fantasy.nfl.com/v2/players/weekstats?season=2023&week=12
+2023-11-23 13:02:14 INFO turkey_bowl.aggregate - All player ids in pulled player points exist in player_ids.json
+2023-11-23 13:02:14 INFO turkey_bowl.aggregate - WARNING: Logan has players with NaN values: ['TJ Lockett', 'Antonio Gibson']
+2023-11-23 13:02:14 INFO turkey_bowl.aggregate - WARNING: Dodd has players with NaN values: ['Elijah Mitchell']
+2023-11-23 13:02:14 INFO turkey_bowl.aggregate - Writing robust player points summary to /Users/logan/Desktop/repos/turkey-bowl/archive/2023/2023_12_robust_participant_player_pts.xlsx...
+2023-11-23 13:02:14 INFO turkey_bowl.leader_board -
+
+### LOGAN stats ###
+              Position               Player Team  ACTUAL_pts  PROJ_pts
+0                   QB           Jared Goff  DET         4.5     18.62
+1                 RB_1  Christian McCaffrey   SF         NaN     20.92
+2                 RB_2       Brian Robinson  WAS         NaN     16.83
+3                 WR_1           TJ Lockett  SEA         NaN       NaN
+4                 WR_2          Romeo Doubs   GB         4.3     11.43
+5                   TE        George Kittle   SF         NaN     14.78
+6      Flex (RB/WR/TE)       Michael Gallup  DAL         NaN      8.75
+7                    K       Brandon Aubrey  DAL         NaN      6.35
+8  Defense (Team Name)     Seattle Seahawks  SEA         NaN      6.26
+9     Bench (RB/WR/TE)       Antonio Gibson  WAS         NaN       NaN
+
+2023-11-23 13:02:14 INFO turkey_bowl.leader_board -
+
+### YEAGER stats ###
+              Position            Player Team  ACTUAL_pts  PROJ_pts
+0                   QB       Brock Purdy   SF         NaN     18.91
+1                 RB_1   Zach Charbonnet  SEA         NaN     12.34
+2                 RB_2  David Montgomery  DET         2.8     11.31
+3                 WR_1       CeeDee Lamb  DAL         NaN     21.78
+4                 WR_2       Jayden Reed   GB        12.6     12.54
+5                   TE       Sam LaPorta  DET        11.8     10.58
+6      Flex (RB/WR/TE)      Jahan Dotson  WAS         NaN      9.48
+7                    K    Anders Carlson   GB         5.0      5.08
+8  Defense (Team Name)     Detroit Lions  DET         1.0      6.56
+9     Bench (RB/WR/TE)     Curtis Samuel  WAS         NaN      7.83
+
+2023-11-23 13:02:14 INFO turkey_bowl.leader_board -
+
+### CINDY stats ###
+              Position               Player Team  ACTUAL_pts  PROJ_pts
+0                   QB         Dak Prescott  DAL         NaN     20.32
+1                 RB_1        DeeJay Dallas  SEA         NaN      2.14
+2                 RB_2  Chris Rodriguez Jr.  WAS         NaN      3.47
+3                 WR_1           DK Metcalf  SEA         NaN     13.89
+4                 WR_2   Jaxon Smith-Njigba  SEA         NaN     10.09
+5                   TE        Jake Ferguson  DAL         NaN      9.31
+6      Flex (RB/WR/TE)     Jameson Williams  DET         2.3      5.56
+7                    K          Jason Myers  SEA         NaN      6.40
+8  Defense (Team Name)    Green Bay Packers   GB        19.0      6.37
+9     Bench (RB/WR/TE)       Jauan Jennings   SF         NaN      3.59
+
+2023-11-23 13:02:14 INFO turkey_bowl.leader_board -
+
+### DODD stats ###
+              Position           Player Team  ACTUAL_pts  PROJ_pts
+0                   QB      Jordan Love   GB       15.76     16.14
+1                 RB_1     Jahmyr Gibbs  DET        1.30      8.40
+2                 RB_2      Rico Dowdle  DAL         NaN      5.14
+3                 WR_1    Brandon Aiyuk   SF         NaN     16.94
+4                 WR_2   Terry McLaurin  WAS         NaN     11.14
+5                   TE     Logan Thomas  WAS         NaN      8.45
+6      Flex (RB/WR/TE)    Brandin Cooks  DAL         NaN     11.94
+7                    K       Jake Moody   SF         NaN      6.13
+8  Defense (Team Name)   Dallas Cowboys  DAL         NaN      7.44
+9     Bench (RB/WR/TE)  Elijah Mitchell   RB         NaN       NaN
+
+2023-11-23 13:02:14 INFO turkey_bowl.leader_board -
+
+### BECCA_HUD stats ###
+              Position               Player Team  ACTUAL_pts  PROJ_pts
+0                   QB           Sam Howell  WAS         NaN     17.69
+1                 RB_1         Tony Pollard  DAL         NaN     13.81
+2                 RB_2            AJ Dillon   GB         8.3     10.94
+3                 WR_1    Amon-Ra St. Brown  DET         3.4     17.57
+4                 WR_2         Deebo Samuel   SF         NaN     12.84
+5                   TE            Noah Fant  SEA         NaN      4.95
+6      Flex (RB/WR/TE)     Christian Watson   GB        11.8     10.76
+7                    K      Riley Patterson  DET         0.0      6.47
+8  Defense (Team Name)  San Francisco 49ers   SF         NaN      6.76
+9     Bench (RB/WR/TE)        Josh Reynolds  DET         0.0      6.04
+
+2023-11-23 13:02:14 INFO turkey_bowl.leader_board - Yeager winning with 33.2 pts
+             PTS  margin  pts_back
+Yeager     33.20    9.70      0.00
+Becca_Hud  23.50    2.20      9.70
+Cindy      21.30    4.24     11.90
+Dodd       17.06    8.26     16.14
+Logan       8.80     NaN     24.40
+
+2023-11-23 13:02:14 INFO turkey_bowl.leader_board - Saving LeaderBoard to /Users/logan/Desktop/repos/turkey-bowl/archive/2023/2023_leader_board.xlsx...
+2023-11-23 13:02:52 INFO turkey_bowl.cli -
+
+-------------------- Scraping Player Actual Points ---------------------
+
+2023-11-23 13:02:52 INFO turkey_bowl.scrape - Collecting actual player points...
+2023-11-23 13:02:53 INFO turkey_bowl.scrape - Successful API response obtained for: https://api.fantasy.nfl.com/v2/players/weekstats?season=2023&week=12
+2023-11-23 13:02:53 INFO turkey_bowl.aggregate - All player ids in pulled player points exist in player_ids.json
+2023-11-23 13:02:53 INFO turkey_bowl.aggregate - WARNING: Logan has players with NaN values: ['Antonio Gibson']
+2023-11-23 13:02:53 INFO turkey_bowl.aggregate - WARNING: Dodd has players with NaN values: ['Elijah Mitchell']
+2023-11-23 13:02:53 INFO turkey_bowl.aggregate - Writing robust player points summary to /Users/logan/Desktop/repos/turkey-bowl/archive/2023/2023_12_robust_participant_player_pts.xlsx...
+2023-11-23 13:02:53 INFO turkey_bowl.leader_board -
+
+### LOGAN stats ###
+              Position               Player Team  ACTUAL_pts  PROJ_pts
+0                   QB           Jared Goff  DET         4.5     18.62
+1                 RB_1  Christian McCaffrey   SF         NaN     20.92
+2                 RB_2       Brian Robinson  WAS         NaN     16.83
+3                 WR_1        Tyler Lockett  SEA         NaN     14.04
+4                 WR_2          Romeo Doubs   GB         4.3     11.43
+5                   TE        George Kittle   SF         NaN     14.78
+6      Flex (RB/WR/TE)       Michael Gallup  DAL         NaN      8.75
+7                    K       Brandon Aubrey  DAL         NaN      6.35
+8  Defense (Team Name)     Seattle Seahawks  SEA         NaN      6.26
+9     Bench (RB/WR/TE)       Antonio Gibson  WAS         NaN       NaN
+
+2023-11-23 13:02:53 INFO turkey_bowl.leader_board -
+
+### YEAGER stats ###
+              Position            Player Team  ACTUAL_pts  PROJ_pts
+0                   QB       Brock Purdy   SF         NaN     18.91
+1                 RB_1   Zach Charbonnet  SEA         NaN     12.34
+2                 RB_2  David Montgomery  DET         2.8     11.31
+3                 WR_1       CeeDee Lamb  DAL         NaN     21.78
+4                 WR_2       Jayden Reed   GB        12.6     12.54
+5                   TE       Sam LaPorta  DET        11.8     10.58
+6      Flex (RB/WR/TE)      Jahan Dotson  WAS         NaN      9.48
+7                    K    Anders Carlson   GB         5.0      5.08
+8  Defense (Team Name)     Detroit Lions  DET         1.0      6.56
+9     Bench (RB/WR/TE)     Curtis Samuel  WAS         NaN      7.83
+
+2023-11-23 13:02:53 INFO turkey_bowl.leader_board -
+
+### CINDY stats ###
+              Position               Player Team  ACTUAL_pts  PROJ_pts
+0                   QB         Dak Prescott  DAL         NaN     20.32
+1                 RB_1        DeeJay Dallas  SEA         NaN      2.14
+2                 RB_2  Chris Rodriguez Jr.  WAS         NaN      3.47
+3                 WR_1           DK Metcalf  SEA         NaN     13.89
+4                 WR_2   Jaxon Smith-Njigba  SEA         NaN     10.09
+5                   TE        Jake Ferguson  DAL         NaN      9.31
+6      Flex (RB/WR/TE)     Jameson Williams  DET         2.3      5.56
+7                    K          Jason Myers  SEA         NaN      6.40
+8  Defense (Team Name)    Green Bay Packers   GB        19.0      6.37
+9     Bench (RB/WR/TE)       Jauan Jennings   SF         NaN      3.59
+
+2023-11-23 13:02:53 INFO turkey_bowl.leader_board -
+
+### DODD stats ###
+              Position           Player Team  ACTUAL_pts  PROJ_pts
+0                   QB      Jordan Love   GB       15.76     16.14
+1                 RB_1     Jahmyr Gibbs  DET        1.30      8.40
+2                 RB_2      Rico Dowdle  DAL         NaN      5.14
+3                 WR_1    Brandon Aiyuk   SF         NaN     16.94
+4                 WR_2   Terry McLaurin  WAS         NaN     11.14
+5                   TE     Logan Thomas  WAS         NaN      8.45
+6      Flex (RB/WR/TE)    Brandin Cooks  DAL         NaN     11.94
+7                    K       Jake Moody   SF         NaN      6.13
+8  Defense (Team Name)   Dallas Cowboys  DAL         NaN      7.44
+9     Bench (RB/WR/TE)  Elijah Mitchell   RB         NaN       NaN
+
+2023-11-23 13:02:53 INFO turkey_bowl.leader_board -
+
+### BECCA_HUD stats ###
+              Position               Player Team  ACTUAL_pts  PROJ_pts
+0                   QB           Sam Howell  WAS         NaN     17.69
+1                 RB_1         Tony Pollard  DAL         NaN     13.81
+2                 RB_2            AJ Dillon   GB         8.3     10.94
+3                 WR_1    Amon-Ra St. Brown  DET         3.4     17.57
+4                 WR_2         Deebo Samuel   SF         NaN     12.84
+5                   TE            Noah Fant  SEA         NaN      4.95
+6      Flex (RB/WR/TE)     Christian Watson   GB        11.8     10.76
+7                    K      Riley Patterson  DET         0.0      6.47
+8  Defense (Team Name)  San Francisco 49ers   SF         NaN      6.76
+9     Bench (RB/WR/TE)        Josh Reynolds  DET         0.0      6.04
+
+2023-11-23 13:02:53 INFO turkey_bowl.leader_board - Yeager winning with 33.2 pts
+             PTS  margin  pts_back
+Yeager     33.20    9.70      0.00
+Becca_Hud  23.50    2.20      9.70
+Cindy      21.30    4.24     11.90
+Dodd       17.06    8.26     16.14
+Logan       8.80     NaN     24.40
+
+2023-11-23 13:02:53 INFO turkey_bowl.leader_board - Saving LeaderBoard to /Users/logan/Desktop/repos/turkey-bowl/archive/2023/2023_leader_board.xlsx...
+2023-11-23 14:13:00 INFO turkey_bowl.cli -
+
+-------------------- Scraping Player Actual Points ---------------------
+
+2023-11-23 14:13:00 INFO turkey_bowl.scrape - Collecting actual player points...
+2023-11-23 14:13:30 INFO turkey_bowl.cli -
+
+-------------------- Scraping Player Actual Points ---------------------
+
+2023-11-23 14:13:30 INFO turkey_bowl.scrape - Collecting actual player points...
+2023-11-23 14:13:35 INFO turkey_bowl.cli -
+
+-------------------- Scraping Player Actual Points ---------------------
+
+2023-11-23 14:13:35 INFO turkey_bowl.scrape - Collecting actual player points...
+2023-11-23 14:13:36 INFO turkey_bowl.scrape - Successful API response obtained for: https://api.fantasy.nfl.com/v2/players/weekstats?season=2023&week=12
+2023-11-23 14:13:36 INFO turkey_bowl.aggregate - All player ids in pulled player points exist in player_ids.json
+2023-11-23 14:13:36 INFO turkey_bowl.aggregate - WARNING: Logan has players with NaN values: ['Antonio Gibson']
+2023-11-23 14:13:36 INFO turkey_bowl.aggregate - WARNING: Dodd has players with NaN values: ['Elijah Mitchell']
+2023-11-23 14:13:36 INFO turkey_bowl.aggregate - Writing robust player points summary to /Users/logan/Desktop/repos/turkey-bowl/archive/2023/2023_12_robust_participant_player_pts.xlsx...
+2023-11-23 14:13:36 INFO turkey_bowl.leader_board -
+
+### LOGAN stats ###
+              Position               Player Team  ACTUAL_pts  PROJ_pts
+0                   QB           Jared Goff  DET        5.74     18.62
+1                 RB_1  Christian McCaffrey   SF         NaN     20.92
+2                 RB_2       Brian Robinson  WAS         NaN     16.83
+3                 WR_1        Tyler Lockett  SEA         NaN     14.04
+4                 WR_2          Romeo Doubs   GB        6.70     11.43
+5                   TE        George Kittle   SF         NaN     14.78
+6      Flex (RB/WR/TE)       Michael Gallup  DAL         NaN      8.75
+7                    K       Brandon Aubrey  DAL         NaN      6.35
+8  Defense (Team Name)     Seattle Seahawks  SEA         NaN      6.26
+9     Bench (RB/WR/TE)       Antonio Gibson  WAS         NaN       NaN
+
+2023-11-23 14:13:36 INFO turkey_bowl.leader_board -
+
+### YEAGER stats ###
+              Position            Player Team  ACTUAL_pts  PROJ_pts
+0                   QB       Brock Purdy   SF         NaN     18.91
+1                 RB_1   Zach Charbonnet  SEA         NaN     12.34
+2                 RB_2  David Montgomery  DET        14.7     11.31
+3                 WR_1       CeeDee Lamb  DAL         NaN     21.78
+4                 WR_2       Jayden Reed   GB        15.0     12.54
+5                   TE       Sam LaPorta  DET        12.6     10.58
+6      Flex (RB/WR/TE)      Jahan Dotson  WAS         NaN      9.48
+7                    K    Anders Carlson   GB         5.0      5.08
+8  Defense (Team Name)     Detroit Lions  DET         0.0      6.56
+9     Bench (RB/WR/TE)     Curtis Samuel  WAS         NaN      7.83
+
+2023-11-23 14:13:36 INFO turkey_bowl.leader_board -
+
+### CINDY stats ###
+              Position               Player Team  ACTUAL_pts  PROJ_pts
+0                   QB         Dak Prescott  DAL         NaN     20.32
+1                 RB_1        DeeJay Dallas  SEA         NaN      2.14
+2                 RB_2  Chris Rodriguez Jr.  WAS         NaN      3.47
+3                 WR_1           DK Metcalf  SEA         NaN     13.89
+4                 WR_2   Jaxon Smith-Njigba  SEA         NaN     10.09
+5                   TE        Jake Ferguson  DAL         NaN      9.31
+6      Flex (RB/WR/TE)     Jameson Williams  DET         2.3      5.56
+7                    K          Jason Myers  SEA         NaN      6.40
+8  Defense (Team Name)    Green Bay Packers   GB        16.0      6.37
+9     Bench (RB/WR/TE)       Jauan Jennings   SF         NaN      3.59
+
+2023-11-23 14:13:36 INFO turkey_bowl.leader_board -
+
+### DODD stats ###
+              Position           Player Team  ACTUAL_pts  PROJ_pts
+0                   QB      Jordan Love   GB       22.92     16.14
+1                 RB_1     Jahmyr Gibbs  DET        6.40      8.40
+2                 RB_2      Rico Dowdle  DAL         NaN      5.14
+3                 WR_1    Brandon Aiyuk   SF         NaN     16.94
+4                 WR_2   Terry McLaurin  WAS         NaN     11.14
+5                   TE     Logan Thomas  WAS         NaN      8.45
+6      Flex (RB/WR/TE)    Brandin Cooks  DAL         NaN     11.94
+7                    K       Jake Moody   SF         NaN      6.13
+8  Defense (Team Name)   Dallas Cowboys  DAL         NaN      7.44
+9     Bench (RB/WR/TE)  Elijah Mitchell   RB         NaN       NaN
+
+2023-11-23 14:13:36 INFO turkey_bowl.leader_board -
+
+### BECCA_HUD stats ###
+              Position               Player Team  ACTUAL_pts  PROJ_pts
+0                   QB           Sam Howell  WAS         NaN     17.69
+1                 RB_1         Tony Pollard  DAL         NaN     13.81
+2                 RB_2            AJ Dillon   GB        10.3     10.94
+3                 WR_1    Amon-Ra St. Brown  DET        10.6     17.57
+4                 WR_2         Deebo Samuel   SF         NaN     12.84
+5                   TE            Noah Fant  SEA         NaN      4.95
+6      Flex (RB/WR/TE)     Christian Watson   GB        20.4     10.76
+7                    K      Riley Patterson  DET         0.0      6.47
+8  Defense (Team Name)  San Francisco 49ers   SF         NaN      6.76
+9     Bench (RB/WR/TE)        Josh Reynolds  DET         1.3      6.04
+
+2023-11-23 14:13:36 INFO turkey_bowl.leader_board - Yeager winning with 47.3 pts
+             PTS  margin  pts_back
+Yeager     47.30    6.00      0.00
+Becca_Hud  41.30   11.98      6.00
+Dodd       29.32   11.02     17.98
+Cindy      18.30    5.86     29.00
+Logan      12.44     NaN     34.86
+
+2023-11-23 14:13:36 INFO turkey_bowl.leader_board - Saving LeaderBoard to /Users/logan/Desktop/repos/turkey-bowl/archive/2023/2023_leader_board.xlsx...
+2023-11-23 14:45:43 INFO turkey_bowl.cli -
+
+-------------------- Scraping Player Actual Points ---------------------
+
+2023-11-23 14:45:43 INFO turkey_bowl.scrape - Collecting actual player points...
+2023-11-23 14:45:46 INFO turkey_bowl.cli -
+
+-------------------- Scraping Player Actual Points ---------------------
+
+2023-11-23 14:45:46 INFO turkey_bowl.scrape - Collecting actual player points...
+2023-11-23 14:45:48 INFO turkey_bowl.scrape - Successful API response obtained for: https://api.fantasy.nfl.com/v2/players/weekstats?season=2023&week=12
+2023-11-23 14:45:48 INFO turkey_bowl.aggregate - All player ids in pulled player points exist in player_ids.json
+2023-11-23 14:45:48 INFO turkey_bowl.aggregate - WARNING: Logan has players with NaN values: ['Antonio Gibson']
+2023-11-23 14:45:48 INFO turkey_bowl.aggregate - WARNING: Dodd has players with NaN values: ['Elijah Mitchell']
+2023-11-23 14:45:48 INFO turkey_bowl.aggregate - Writing robust player points summary to /Users/logan/Desktop/repos/turkey-bowl/archive/2023/2023_12_robust_participant_player_pts.xlsx...
+2023-11-23 14:45:48 INFO turkey_bowl.leader_board -
+
+### LOGAN stats ###
+              Position               Player Team  ACTUAL_pts  PROJ_pts
+0                   QB           Jared Goff  DET       18.18     18.62
+1                 RB_1  Christian McCaffrey   SF         NaN     20.92
+2                 RB_2       Brian Robinson  WAS         NaN     16.83
+3                 WR_1        Tyler Lockett  SEA         NaN     14.04
+4                 WR_2          Romeo Doubs   GB        6.70     11.43
+5                   TE        George Kittle   SF         NaN     14.78
+6      Flex (RB/WR/TE)       Michael Gallup  DAL         NaN      8.75
+7                    K       Brandon Aubrey  DAL         NaN      6.35
+8  Defense (Team Name)     Seattle Seahawks  SEA         NaN      6.26
+9     Bench (RB/WR/TE)       Antonio Gibson  WAS         NaN       NaN
+
+2023-11-23 14:45:48 INFO turkey_bowl.leader_board -
+
+### YEAGER stats ###
+              Position            Player Team  ACTUAL_pts  PROJ_pts
+0                   QB       Brock Purdy   SF         NaN     18.91
+1                 RB_1   Zach Charbonnet  SEA         NaN     12.34
+2                 RB_2  David Montgomery  DET        15.1     11.31
+3                 WR_1       CeeDee Lamb  DAL         NaN     21.78
+4                 WR_2       Jayden Reed   GB        15.0     12.54
+5                   TE       Sam LaPorta  DET        17.7     10.58
+6      Flex (RB/WR/TE)      Jahan Dotson  WAS         NaN      9.48
+7                    K    Anders Carlson   GB         5.0      5.08
+8  Defense (Team Name)     Detroit Lions  DET         0.0      6.56
+9     Bench (RB/WR/TE)     Curtis Samuel  WAS         NaN      7.83
+
+2023-11-23 14:45:48 INFO turkey_bowl.leader_board -
+
+### CINDY stats ###
+              Position               Player Team  ACTUAL_pts  PROJ_pts
+0                   QB         Dak Prescott  DAL         NaN     20.32
+1                 RB_1        DeeJay Dallas  SEA         NaN      2.14
+2                 RB_2  Chris Rodriguez Jr.  WAS         NaN      3.47
+3                 WR_1           DK Metcalf  SEA         NaN     13.89
+4                 WR_2   Jaxon Smith-Njigba  SEA         NaN     10.09
+5                   TE        Jake Ferguson  DAL         NaN      9.31
+6      Flex (RB/WR/TE)     Jameson Williams  DET         7.1      5.56
+7                    K          Jason Myers  SEA         NaN      6.40
+8  Defense (Team Name)    Green Bay Packers   GB        15.0      6.37
+9     Bench (RB/WR/TE)       Jauan Jennings   SF         NaN      3.59
+
+2023-11-23 14:45:48 INFO turkey_bowl.leader_board -
+
+### DODD stats ###
+              Position           Player Team  ACTUAL_pts  PROJ_pts
+0                   QB      Jordan Love   GB       26.42     16.14
+1                 RB_1     Jahmyr Gibbs  DET       11.30      8.40
+2                 RB_2      Rico Dowdle  DAL         NaN      5.14
+3                 WR_1    Brandon Aiyuk   SF         NaN     16.94
+4                 WR_2   Terry McLaurin  WAS         NaN     11.14
+5                   TE     Logan Thomas  WAS         NaN      8.45
+6      Flex (RB/WR/TE)    Brandin Cooks  DAL         NaN     11.94
+7                    K       Jake Moody   SF         NaN      6.13
+8  Defense (Team Name)   Dallas Cowboys  DAL         NaN      7.44
+9     Bench (RB/WR/TE)  Elijah Mitchell   RB         NaN       NaN
+
+2023-11-23 14:45:48 INFO turkey_bowl.leader_board -
+
+### BECCA_HUD stats ###
+              Position               Player Team  ACTUAL_pts  PROJ_pts
+0                   QB           Sam Howell  WAS         NaN     17.69
+1                 RB_1         Tony Pollard  DAL         NaN     13.81
+2                 RB_2            AJ Dillon   GB        11.1     10.94
+3                 WR_1    Amon-Ra St. Brown  DET        18.5     17.57
+4                 WR_2         Deebo Samuel   SF         NaN     12.84
+5                   TE            Noah Fant  SEA         NaN      4.95
+6      Flex (RB/WR/TE)     Christian Watson   GB        20.4     10.76
+7                    K      Riley Patterson  DET         0.0      6.47
+8  Defense (Team Name)  San Francisco 49ers   SF         NaN      6.76
+9     Bench (RB/WR/TE)        Josh Reynolds  DET         9.5      6.04
+
+2023-11-23 14:45:48 INFO turkey_bowl.leader_board - Yeager winning with 52.8 pts
+             PTS  margin  pts_back
+Yeager     52.80    2.80      0.00
+Becca_Hud  50.00   12.28      2.80
+Dodd       37.72   12.84     15.08
+Logan      24.88    2.78     27.92
+Cindy      22.10     NaN     30.70
+
+2023-11-23 14:45:48 INFO turkey_bowl.leader_board - Saving LeaderBoard to /Users/logan/Desktop/repos/turkey-bowl/archive/2023/2023_leader_board.xlsx...
+2023-11-23 16:17:29 INFO turkey_bowl.cli -
+
+-------------------- Scraping Player Actual Points ---------------------
+
+2023-11-23 16:17:29 INFO turkey_bowl.scrape - Collecting actual player points...
+2023-11-23 16:17:30 INFO turkey_bowl.scrape - Successful API response obtained for: https://api.fantasy.nfl.com/v2/players/weekstats?season=2023&week=12
+2023-11-23 16:17:30 INFO turkey_bowl.aggregate - All player ids in pulled player points exist in player_ids.json
+2023-11-23 16:17:31 INFO turkey_bowl.aggregate - WARNING: Dodd has players with NaN values: ['Elijah Mitchell']
+2023-11-23 16:17:31 INFO turkey_bowl.aggregate - Writing robust player points summary to /Users/logan/Desktop/repos/turkey-bowl/archive/2023/2023_12_robust_participant_player_pts.xlsx...
+2023-11-23 16:17:31 INFO turkey_bowl.leader_board -
+
+### LOGAN stats ###
+              Position               Player Team  ACTUAL_pts  PROJ_pts
+0                   QB           Jared Goff  DET       18.18     18.62
+1                 RB_1  Christian McCaffrey   SF         NaN     20.92
+2                 RB_2       Brian Robinson  WAS        4.50     16.83
+3                 WR_1        Tyler Lockett  SEA         NaN     14.04
+4                 WR_2          Romeo Doubs   GB        6.70     11.43
+5                   TE        George Kittle   SF         NaN     14.78
+6      Flex (RB/WR/TE)       Michael Gallup  DAL        2.30      8.75
+7                    K       Brandon Aubrey  DAL        1.00      6.35
+8  Defense (Team Name)     Seattle Seahawks  SEA         NaN      6.26
+9     Bench (RB/WR/TE)       Antonio Gibson  WAS        2.10       NaN
+
+2023-11-23 16:17:31 INFO turkey_bowl.leader_board -
+
+### YEAGER stats ###
+              Position            Player Team  ACTUAL_pts  PROJ_pts
+0                   QB       Brock Purdy   SF         NaN     18.91
+1                 RB_1   Zach Charbonnet  SEA         NaN     12.34
+2                 RB_2  David Montgomery  DET        15.1     11.31
+3                 WR_1       CeeDee Lamb  DAL         1.8     21.78
+4                 WR_2       Jayden Reed   GB        15.0     12.54
+5                   TE       Sam LaPorta  DET        17.7     10.58
+6      Flex (RB/WR/TE)      Jahan Dotson  WAS         2.0      9.48
+7                    K    Anders Carlson   GB         5.0      5.08
+8  Defense (Team Name)     Detroit Lions  DET         0.0      6.56
+9     Bench (RB/WR/TE)     Curtis Samuel  WAS         7.4      7.83
+
+2023-11-23 16:17:31 INFO turkey_bowl.leader_board -
+
+### CINDY stats ###
+              Position               Player Team  ACTUAL_pts  PROJ_pts
+0                   QB         Dak Prescott  DAL         7.8     20.32
+1                 RB_1        DeeJay Dallas  SEA         NaN      2.14
+2                 RB_2  Chris Rodriguez Jr.  WAS         NaN      3.47
+3                 WR_1           DK Metcalf  SEA         NaN     13.89
+4                 WR_2   Jaxon Smith-Njigba  SEA         NaN     10.09
+5                   TE        Jake Ferguson  DAL         4.5      9.31
+6      Flex (RB/WR/TE)     Jameson Williams  DET         7.1      5.56
+7                    K          Jason Myers  SEA         NaN      6.40
+8  Defense (Team Name)    Green Bay Packers   GB        15.0      6.37
+9     Bench (RB/WR/TE)       Jauan Jennings   SF         NaN      3.59
+
+2023-11-23 16:17:31 INFO turkey_bowl.leader_board -
+
+### DODD stats ###
+              Position           Player Team  ACTUAL_pts  PROJ_pts
+0                   QB      Jordan Love   GB       26.62     16.14
+1                 RB_1     Jahmyr Gibbs  DET       11.30      8.40
+2                 RB_2      Rico Dowdle  DAL        9.20      5.14
+3                 WR_1    Brandon Aiyuk   SF         NaN     16.94
+4                 WR_2   Terry McLaurin  WAS        1.80     11.14
+5                   TE     Logan Thomas  WAS         NaN      8.45
+6      Flex (RB/WR/TE)    Brandin Cooks  DAL        0.00     11.94
+7                    K       Jake Moody   SF         NaN      6.13
+8  Defense (Team Name)   Dallas Cowboys  DAL       11.00      7.44
+9     Bench (RB/WR/TE)  Elijah Mitchell   RB         NaN       NaN
+
+2023-11-23 16:17:31 INFO turkey_bowl.leader_board -
+
+### BECCA_HUD stats ###
+              Position               Player Team  ACTUAL_pts  PROJ_pts
+0                   QB           Sam Howell  WAS        3.68     17.69
+1                 RB_1         Tony Pollard  DAL        4.10     13.81
+2                 RB_2            AJ Dillon   GB       11.10     10.94
+3                 WR_1    Amon-Ra St. Brown  DET       18.50     17.57
+4                 WR_2         Deebo Samuel   SF         NaN     12.84
+5                   TE            Noah Fant  SEA         NaN      4.95
+6      Flex (RB/WR/TE)     Christian Watson   GB       20.40     10.76
+7                    K      Riley Patterson  DET        0.00      6.47
+8  Defense (Team Name)  San Francisco 49ers   SF         NaN      6.76
+9     Bench (RB/WR/TE)        Josh Reynolds  DET        9.50      6.04
+
+2023-11-23 16:17:31 INFO turkey_bowl.leader_board - Dodd winning with 59.92 pts
+             PTS  margin  pts_back
+Dodd       59.92    2.14      0.00
+Becca_Hud  57.78    1.18      2.14
+Yeager     56.60   22.20      3.32
+Cindy      34.40    1.72     25.52
+Logan      32.68     NaN     27.24
+
+2023-11-23 16:17:31 INFO turkey_bowl.leader_board - Saving LeaderBoard to /Users/logan/Desktop/repos/turkey-bowl/archive/2023/2023_leader_board.xlsx...
+2023-11-23 16:29:08 INFO turkey_bowl.cli -
+
+-------------------- Scraping Player Actual Points ---------------------
+
+2023-11-23 16:29:08 INFO turkey_bowl.scrape - Collecting actual player points...
+2023-11-23 16:29:09 INFO turkey_bowl.scrape - Successful API response obtained for: https://api.fantasy.nfl.com/v2/players/weekstats?season=2023&week=12
+2023-11-23 16:29:09 INFO turkey_bowl.aggregate - All player ids in pulled player points exist in player_ids.json
+2023-11-23 16:29:09 INFO turkey_bowl.aggregate - WARNING: Dodd has players with NaN values: ['Elijah Mitchell']
+2023-11-23 16:29:09 INFO turkey_bowl.aggregate - Writing robust player points summary to /Users/logan/Desktop/repos/turkey-bowl/archive/2023/2023_12_robust_participant_player_pts.xlsx...
+2023-11-23 16:29:09 INFO turkey_bowl.leader_board -
+
+### LOGAN stats ###
+              Position               Player Team  ACTUAL_pts  PROJ_pts
+0                   QB           Jared Goff  DET       18.18     18.62
+1                 RB_1  Christian McCaffrey   SF         NaN     20.92
+2                 RB_2       Brian Robinson  WAS        6.10     16.83
+3                 WR_1        Tyler Lockett  SEA         NaN     14.04
+4                 WR_2          Romeo Doubs   GB        6.70     11.43
+5                   TE        George Kittle   SF         NaN     14.78
+6      Flex (RB/WR/TE)       Michael Gallup  DAL        2.30      8.75
+7                    K       Brandon Aubrey  DAL        1.00      6.35
+8  Defense (Team Name)     Seattle Seahawks  SEA         NaN      6.26
+9     Bench (RB/WR/TE)       Antonio Gibson  WAS        2.10       NaN
+
+2023-11-23 16:29:09 INFO turkey_bowl.leader_board -
+
+### YEAGER stats ###
+              Position            Player Team  ACTUAL_pts  PROJ_pts
+0                   QB       Brock Purdy   SF         NaN     18.91
+1                 RB_1   Zach Charbonnet  SEA         NaN     12.34
+2                 RB_2  David Montgomery  DET        15.1     11.31
+3                 WR_1       CeeDee Lamb  DAL         1.8     21.78
+4                 WR_2       Jayden Reed   GB        15.0     12.54
+5                   TE       Sam LaPorta  DET        17.7     10.58
+6      Flex (RB/WR/TE)      Jahan Dotson  WAS         4.2      9.48
+7                    K    Anders Carlson   GB         5.0      5.08
+8  Defense (Team Name)     Detroit Lions  DET         0.0      6.56
+9     Bench (RB/WR/TE)     Curtis Samuel  WAS         7.4      7.83
+
+2023-11-23 16:29:09 INFO turkey_bowl.leader_board -
+
+### CINDY stats ###
+              Position               Player Team  ACTUAL_pts  PROJ_pts
+0                   QB         Dak Prescott  DAL         7.8     20.32
+1                 RB_1        DeeJay Dallas  SEA         NaN      2.14
+2                 RB_2  Chris Rodriguez Jr.  WAS         NaN      3.47
+3                 WR_1           DK Metcalf  SEA         NaN     13.89
+4                 WR_2   Jaxon Smith-Njigba  SEA         NaN     10.09
+5                   TE        Jake Ferguson  DAL         4.5      9.31
+6      Flex (RB/WR/TE)     Jameson Williams  DET         7.1      5.56
+7                    K          Jason Myers  SEA         NaN      6.40
+8  Defense (Team Name)    Green Bay Packers   GB        15.0      6.37
+9     Bench (RB/WR/TE)       Jauan Jennings   SF         NaN      3.59
+
+2023-11-23 16:29:09 INFO turkey_bowl.leader_board -
+
+### DODD stats ###
+              Position           Player Team  ACTUAL_pts  PROJ_pts
+0                   QB      Jordan Love   GB       26.62     16.14
+1                 RB_1     Jahmyr Gibbs  DET       11.30      8.40
+2                 RB_2      Rico Dowdle  DAL        9.20      5.14
+3                 WR_1    Brandon Aiyuk   SF         NaN     16.94
+4                 WR_2   Terry McLaurin  WAS        1.80     11.14
+5                   TE     Logan Thomas  WAS        1.20      8.45
+6      Flex (RB/WR/TE)    Brandin Cooks  DAL        0.00     11.94
+7                    K       Jake Moody   SF         NaN      6.13
+8  Defense (Team Name)   Dallas Cowboys  DAL        8.00      7.44
+9     Bench (RB/WR/TE)  Elijah Mitchell   RB         NaN       NaN
+
+2023-11-23 16:29:09 INFO turkey_bowl.leader_board -
+
+### BECCA_HUD stats ###
+              Position               Player Team  ACTUAL_pts  PROJ_pts
+0                   QB           Sam Howell  WAS        3.92     17.69
+1                 RB_1         Tony Pollard  DAL        4.10     13.81
+2                 RB_2            AJ Dillon   GB       11.10     10.94
+3                 WR_1    Amon-Ra St. Brown  DET       18.50     17.57
+4                 WR_2         Deebo Samuel   SF         NaN     12.84
+5                   TE            Noah Fant  SEA         NaN      4.95
+6      Flex (RB/WR/TE)     Christian Watson   GB       20.40     10.76
+7                    K      Riley Patterson  DET        0.00      6.47
+8  Defense (Team Name)  San Francisco 49ers   SF         NaN      6.76
+9     Bench (RB/WR/TE)        Josh Reynolds  DET        9.50      6.04
+
+2023-11-23 16:29:09 INFO turkey_bowl.leader_board - Yeager winning with 58.8 pts
+             PTS  margin  pts_back
+Yeager     58.80    0.68      0.00
+Dodd       58.12    0.10      0.68
+Becca_Hud  58.02   23.62      0.78
+Cindy      34.40    0.12     24.40
+Logan      34.28     NaN     24.52
+
+2023-11-23 16:29:09 INFO turkey_bowl.leader_board - Saving LeaderBoard to /Users/logan/Desktop/repos/turkey-bowl/archive/2023/2023_leader_board.xlsx...
+2023-11-23 17:15:33 INFO turkey_bowl.cli -
+
+-------------------- Scraping Player Actual Points ---------------------
+
+2023-11-23 17:15:33 INFO turkey_bowl.scrape - Collecting actual player points...
+2023-11-23 17:15:34 INFO turkey_bowl.scrape - Successful API response obtained for: https://api.fantasy.nfl.com/v2/players/weekstats?season=2023&week=12
+2023-11-23 17:15:34 INFO turkey_bowl.aggregate - All player ids in pulled player points exist in player_ids.json
+2023-11-23 17:15:34 INFO turkey_bowl.aggregate - WARNING: Dodd has players with NaN values: ['Elijah Mitchell']
+2023-11-23 17:15:34 INFO turkey_bowl.aggregate - Writing robust player points summary to /Users/logan/Desktop/repos/turkey-bowl/archive/2023/2023_12_robust_participant_player_pts.xlsx...
+2023-11-23 17:15:34 INFO turkey_bowl.leader_board -
+
+### LOGAN stats ###
+              Position               Player Team  ACTUAL_pts  PROJ_pts
+0                   QB           Jared Goff  DET       18.18     18.62
+1                 RB_1  Christian McCaffrey   SF         NaN     20.92
+2                 RB_2       Brian Robinson  WAS        7.10     16.83
+3                 WR_1        Tyler Lockett  SEA         NaN     14.04
+4                 WR_2          Romeo Doubs   GB        6.70     11.43
+5                   TE        George Kittle   SF         NaN     14.78
+6      Flex (RB/WR/TE)       Michael Gallup  DAL        2.30      8.75
+7                    K       Brandon Aubrey  DAL        2.00      6.35
+8  Defense (Team Name)     Seattle Seahawks  SEA         NaN      6.26
+9     Bench (RB/WR/TE)       Antonio Gibson  WAS        3.00       NaN
+
+2023-11-23 17:15:34 INFO turkey_bowl.leader_board -
+
+### YEAGER stats ###
+              Position            Player Team  ACTUAL_pts  PROJ_pts
+0                   QB       Brock Purdy   SF         NaN     18.91
+1                 RB_1   Zach Charbonnet  SEA         NaN     12.34
+2                 RB_2  David Montgomery  DET        15.1     11.31
+3                 WR_1       CeeDee Lamb  DAL         4.4     21.78
+4                 WR_2       Jayden Reed   GB        15.0     12.54
+5                   TE       Sam LaPorta  DET        17.7     10.58
+6      Flex (RB/WR/TE)      Jahan Dotson  WAS         6.7      9.48
+7                    K    Anders Carlson   GB         5.0      5.08
+8  Defense (Team Name)     Detroit Lions  DET         0.0      6.56
+9     Bench (RB/WR/TE)     Curtis Samuel  WAS        11.5      7.83
+
+2023-11-23 17:15:34 INFO turkey_bowl.leader_board -
+
+### CINDY stats ###
+              Position               Player Team  ACTUAL_pts  PROJ_pts
+0                   QB         Dak Prescott  DAL       17.84     20.32
+1                 RB_1        DeeJay Dallas  SEA         NaN      2.14
+2                 RB_2  Chris Rodriguez Jr.  WAS         NaN      3.47
+3                 WR_1           DK Metcalf  SEA         NaN     13.89
+4                 WR_2   Jaxon Smith-Njigba  SEA         NaN     10.09
+5                   TE        Jake Ferguson  DAL        4.50      9.31
+6      Flex (RB/WR/TE)     Jameson Williams  DET        7.10      5.56
+7                    K          Jason Myers  SEA         NaN      6.40
+8  Defense (Team Name)    Green Bay Packers   GB       15.00      6.37
+9     Bench (RB/WR/TE)       Jauan Jennings   SF         NaN      3.59
+
+2023-11-23 17:15:34 INFO turkey_bowl.leader_board -
+
+### DODD stats ###
+              Position           Player Team  ACTUAL_pts  PROJ_pts
+0                   QB      Jordan Love   GB       26.62     16.14
+1                 RB_1     Jahmyr Gibbs  DET       11.30      8.40
+2                 RB_2      Rico Dowdle  DAL        9.20      5.14
+3                 WR_1    Brandon Aiyuk   SF         NaN     16.94
+4                 WR_2   Terry McLaurin  WAS        4.00     11.14
+5                   TE     Logan Thomas  WAS        3.50      8.45
+6      Flex (RB/WR/TE)    Brandin Cooks  DAL       11.90     11.94
+7                    K       Jake Moody   SF         NaN      6.13
+8  Defense (Team Name)   Dallas Cowboys  DAL        6.00      7.44
+9     Bench (RB/WR/TE)  Elijah Mitchell   RB         NaN       NaN
+
+2023-11-23 17:15:34 INFO turkey_bowl.leader_board -
+
+### BECCA_HUD stats ###
+              Position               Player Team  ACTUAL_pts  PROJ_pts
+0                   QB           Sam Howell  WAS        12.9     17.69
+1                 RB_1         Tony Pollard  DAL        12.4     13.81
+2                 RB_2            AJ Dillon   GB        11.1     10.94
+3                 WR_1    Amon-Ra St. Brown  DET        18.5     17.57
+4                 WR_2         Deebo Samuel   SF         NaN     12.84
+5                   TE            Noah Fant  SEA         NaN      4.95
+6      Flex (RB/WR/TE)     Christian Watson   GB        20.4     10.76
+7                    K      Riley Patterson  DET         0.0      6.47
+8  Defense (Team Name)  San Francisco 49ers   SF         NaN      6.76
+9     Bench (RB/WR/TE)        Josh Reynolds  DET         9.5      6.04
+
+2023-11-23 17:15:34 INFO turkey_bowl.leader_board - Becca_Hud winning with 75.3 pts
+             PTS  margin  pts_back
+Becca_Hud  75.30    2.78      0.00
+Dodd       72.52    8.62      2.78
+Yeager     63.90   19.46     11.40
+Cindy      44.44    8.16     30.86
+Logan      36.28     NaN     39.02
+
+2023-11-23 17:15:34 INFO turkey_bowl.leader_board - Saving LeaderBoard to /Users/logan/Desktop/repos/turkey-bowl/archive/2023/2023_leader_board.xlsx...
+2023-11-23 18:29:14 INFO turkey_bowl.cli -
+
+-------------------- Scraping Player Actual Points ---------------------
+
+2023-11-23 18:29:14 INFO turkey_bowl.scrape - Collecting actual player points...
+2023-11-23 18:29:17 INFO turkey_bowl.cli -
+
+-------------------- Scraping Player Actual Points ---------------------
+
+2023-11-23 18:29:17 INFO turkey_bowl.scrape - Collecting actual player points...
+2023-11-23 18:29:18 INFO turkey_bowl.scrape - Successful API response obtained for: https://api.fantasy.nfl.com/v2/players/weekstats?season=2023&week=12
+2023-11-23 18:29:18 INFO turkey_bowl.aggregate - All player ids in pulled player points exist in player_ids.json
+2023-11-23 18:29:19 INFO turkey_bowl.aggregate - WARNING: Dodd has players with NaN values: ['Elijah Mitchell']
+2023-11-23 18:29:19 INFO turkey_bowl.aggregate - Writing robust player points summary to /Users/logan/Desktop/repos/turkey-bowl/archive/2023/2023_12_robust_participant_player_pts.xlsx...
+2023-11-23 18:29:19 INFO turkey_bowl.leader_board -
+
+### LOGAN stats ###
+              Position               Player Team  ACTUAL_pts  PROJ_pts
+0                   QB           Jared Goff  DET       18.18     18.62
+1                 RB_1  Christian McCaffrey   SF         NaN     20.92
+2                 RB_2       Brian Robinson  WAS        8.40     16.83
+3                 WR_1        Tyler Lockett  SEA         NaN     14.04
+4                 WR_2          Romeo Doubs   GB        6.70     11.43
+5                   TE        George Kittle   SF         NaN     14.78
+6      Flex (RB/WR/TE)       Michael Gallup  DAL        2.30      8.75
+7                    K       Brandon Aubrey  DAL        8.00      6.35
+8  Defense (Team Name)     Seattle Seahawks  SEA         NaN      6.26
+9     Bench (RB/WR/TE)       Antonio Gibson  WAS        5.50       NaN
+
+2023-11-23 18:29:19 INFO turkey_bowl.leader_board -
+
+### YEAGER stats ###
+              Position            Player Team  ACTUAL_pts  PROJ_pts
+0                   QB       Brock Purdy   SF         NaN     18.91
+1                 RB_1   Zach Charbonnet  SEA         NaN     12.34
+2                 RB_2  David Montgomery  DET        15.1     11.31
+3                 WR_1       CeeDee Lamb  DAL        17.3     21.78
+4                 WR_2       Jayden Reed   GB        15.0     12.54
+5                   TE       Sam LaPorta  DET        17.7     10.58
+6      Flex (RB/WR/TE)      Jahan Dotson  WAS        10.2      9.48
+7                    K    Anders Carlson   GB         5.0      5.08
+8  Defense (Team Name)     Detroit Lions  DET         0.0      6.56
+9     Bench (RB/WR/TE)     Curtis Samuel  WAS        19.0      7.83
+
+2023-11-23 18:29:19 INFO turkey_bowl.leader_board -
+
+### CINDY stats ###
+              Position               Player Team  ACTUAL_pts  PROJ_pts
+0                   QB         Dak Prescott  DAL       32.24     20.32
+1                 RB_1        DeeJay Dallas  SEA         NaN      2.14
+2                 RB_2  Chris Rodriguez Jr.  WAS         NaN      3.47
+3                 WR_1           DK Metcalf  SEA         NaN     13.89
+4                 WR_2   Jaxon Smith-Njigba  SEA         NaN     10.09
+5                   TE        Jake Ferguson  DAL        4.50      9.31
+6      Flex (RB/WR/TE)     Jameson Williams  DET        7.10      5.56
+7                    K          Jason Myers  SEA         NaN      6.40
+8  Defense (Team Name)    Green Bay Packers   GB       15.00      6.37
+9     Bench (RB/WR/TE)       Jauan Jennings   SF         NaN      3.59
+
+2023-11-23 18:29:19 INFO turkey_bowl.leader_board -
+
+### DODD stats ###
+              Position           Player Team  ACTUAL_pts  PROJ_pts
+0                   QB      Jordan Love   GB       26.62     16.14
+1                 RB_1     Jahmyr Gibbs  DET       11.30      8.40
+2                 RB_2      Rico Dowdle  DAL        9.60      5.14
+3                 WR_1    Brandon Aiyuk   SF         NaN     16.94
+4                 WR_2   Terry McLaurin  WAS        9.00     11.14
+5                   TE     Logan Thomas  WAS        3.50      8.45
+6      Flex (RB/WR/TE)    Brandin Cooks  DAL       17.20     11.94
+7                    K       Jake Moody   SF         NaN      6.13
+8  Defense (Team Name)   Dallas Cowboys  DAL        8.00      7.44
+9     Bench (RB/WR/TE)  Elijah Mitchell   RB         NaN       NaN
+
+2023-11-23 18:29:19 INFO turkey_bowl.leader_board -
+
+### BECCA_HUD stats ###
+              Position               Player Team  ACTUAL_pts  PROJ_pts
+0                   QB           Sam Howell  WAS       18.14     17.69
+1                 RB_1         Tony Pollard  DAL       22.30     13.81
+2                 RB_2            AJ Dillon   GB       11.10     10.94
+3                 WR_1    Amon-Ra St. Brown  DET       18.50     17.57
+4                 WR_2         Deebo Samuel   SF         NaN     12.84
+5                   TE            Noah Fant  SEA         NaN      4.95
+6      Flex (RB/WR/TE)     Christian Watson   GB       20.40     10.76
+7                    K      Riley Patterson  DET        0.00      6.47
+8  Defense (Team Name)  San Francisco 49ers   SF         NaN      6.76
+9     Bench (RB/WR/TE)        Josh Reynolds  DET        9.50      6.04
+
+2023-11-23 18:29:19 INFO turkey_bowl.leader_board - Becca_Hud winning with 90.44 pts
+             PTS  margin  pts_back
+Becca_Hud  90.44    5.22      0.00
+Dodd       85.22    4.92      5.22
+Yeager     80.30   21.46     10.14
+Cindy      58.84   15.26     31.60
+Logan      43.58     NaN     46.86
+
+2023-11-23 18:29:19 INFO turkey_bowl.leader_board - Saving LeaderBoard to /Users/logan/Desktop/repos/turkey-bowl/archive/2023/2023_leader_board.xlsx...
+2023-11-23 18:52:12 INFO turkey_bowl.cli -
+
+-------------------- Scraping Player Actual Points ---------------------
+
+2023-11-23 18:52:12 INFO turkey_bowl.scrape - Collecting actual player points...
+2023-11-23 18:52:27 INFO turkey_bowl.cli -
+
+-------------------- Scraping Player Actual Points ---------------------
+
+2023-11-23 18:52:27 INFO turkey_bowl.scrape - Collecting actual player points...
+2023-11-23 18:52:35 INFO turkey_bowl.scrape - Successful API response obtained for: https://api.fantasy.nfl.com/v2/players/weekstats?season=2023&week=12
+2023-11-23 18:52:36 INFO turkey_bowl.aggregate - All player ids in pulled player points exist in player_ids.json
+2023-11-23 18:52:36 INFO turkey_bowl.aggregate - Writing robust player points summary to /Users/logan/Desktop/repos/turkey-bowl/archive/2023/2023_12_robust_participant_player_pts.xlsx...
+2023-11-23 18:52:36 INFO turkey_bowl.leader_board -
+
+### LOGAN stats ###
+              Position               Player Team  ACTUAL_pts  PROJ_pts
+0                   QB           Jared Goff  DET       18.18     18.62
+1                 RB_1  Christian McCaffrey   SF         NaN     20.92
+2                 RB_2       Brian Robinson  WAS        8.40     16.83
+3                 WR_1        Tyler Lockett  SEA         NaN     14.04
+4                 WR_2          Romeo Doubs   GB        6.70     11.43
+5                   TE        George Kittle   SF         NaN     14.78
+6      Flex (RB/WR/TE)       Michael Gallup  DAL        2.30      8.75
+7                    K       Brandon Aubrey  DAL        9.00      6.35
+8  Defense (Team Name)     Seattle Seahawks  SEA         NaN      6.26
+9     Bench (RB/WR/TE)       Antonio Gibson  WAS        6.70       NaN
+
+2023-11-23 18:52:36 INFO turkey_bowl.leader_board -
+
+### YEAGER stats ###
+              Position            Player Team  ACTUAL_pts  PROJ_pts
+0                   QB       Brock Purdy   SF         NaN     18.91
+1                 RB_1   Zach Charbonnet  SEA         NaN     12.34
+2                 RB_2  David Montgomery  DET        15.1     11.31
+3                 WR_1       CeeDee Lamb  DAL        17.3     21.78
+4                 WR_2       Jayden Reed   GB        15.0     12.54
+5                   TE       Sam LaPorta  DET        17.7     10.58
+6      Flex (RB/WR/TE)      Jahan Dotson  WAS        10.2      9.48
+7                    K    Anders Carlson   GB         5.0      5.08
+8  Defense (Team Name)     Detroit Lions  DET         0.0      6.56
+9     Bench (RB/WR/TE)     Curtis Samuel  WAS        19.0      7.83
+
+2023-11-23 18:52:36 INFO turkey_bowl.leader_board -
+
+### CINDY stats ###
+              Position               Player Team  ACTUAL_pts  PROJ_pts
+0                   QB         Dak Prescott  DAL       32.24     20.32
+1                 RB_1        DeeJay Dallas  SEA         NaN      2.14
+2                 RB_2  Chris Rodriguez Jr.  WAS        2.10      3.47
+3                 WR_1           DK Metcalf  SEA         NaN     13.89
+4                 WR_2   Jaxon Smith-Njigba  SEA         NaN     10.09
+5                   TE        Jake Ferguson  DAL        4.50      9.31
+6      Flex (RB/WR/TE)     Jameson Williams  DET        7.10      5.56
+7                    K          Jason Myers  SEA         NaN      6.40
+8  Defense (Team Name)    Green Bay Packers   GB       15.00      6.37
+9     Bench (RB/WR/TE)       Jauan Jennings   SF         NaN      3.59
+
+2023-11-23 18:52:36 INFO turkey_bowl.leader_board -
+
+### DODD stats ###
+              Position           Player Team  ACTUAL_pts  PROJ_pts
+0                   QB      Jordan Love   GB       26.62     16.14
+1                 RB_1     Jahmyr Gibbs  DET       11.30      8.40
+2                 RB_2      Rico Dowdle  DAL        9.60      5.14
+3                 WR_1    Brandon Aiyuk   SF         NaN     16.94
+4                 WR_2   Terry McLaurin  WAS        9.00     11.14
+5                   TE     Logan Thomas  WAS        3.50      8.45
+6      Flex (RB/WR/TE)    Brandin Cooks  DAL       17.20     11.94
+7                    K       Jake Moody   SF         NaN      6.13
+8  Defense (Team Name)   Dallas Cowboys  DAL       16.00      7.44
+9     Bench (RB/WR/TE)  Elijah Mitchell   SF         NaN      4.08
+
+2023-11-23 18:52:36 INFO turkey_bowl.leader_board -
+
+### BECCA_HUD stats ###
+              Position               Player Team  ACTUAL_pts  PROJ_pts
+0                   QB           Sam Howell  WAS        17.3     17.69
+1                 RB_1         Tony Pollard  DAL        22.3     13.81
+2                 RB_2            AJ Dillon   GB        11.1     10.94
+3                 WR_1    Amon-Ra St. Brown  DET        18.5     17.57
+4                 WR_2         Deebo Samuel   SF         NaN     12.84
+5                   TE            Noah Fant  SEA         NaN      4.95
+6      Flex (RB/WR/TE)     Christian Watson   GB        20.4     10.76
+7                    K      Riley Patterson  DET         0.0      6.47
+8  Defense (Team Name)  San Francisco 49ers   SF         NaN      6.76
+9     Bench (RB/WR/TE)        Josh Reynolds  DET         9.5      6.04
+
+2023-11-23 18:52:36 INFO turkey_bowl.leader_board - Dodd winning with 93.22 pts
+             PTS  margin  pts_back
+Dodd       93.22    3.62      0.00
+Becca_Hud  89.60    9.30      3.62
+Yeager     80.30   19.36     12.92
+Cindy      60.94   16.36     32.28
+Logan      44.58     NaN     48.64
+
+2023-11-23 18:52:36 INFO turkey_bowl.leader_board - Saving LeaderBoard to /Users/logan/Desktop/repos/turkey-bowl/archive/2023/2023_leader_board.xlsx...
+2023-11-23 19:04:33 INFO turkey_bowl.cli -
+
+-------------------- Scraping Player Actual Points ---------------------
+
+2023-11-23 19:04:33 INFO turkey_bowl.scrape - Collecting actual player points...
+2023-11-23 19:04:38 INFO turkey_bowl.scrape - Successful API response obtained for: https://api.fantasy.nfl.com/v2/players/weekstats?season=2023&week=12
+2023-11-23 19:04:38 INFO turkey_bowl.aggregate - All player ids in pulled player points exist in player_ids.json
+2023-11-23 19:04:38 INFO turkey_bowl.aggregate - Writing robust player points summary to /Users/logan/Desktop/repos/turkey-bowl/archive/2023/2023_12_robust_participant_player_pts.xlsx...
+2023-11-23 19:04:38 INFO turkey_bowl.leader_board -
+
+### LOGAN stats ###
+              Position               Player Team  ACTUAL_pts  PROJ_pts
+0                   QB           Jared Goff  DET       18.18     18.62
+1                 RB_1  Christian McCaffrey   SF         NaN     20.92
+2                 RB_2       Brian Robinson  WAS        8.40     16.83
+3                 WR_1        Tyler Lockett  SEA         NaN     14.04
+4                 WR_2          Romeo Doubs   GB        6.70     11.43
+5                   TE        George Kittle   SF         NaN     14.78
+6      Flex (RB/WR/TE)       Michael Gallup  DAL        2.30      8.75
+7                    K       Brandon Aubrey  DAL        9.00      6.35
+8  Defense (Team Name)     Seattle Seahawks  SEA         NaN      6.26
+9     Bench (RB/WR/TE)       Antonio Gibson  WAS        6.70       NaN
+
+2023-11-23 19:04:38 INFO turkey_bowl.leader_board -
+
+### YEAGER stats ###
+              Position            Player Team  ACTUAL_pts  PROJ_pts
+0                   QB       Brock Purdy   SF         NaN     18.91
+1                 RB_1   Zach Charbonnet  SEA         NaN     12.34
+2                 RB_2  David Montgomery  DET        15.1     11.31
+3                 WR_1       CeeDee Lamb  DAL        17.3     21.78
+4                 WR_2       Jayden Reed   GB        15.0     12.54
+5                   TE       Sam LaPorta  DET        17.7     10.58
+6      Flex (RB/WR/TE)      Jahan Dotson  WAS        10.2      9.48
+7                    K    Anders Carlson   GB         5.0      5.08
+8  Defense (Team Name)     Detroit Lions  DET         0.0      6.56
+9     Bench (RB/WR/TE)     Curtis Samuel  WAS        19.0      7.83
+
+2023-11-23 19:04:38 INFO turkey_bowl.leader_board -
+
+### CINDY stats ###
+              Position               Player Team  ACTUAL_pts  PROJ_pts
+0                   QB         Dak Prescott  DAL       32.24     20.32
+1                 RB_1        DeeJay Dallas  SEA         NaN      2.14
+2                 RB_2  Chris Rodriguez Jr.  WAS        2.10      3.47
+3                 WR_1           DK Metcalf  SEA         NaN     13.89
+4                 WR_2   Jaxon Smith-Njigba  SEA         NaN     10.09
+5                   TE        Jake Ferguson  DAL        4.50      9.31
+6      Flex (RB/WR/TE)     Jameson Williams  DET        7.10      5.56
+7                    K          Jason Myers  SEA         NaN      6.40
+8  Defense (Team Name)    Green Bay Packers   GB       15.00      6.37
+9     Bench (RB/WR/TE)       Jauan Jennings   SF         NaN      3.59
+
+2023-11-23 19:04:38 INFO turkey_bowl.leader_board -
+
+### DODD stats ###
+              Position           Player Team  ACTUAL_pts  PROJ_pts
+0                   QB      Jordan Love   GB       26.62     16.14
+1                 RB_1     Jahmyr Gibbs  DET       11.30      8.40
+2                 RB_2      Rico Dowdle  DAL        9.60      5.14
+3                 WR_1    Brandon Aiyuk   SF         NaN     16.94
+4                 WR_2   Terry McLaurin  WAS        9.00     11.14
+5                   TE     Logan Thomas  WAS        3.50      8.45
+6      Flex (RB/WR/TE)    Brandin Cooks  DAL       17.20     11.94
+7                    K       Jake Moody   SF         NaN      6.13
+8  Defense (Team Name)   Dallas Cowboys  DAL       16.00      7.44
+9     Bench (RB/WR/TE)  Elijah Mitchell   SF         NaN      4.08
+
+2023-11-23 19:04:38 INFO turkey_bowl.leader_board -
+
+### BECCA_HUD stats ###
+              Position               Player Team  ACTUAL_pts  PROJ_pts
+0                   QB           Sam Howell  WAS        17.3     17.69
+1                 RB_1         Tony Pollard  DAL        22.3     13.81
+2                 RB_2            AJ Dillon   GB        11.1     10.94
+3                 WR_1    Amon-Ra St. Brown  DET        18.5     17.57
+4                 WR_2         Deebo Samuel   SF         NaN     12.84
+5                   TE            Noah Fant  SEA         NaN      4.95
+6      Flex (RB/WR/TE)     Christian Watson   GB        20.4     10.76
+7                    K      Riley Patterson  DET         0.0      6.47
+8  Defense (Team Name)  San Francisco 49ers   SF         NaN      6.76
+9     Bench (RB/WR/TE)        Josh Reynolds  DET         9.5      6.04
+
+2023-11-23 19:04:38 INFO turkey_bowl.leader_board - Dodd winning with 93.22 pts
+             PTS  margin  pts_back
+Dodd       93.22    3.62      0.00
+Becca_Hud  89.60    9.30      3.62
+Yeager     80.30   19.36     12.92
+Cindy      60.94   16.36     32.28
+Logan      44.58     NaN     48.64
+
+2023-11-23 19:04:38 INFO turkey_bowl.leader_board - Saving LeaderBoard to /Users/logan/Desktop/repos/turkey-bowl/archive/2023/2023_leader_board.xlsx...
+2023-11-23 20:56:05 INFO turkey_bowl.cli -
+
+-------------------- Scraping Player Actual Points ---------------------
+
+2023-11-23 20:56:05 INFO turkey_bowl.scrape - Collecting actual player points...
+2023-11-23 20:56:24 INFO turkey_bowl.scrape - Successful API response obtained for: https://api.fantasy.nfl.com/v2/players/weekstats?season=2023&week=12
+2023-11-23 20:56:31 INFO turkey_bowl.aggregate - Undocumented player 2567127: Jon Rhattigan
+2023-11-23 20:56:32 INFO turkey_bowl.aggregate - Undocumented player 2568219: Samuel Womack
+2023-11-23 20:56:32 INFO turkey_bowl.aggregate - Writing robust player points summary to /Users/logan/Desktop/repos/turkey-bowl/archive/2023/2023_12_robust_participant_player_pts.xlsx...
+2023-11-23 20:56:32 INFO turkey_bowl.leader_board -
+
+### LOGAN stats ###
+              Position               Player Team  ACTUAL_pts  PROJ_pts
+0                   QB           Jared Goff  DET       18.18     18.62
+1                 RB_1  Christian McCaffrey   SF       26.40     20.92
+2                 RB_2       Brian Robinson  WAS        8.40     16.83
+3                 WR_1        Tyler Lockett  SEA        1.90     14.04
+4                 WR_2          Romeo Doubs   GB        6.70     11.43
+5                   TE        George Kittle   SF        3.20     14.78
+6      Flex (RB/WR/TE)       Michael Gallup  DAL        2.30      8.75
+7                    K       Brandon Aubrey  DAL        9.00      6.35
+8  Defense (Team Name)     Seattle Seahawks  SEA        1.00      6.26
+9     Bench (RB/WR/TE)       Antonio Gibson  WAS        6.70       NaN
+
+2023-11-23 20:56:32 INFO turkey_bowl.leader_board -
+
+### YEAGER stats ###
+              Position            Player Team  ACTUAL_pts  PROJ_pts
+0                   QB       Brock Purdy   SF        5.66     18.91
+1                 RB_1   Zach Charbonnet  SEA        0.70     12.34
+2                 RB_2  David Montgomery  DET       15.10     11.31
+3                 WR_1       CeeDee Lamb  DAL       17.30     21.78
+4                 WR_2       Jayden Reed   GB       15.00     12.54
+5                   TE       Sam LaPorta  DET       17.70     10.58
+6      Flex (RB/WR/TE)      Jahan Dotson  WAS       10.20      9.48
+7                    K    Anders Carlson   GB        5.00      5.08
+8  Defense (Team Name)     Detroit Lions  DET        0.00      6.56
+9     Bench (RB/WR/TE)     Curtis Samuel  WAS       19.00      7.83
+
+2023-11-23 20:56:32 INFO turkey_bowl.leader_board -
+
+### CINDY stats ###
+              Position               Player Team  ACTUAL_pts  PROJ_pts
+0                   QB         Dak Prescott  DAL       32.24     20.32
+1                 RB_1        DeeJay Dallas  SEA       -0.50      2.14
+2                 RB_2  Chris Rodriguez Jr.  WAS        2.10      3.47
+3                 WR_1           DK Metcalf  SEA        6.20     13.89
+4                 WR_2   Jaxon Smith-Njigba  SEA         NaN     10.09
+5                   TE        Jake Ferguson  DAL        4.50      9.31
+6      Flex (RB/WR/TE)     Jameson Williams  DET        7.10      5.56
+7                    K          Jason Myers  SEA        5.00      6.40
+8  Defense (Team Name)    Green Bay Packers   GB       15.00      6.37
+9     Bench (RB/WR/TE)       Jauan Jennings   SF        1.70      3.59
+
+2023-11-23 20:56:32 INFO turkey_bowl.leader_board -
+
+### DODD stats ###
+              Position           Player Team  ACTUAL_pts  PROJ_pts
+0                   QB      Jordan Love   GB       26.62     16.14
+1                 RB_1     Jahmyr Gibbs  DET       11.30      8.40
+2                 RB_2      Rico Dowdle  DAL        9.60      5.14
+3                 WR_1    Brandon Aiyuk   SF        3.20     16.94
+4                 WR_2   Terry McLaurin  WAS        9.00     11.14
+5                   TE     Logan Thomas  WAS        3.50      8.45
+6      Flex (RB/WR/TE)    Brandin Cooks  DAL       17.20     11.94
+7                    K       Jake Moody   SF        6.00      6.13
+8  Defense (Team Name)   Dallas Cowboys  DAL       16.00      7.44
+9     Bench (RB/WR/TE)  Elijah Mitchell   SF        0.90      4.08
+
+2023-11-23 20:56:32 INFO turkey_bowl.leader_board -
+
+### BECCA_HUD stats ###
+              Position               Player Team  ACTUAL_pts  PROJ_pts
+0                   QB           Sam Howell  WAS        17.3     17.69
+1                 RB_1         Tony Pollard  DAL        22.3     13.81
+2                 RB_2            AJ Dillon   GB        11.1     10.94
+3                 WR_1    Amon-Ra St. Brown  DET        18.5     17.57
+4                 WR_2         Deebo Samuel   SF        18.0     12.84
+5                   TE            Noah Fant  SEA         1.9      4.95
+6      Flex (RB/WR/TE)     Christian Watson   GB        20.4     10.76
+7                    K      Riley Patterson  DET         0.0      6.47
+8  Defense (Team Name)  San Francisco 49ers   SF        13.0      6.76
+9     Bench (RB/WR/TE)        Josh Reynolds  DET         9.5      6.04
+
+2023-11-23 20:56:32 INFO turkey_bowl.leader_board - Becca_Hud winning with 122.5 pts
+              PTS  margin  pts_back
+Becca_Hud  122.50   20.08      0.00
+Dodd       102.42   15.76     20.08
+Yeager      86.66    9.58     35.84
+Logan       77.08    5.44     45.42
+Cindy       71.64     NaN     50.86
+
+2023-11-23 20:56:32 INFO turkey_bowl.leader_board - Saving LeaderBoard to /Users/logan/Desktop/repos/turkey-bowl/archive/2023/2023_leader_board.xlsx...
+2023-11-23 22:04:35 INFO turkey_bowl.cli -
+
+-------------------- Scraping Player Actual Points ---------------------
+
+2023-11-23 22:04:35 INFO turkey_bowl.scrape - Collecting actual player points...
+2023-11-23 22:04:36 INFO turkey_bowl.scrape - Successful API response obtained for: https://api.fantasy.nfl.com/v2/players/weekstats?season=2023&week=12
+2023-11-23 22:04:36 INFO turkey_bowl.aggregate - All player ids in pulled player points exist in player_ids.json
+2023-11-23 22:04:36 INFO turkey_bowl.aggregate - Writing robust player points summary to /Users/logan/Desktop/repos/turkey-bowl/archive/2023/2023_12_robust_participant_player_pts.xlsx...
+2023-11-23 22:04:36 INFO turkey_bowl.leader_board -
+
+### LOGAN stats ###
+              Position               Player Team  ACTUAL_pts  PROJ_pts
+0                   QB           Jared Goff  DET       18.18     18.62
+1                 RB_1  Christian McCaffrey   SF       30.90     20.92
+2                 RB_2       Brian Robinson  WAS        8.40     16.83
+3                 WR_1        Tyler Lockett  SEA        4.00     14.04
+4                 WR_2          Romeo Doubs   GB        6.70     11.43
+5                   TE        George Kittle   SF        4.90     14.78
+6      Flex (RB/WR/TE)       Michael Gallup  DAL        2.30      8.75
+7                    K       Brandon Aubrey  DAL        9.00      6.35
+8  Defense (Team Name)     Seattle Seahawks  SEA        8.00      6.26
+9     Bench (RB/WR/TE)       Antonio Gibson  WAS        6.70       NaN
+
+2023-11-23 22:04:36 INFO turkey_bowl.leader_board -
+
+### YEAGER stats ###
+              Position            Player Team  ACTUAL_pts  PROJ_pts
+0                   QB       Brock Purdy   SF        9.74     18.91
+1                 RB_1   Zach Charbonnet  SEA        6.40     12.34
+2                 RB_2  David Montgomery  DET       15.10     11.31
+3                 WR_1       CeeDee Lamb  DAL       17.30     21.78
+4                 WR_2       Jayden Reed   GB       15.00     12.54
+5                   TE       Sam LaPorta  DET       17.70     10.58
+6      Flex (RB/WR/TE)      Jahan Dotson  WAS       10.20      9.48
+7                    K    Anders Carlson   GB        5.00      5.08
+8  Defense (Team Name)     Detroit Lions  DET        0.00      6.56
+9     Bench (RB/WR/TE)     Curtis Samuel  WAS       19.00      7.83
+
+2023-11-23 22:04:36 INFO turkey_bowl.leader_board -
+
+### CINDY stats ###
+              Position               Player Team  ACTUAL_pts  PROJ_pts
+0                   QB         Dak Prescott  DAL       32.24     20.32
+1                 RB_1        DeeJay Dallas  SEA        0.50      2.14
+2                 RB_2  Chris Rodriguez Jr.  WAS        2.10      3.47
+3                 WR_1           DK Metcalf  SEA        6.20     13.89
+4                 WR_2   Jaxon Smith-Njigba  SEA        6.10     10.09
+5                   TE        Jake Ferguson  DAL        4.50      9.31
+6      Flex (RB/WR/TE)     Jameson Williams  DET        7.10      5.56
+7                    K          Jason Myers  SEA        9.00      6.40
+8  Defense (Team Name)    Green Bay Packers   GB       15.00      6.37
+9     Bench (RB/WR/TE)       Jauan Jennings   SF        1.70      3.59
+
+2023-11-23 22:04:36 INFO turkey_bowl.leader_board -
+
+### DODD stats ###
+              Position           Player Team  ACTUAL_pts  PROJ_pts
+0                   QB      Jordan Love   GB       26.62     16.14
+1                 RB_1     Jahmyr Gibbs  DET       11.30      8.40
+2                 RB_2      Rico Dowdle  DAL        9.60      5.14
+3                 WR_1    Brandon Aiyuk   SF       13.00     16.94
+4                 WR_2   Terry McLaurin  WAS        9.00     11.14
+5                   TE     Logan Thomas  WAS        3.50      8.45
+6      Flex (RB/WR/TE)    Brandin Cooks  DAL       17.20     11.94
+7                    K       Jake Moody   SF        7.00      6.13
+8  Defense (Team Name)   Dallas Cowboys  DAL       16.00      7.44
+9     Bench (RB/WR/TE)  Elijah Mitchell   SF        2.60      4.08
+
+2023-11-23 22:04:36 INFO turkey_bowl.leader_board -
+
+### BECCA_HUD stats ###
+              Position               Player Team  ACTUAL_pts  PROJ_pts
+0                   QB           Sam Howell  WAS        17.3     17.69
+1                 RB_1         Tony Pollard  DAL        22.3     13.81
+2                 RB_2            AJ Dillon   GB        11.1     10.94
+3                 WR_1    Amon-Ra St. Brown  DET        18.5     17.57
+4                 WR_2         Deebo Samuel   SF        22.4     12.84
+5                   TE            Noah Fant  SEA         1.9      4.95
+6      Flex (RB/WR/TE)     Christian Watson   GB        20.4     10.76
+7                    K      Riley Patterson  DET         0.0      6.47
+8  Defense (Team Name)  San Francisco 49ers   SF        13.0      6.76
+9     Bench (RB/WR/TE)        Josh Reynolds  DET         9.5      6.04
+
+2023-11-23 22:04:36 INFO turkey_bowl.leader_board - Becca_Hud winning with 126.9 pts
+              PTS  margin  pts_back
+Becca_Hud  126.90   13.68      0.00
+Dodd       113.22   16.78     13.68
+Yeager      96.44    4.06     30.46
+Logan       92.38    9.64     34.52
+Cindy       82.74     NaN     44.16
+
+2023-11-23 22:04:36 INFO turkey_bowl.leader_board - Saving LeaderBoard to /Users/logan/Desktop/repos/turkey-bowl/archive/2023/2023_leader_board.xlsx...
+2023-11-23 22:32:15 INFO turkey_bowl.cli -
+
+-------------------- Scraping Player Actual Points ---------------------
+
+2023-11-23 22:32:15 INFO turkey_bowl.scrape - Collecting actual player points...
+2023-11-23 22:32:18 INFO turkey_bowl.scrape - Successful API response obtained for: https://api.fantasy.nfl.com/v2/players/weekstats?season=2023&week=12
+2023-11-23 22:32:18 INFO turkey_bowl.aggregate - All player ids in pulled player points exist in player_ids.json
+2023-11-23 22:32:18 INFO turkey_bowl.aggregate - Writing robust player points summary to /Users/logan/Desktop/repos/turkey-bowl/archive/2023/2023_12_robust_participant_player_pts.xlsx...
+2023-11-23 22:32:18 INFO turkey_bowl.leader_board -
+
+### LOGAN stats ###
+              Position               Player Team  ACTUAL_pts  PROJ_pts
+0                   QB           Jared Goff  DET       18.18     18.62
+1                 RB_1  Christian McCaffrey   SF       30.90     20.92
+2                 RB_2       Brian Robinson  WAS        8.40     16.83
+3                 WR_1        Tyler Lockett  SEA        6.00     14.04
+4                 WR_2          Romeo Doubs   GB        6.70     11.43
+5                   TE        George Kittle   SF        4.90     14.78
+6      Flex (RB/WR/TE)       Michael Gallup  DAL        2.30      8.75
+7                    K       Brandon Aubrey  DAL        9.00      6.35
+8  Defense (Team Name)     Seattle Seahawks  SEA        8.00      6.26
+9     Bench (RB/WR/TE)       Antonio Gibson  WAS        6.70       NaN
+
+2023-11-23 22:32:18 INFO turkey_bowl.leader_board -
+
+### YEAGER stats ###
+              Position            Player Team  ACTUAL_pts  PROJ_pts
+0                   QB       Brock Purdy   SF       10.46     18.91
+1                 RB_1   Zach Charbonnet  SEA        9.80     12.34
+2                 RB_2  David Montgomery  DET       15.10     11.31
+3                 WR_1       CeeDee Lamb  DAL       17.30     21.78
+4                 WR_2       Jayden Reed   GB       15.00     12.54
+5                   TE       Sam LaPorta  DET       17.70     10.58
+6      Flex (RB/WR/TE)      Jahan Dotson  WAS       10.20      9.48
+7                    K    Anders Carlson   GB        5.00      5.08
+8  Defense (Team Name)     Detroit Lions  DET        0.00      6.56
+9     Bench (RB/WR/TE)     Curtis Samuel  WAS       19.00      7.83
+
+2023-11-23 22:32:18 INFO turkey_bowl.leader_board -
+
+### CINDY stats ###
+              Position               Player Team  ACTUAL_pts  PROJ_pts
+0                   QB         Dak Prescott  DAL       32.24     20.32
+1                 RB_1        DeeJay Dallas  SEA        0.50      2.14
+2                 RB_2  Chris Rodriguez Jr.  WAS        2.10      3.47
+3                 WR_1           DK Metcalf  SEA        6.20     13.89
+4                 WR_2   Jaxon Smith-Njigba  SEA        6.10     10.09
+5                   TE        Jake Ferguson  DAL        4.50      9.31
+6      Flex (RB/WR/TE)     Jameson Williams  DET        7.10      5.56
+7                    K          Jason Myers  SEA        9.00      6.40
+8  Defense (Team Name)    Green Bay Packers   GB       15.00      6.37
+9     Bench (RB/WR/TE)       Jauan Jennings   SF        1.70      3.59
+
+2023-11-23 22:32:18 INFO turkey_bowl.leader_board -
+
+### DODD stats ###
+              Position           Player Team  ACTUAL_pts  PROJ_pts
+0                   QB      Jordan Love   GB       26.62     16.14
+1                 RB_1     Jahmyr Gibbs  DET       11.30      8.40
+2                 RB_2      Rico Dowdle  DAL        9.60      5.14
+3                 WR_1    Brandon Aiyuk   SF       13.00     16.94
+4                 WR_2   Terry McLaurin  WAS        9.00     11.14
+5                   TE     Logan Thomas  WAS        3.50      8.45
+6      Flex (RB/WR/TE)    Brandin Cooks  DAL       17.20     11.94
+7                    K       Jake Moody   SF        7.00      6.13
+8  Defense (Team Name)   Dallas Cowboys  DAL       16.00      7.44
+9     Bench (RB/WR/TE)  Elijah Mitchell   SF        4.60      4.08
+
+2023-11-23 22:32:18 INFO turkey_bowl.leader_board -
+
+### BECCA_HUD stats ###
+              Position               Player Team  ACTUAL_pts  PROJ_pts
+0                   QB           Sam Howell  WAS        17.3     17.69
+1                 RB_1         Tony Pollard  DAL        22.3     13.81
+2                 RB_2            AJ Dillon   GB        11.1     10.94
+3                 WR_1    Amon-Ra St. Brown  DET        18.5     17.57
+4                 WR_2         Deebo Samuel   SF        22.4     12.84
+5                   TE            Noah Fant  SEA         4.5      4.95
+6      Flex (RB/WR/TE)     Christian Watson   GB        20.4     10.76
+7                    K      Riley Patterson  DET         0.0      6.47
+8  Defense (Team Name)  San Francisco 49ers   SF        14.0      6.76
+9     Bench (RB/WR/TE)        Josh Reynolds  DET         9.5      6.04
+
+2023-11-23 22:32:18 INFO turkey_bowl.leader_board - Becca_Hud winning with 130.5 pts
+              PTS  margin  pts_back
+Becca_Hud  130.50   17.28      0.00
+Dodd       113.22   12.66     17.28
+Yeager     100.56    6.18     29.94
+Logan       94.38   11.64     36.12
+Cindy       82.74     NaN     47.76
+
+2023-11-23 22:32:18 INFO turkey_bowl.leader_board - Saving LeaderBoard to /Users/logan/Desktop/repos/turkey-bowl/archive/2023/2023_leader_board.xlsx...
+2023-11-24 10:31:26 INFO turkey_bowl.cli -
+
+-------------------- Scraping Player Actual Points ---------------------
+
+2023-11-24 10:31:26 INFO turkey_bowl.scrape - Collecting actual player points...
+2023-11-24 10:31:26 INFO turkey_bowl.scrape - Successful API response obtained for: https://api.fantasy.nfl.com/v2/players/weekstats?season=2023&week=12
+2023-11-24 10:31:26 INFO turkey_bowl.aggregate - All player ids in pulled player points exist in player_ids.json
+2023-11-24 10:31:26 INFO turkey_bowl.aggregate - Writing robust player points summary to /Users/logan/Desktop/repos/turkey-bowl/archive/2023/2023_12_robust_participant_player_pts.xlsx...
+2023-11-24 10:31:27 INFO turkey_bowl.leader_board -
+
+### LOGAN stats ###
+              Position               Player Team  ACTUAL_pts  PROJ_pts
+0                   QB           Jared Goff  DET       18.18     18.62
+1                 RB_1  Christian McCaffrey   SF       30.90     20.92
+2                 RB_2       Brian Robinson  WAS        8.40     16.83
+3                 WR_1        Tyler Lockett  SEA        6.00     14.04
+4                 WR_2          Romeo Doubs   GB        6.70     11.43
+5                   TE        George Kittle   SF        4.90     14.78
+6      Flex (RB/WR/TE)       Michael Gallup  DAL        2.30      8.75
+7                    K       Brandon Aubrey  DAL        9.00      6.35
+8  Defense (Team Name)     Seattle Seahawks  SEA        8.00      6.26
+9     Bench (RB/WR/TE)       Antonio Gibson  WAS        6.70       NaN
+
+2023-11-24 10:31:27 INFO turkey_bowl.leader_board -
+
+### YEAGER stats ###
+              Position            Player Team  ACTUAL_pts  PROJ_pts
+0                   QB       Brock Purdy   SF       10.46     18.91
+1                 RB_1   Zach Charbonnet  SEA        9.80     12.34
+2                 RB_2  David Montgomery  DET       15.10     11.31
+3                 WR_1       CeeDee Lamb  DAL       17.30     21.78
+4                 WR_2       Jayden Reed   GB       15.00     12.54
+5                   TE       Sam LaPorta  DET       17.70     10.58
+6      Flex (RB/WR/TE)      Jahan Dotson  WAS       10.20      9.48
+7                    K    Anders Carlson   GB        5.00      5.08
+8  Defense (Team Name)     Detroit Lions  DET        0.00      6.56
+9     Bench (RB/WR/TE)     Curtis Samuel  WAS       19.00      7.83
+
+2023-11-24 10:31:27 INFO turkey_bowl.leader_board -
+
+### CINDY stats ###
+              Position               Player Team  ACTUAL_pts  PROJ_pts
+0                   QB         Dak Prescott  DAL       32.24     20.32
+1                 RB_1        DeeJay Dallas  SEA        0.50      2.14
+2                 RB_2  Chris Rodriguez Jr.  WAS        2.10      3.47
+3                 WR_1           DK Metcalf  SEA        6.20     13.89
+4                 WR_2   Jaxon Smith-Njigba  SEA        6.10     10.09
+5                   TE        Jake Ferguson  DAL        4.50      9.31
+6      Flex (RB/WR/TE)     Jameson Williams  DET        7.10      5.56
+7                    K          Jason Myers  SEA        9.00      6.40
+8  Defense (Team Name)    Green Bay Packers   GB       15.00      6.37
+9     Bench (RB/WR/TE)       Jauan Jennings   SF        1.70      3.59
+
+2023-11-24 10:31:27 INFO turkey_bowl.leader_board -
+
+### DODD stats ###
+              Position           Player Team  ACTUAL_pts  PROJ_pts
+0                   QB      Jordan Love   GB       26.62     16.14
+1                 RB_1     Jahmyr Gibbs  DET       11.30      8.40
+2                 RB_2      Rico Dowdle  DAL        9.60      5.14
+3                 WR_1    Brandon Aiyuk   SF       13.00     16.94
+4                 WR_2   Terry McLaurin  WAS        9.00     11.14
+5                   TE     Logan Thomas  WAS        3.50      8.45
+6      Flex (RB/WR/TE)    Brandin Cooks  DAL       17.20     11.94
+7                    K       Jake Moody   SF        7.00      6.13
+8  Defense (Team Name)   Dallas Cowboys  DAL       16.00      7.44
+9     Bench (RB/WR/TE)  Elijah Mitchell   SF        4.60      4.08
+
+2023-11-24 10:31:27 INFO turkey_bowl.leader_board -
+
+### BECCA_HUD stats ###
+              Position               Player Team  ACTUAL_pts  PROJ_pts
+0                   QB           Sam Howell  WAS        17.3     17.69
+1                 RB_1         Tony Pollard  DAL        22.3     13.81
+2                 RB_2            AJ Dillon   GB        11.1     10.94
+3                 WR_1    Amon-Ra St. Brown  DET        18.5     17.57
+4                 WR_2         Deebo Samuel   SF        22.4     12.84
+5                   TE            Noah Fant  SEA         4.5      4.95
+6      Flex (RB/WR/TE)     Christian Watson   GB        20.4     10.76
+7                    K      Riley Patterson  DET         0.0      6.47
+8  Defense (Team Name)  San Francisco 49ers   SF        14.0      6.76
+9     Bench (RB/WR/TE)        Josh Reynolds  DET         9.5      6.04
+
+2023-11-24 10:31:27 INFO turkey_bowl.leader_board - Becca_Hud winning with 130.5 pts
+              PTS  margin  pts_back
+Becca_Hud  130.50   17.28      0.00
+Dodd       113.22   12.66     17.28
+Yeager     100.56    6.18     29.94
+Logan       94.38   11.64     36.12
+Cindy       82.74     NaN     47.76
+
+2023-11-24 10:31:27 INFO turkey_bowl.leader_board - Saving LeaderBoard to /Users/logan/Desktop/repos/turkey-bowl/archive/2023/2023_leader_board.xlsx...

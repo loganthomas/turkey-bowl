@@ -1,6 +1,7 @@
 """
 Unit tests for leader_board.py
 """
+
 import logging
 import textwrap
 
@@ -13,44 +14,44 @@ from turkey_bowl.leader_board import LeaderBoard
 @pytest.fixture
 def mock_participant_teams():
     participant_teams = {
-        "Dodd": {
-            "Position": {
-                0: "QB",
-                1: "RB_1",
-                2: "RB_2",
-                3: "WR_1",
-                4: "WR_2",
-                5: "TE",
-                6: "Flex (RB/WR/TE)",
-                7: "K",
-                8: "Defense (Team Name)",
-                9: "Bench (RB/WR/TE)",
+        'Dodd': {
+            'Position': {
+                0: 'QB',
+                1: 'RB_1',
+                2: 'RB_2',
+                3: 'WR_1',
+                4: 'WR_2',
+                5: 'TE',
+                6: 'Flex (RB/WR/TE)',
+                7: 'K',
+                8: 'Defense (Team Name)',
+                9: 'Bench (RB/WR/TE)',
             },
-            "Player": {
-                0: "Josh Allen",
-                1: "David Montgomery",
-                2: "Ryan Nall",
-                3: "Allen Robinson",
-                4: "Anthony Miller",
-                5: "Dawson Knox",
-                6: "Jared Cook",
-                7: "Cairo Santos",
-                8: "Chicago Bears",
-                9: "Latavius Murray",
+            'Player': {
+                0: 'Josh Allen',
+                1: 'David Montgomery',
+                2: 'Ryan Nall',
+                3: 'Allen Robinson',
+                4: 'Anthony Miller',
+                5: 'Dawson Knox',
+                6: 'Jared Cook',
+                7: 'Cairo Santos',
+                8: 'Chicago Bears',
+                9: 'Latavius Murray',
             },
-            "Team": {
-                0: "BUF",
-                1: "CHI",
-                2: "CHI",
-                3: "CHI",
-                4: "CHI",
-                5: "BUF",
-                6: "NO",
-                7: "CHI",
-                8: "CHI",
-                9: "NO",
+            'Team': {
+                0: 'BUF',
+                1: 'CHI',
+                2: 'CHI',
+                3: 'CHI',
+                4: 'CHI',
+                5: 'BUF',
+                6: 'NO',
+                7: 'CHI',
+                8: 'CHI',
+                9: 'NO',
             },
-            "ACTUAL_pts": {
+            'ACTUAL_pts': {
                 0: 0.0,
                 1: 0.0,
                 2: 0.0,
@@ -62,7 +63,7 @@ def mock_participant_teams():
                 8: 0.0,
                 9: 0.0,
             },
-            "PROJ_pts": {
+            'PROJ_pts': {
                 0: 20.22,
                 1: 14.68,
                 2: 2.4,
@@ -74,7 +75,7 @@ def mock_participant_teams():
                 8: 6.66,
                 9: 6.98,
             },
-            "PROJ_Games_Played": {
+            'PROJ_Games_Played': {
                 0: 1,
                 1: 1,
                 2: 1,
@@ -86,7 +87,7 @@ def mock_participant_teams():
                 8: 1,
                 9: 1,
             },
-            "PROJ_Passing_Yards": {
+            'PROJ_Passing_Yards': {
                 0: 240.26,
                 1: 0.0,
                 2: 0.0,
@@ -98,7 +99,7 @@ def mock_participant_teams():
                 8: 0.0,
                 9: 0.0,
             },
-            "PROJ_Passing_Touchdowns": {
+            'PROJ_Passing_Touchdowns': {
                 0: 1.65,
                 1: 0.0,
                 2: 0.0,
@@ -110,7 +111,7 @@ def mock_participant_teams():
                 8: 0.0,
                 9: 0.0,
             },
-            "PROJ_Interceptions_Thrown": {
+            'PROJ_Interceptions_Thrown': {
                 0: 0.78,
                 1: 0.0,
                 2: 0.0,
@@ -122,7 +123,7 @@ def mock_participant_teams():
                 8: 0.0,
                 9: 0.0,
             },
-            "PROJ_Rushing_Yards": {
+            'PROJ_Rushing_Yards': {
                 0: 37.73,
                 1: 78.49,
                 2: 6.17,
@@ -134,7 +135,7 @@ def mock_participant_teams():
                 8: 0.0,
                 9: 34.23,
             },
-            "PROJ_Fumbles_Lost": {
+            'PROJ_Fumbles_Lost': {
                 0: 0.16,
                 1: 0.12,
                 2: 0.01,
@@ -146,7 +147,7 @@ def mock_participant_teams():
                 8: 0.0,
                 9: 0.0,
             },
-            "PROJ_2-Point_Conversions": {
+            'PROJ_2-Point_Conversions': {
                 0: 0.13,
                 1: 0.01,
                 2: 0.0,
@@ -158,7 +159,7 @@ def mock_participant_teams():
                 8: 0.0,
                 9: 0.0,
             },
-            "PROJ_Rushing_Touchdowns": {
+            'PROJ_Rushing_Touchdowns': {
                 0: 0.31,
                 1: 0.51,
                 2: 0.04,
@@ -170,7 +171,7 @@ def mock_participant_teams():
                 8: 0.0,
                 9: 0.22,
             },
-            "PROJ_Receptions": {
+            'PROJ_Receptions': {
                 0: 0.0,
                 1: 1.9,
                 2: 0.74,
@@ -182,7 +183,7 @@ def mock_participant_teams():
                 8: 0.0,
                 9: 1.22,
             },
-            "PROJ_Receiving_Yards": {
+            'PROJ_Receiving_Yards': {
                 0: 0.0,
                 1: 14.88,
                 2: 7.02,
@@ -194,7 +195,7 @@ def mock_participant_teams():
                 8: 0.0,
                 9: 8.33,
             },
-            "PROJ_Receiving_Touchdowns": {
+            'PROJ_Receiving_Touchdowns': {
                 0: 0.0,
                 1: 0.1,
                 2: 0.02,
@@ -206,7 +207,7 @@ def mock_participant_teams():
                 8: 0.0,
                 9: 0.03,
             },
-            "PROJ_PAT_Made": {
+            'PROJ_PAT_Made': {
                 0: 0.0,
                 1: 0.0,
                 2: 0.0,
@@ -218,7 +219,7 @@ def mock_participant_teams():
                 8: 0.0,
                 9: 0.0,
             },
-            "PROJ_FG_Made_0-19": {
+            'PROJ_FG_Made_0-19': {
                 0: 0.0,
                 1: 0.0,
                 2: 0.0,
@@ -230,7 +231,7 @@ def mock_participant_teams():
                 8: 0.0,
                 9: 0.0,
             },
-            "PROJ_FG_Made_20-29": {
+            'PROJ_FG_Made_20-29': {
                 0: 0.0,
                 1: 0.0,
                 2: 0.0,
@@ -242,7 +243,7 @@ def mock_participant_teams():
                 8: 0.0,
                 9: 0.0,
             },
-            "PROJ_FG_Made_30-39": {
+            'PROJ_FG_Made_30-39': {
                 0: 0.0,
                 1: 0.0,
                 2: 0.0,
@@ -254,7 +255,7 @@ def mock_participant_teams():
                 8: 0.0,
                 9: 0.0,
             },
-            "PROJ_FG_Made_40-49": {
+            'PROJ_FG_Made_40-49': {
                 0: 0.0,
                 1: 0.0,
                 2: 0.0,
@@ -266,7 +267,7 @@ def mock_participant_teams():
                 8: 0.0,
                 9: 0.0,
             },
-            "PROJ_FG_Missed_50+": {
+            'PROJ_FG_Missed_50+': {
                 0: 0.0,
                 1: 0.0,
                 2: 0.0,
@@ -278,7 +279,7 @@ def mock_participant_teams():
                 8: 0.0,
                 9: 0.0,
             },
-            "PROJ_Sacks": {
+            'PROJ_Sacks': {
                 0: 0.0,
                 1: 0.0,
                 2: 0.0,
@@ -290,7 +291,7 @@ def mock_participant_teams():
                 8: 2.46,
                 9: 0.0,
             },
-            "PROJ_Interceptions": {
+            'PROJ_Interceptions': {
                 0: 0.0,
                 1: 0.0,
                 2: 0.0,
@@ -302,7 +303,7 @@ def mock_participant_teams():
                 8: 0.78,
                 9: 0.0,
             },
-            "PROJ_Fumbles_Recovered": {
+            'PROJ_Fumbles_Recovered': {
                 0: 0.0,
                 1: 0.0,
                 2: 0.0,
@@ -314,7 +315,7 @@ def mock_participant_teams():
                 8: 0.63,
                 9: 0.0,
             },
-            "PROJ_Safeties": {
+            'PROJ_Safeties': {
                 0: 0.0,
                 1: 0.0,
                 2: 0.0,
@@ -326,7 +327,7 @@ def mock_participant_teams():
                 8: 0.03,
                 9: 0.0,
             },
-            "PROJ_Touchdowns": {
+            'PROJ_Touchdowns': {
                 0: 0.0,
                 1: 0.0,
                 2: 0.0,
@@ -338,7 +339,7 @@ def mock_participant_teams():
                 8: 0.15,
                 9: 0.0,
             },
-            "PROJ_Blocked_Kicks": {
+            'PROJ_Blocked_Kicks': {
                 0: 0.0,
                 1: 0.0,
                 2: 0.0,
@@ -350,7 +351,7 @@ def mock_participant_teams():
                 8: 0.07,
                 9: 0.0,
             },
-            "PROJ_Team_Kickoff_and_Punt_Return_Touchdowns": {
+            'PROJ_Team_Kickoff_and_Punt_Return_Touchdowns': {
                 0: 0.0,
                 1: 0.0,
                 2: 0.0,
@@ -362,7 +363,7 @@ def mock_participant_teams():
                 8: 0.07,
                 9: 0.0,
             },
-            "PROJ_Points_Allowed": {
+            'PROJ_Points_Allowed': {
                 0: 0.0,
                 1: 0.0,
                 2: 0.0,
@@ -375,44 +376,44 @@ def mock_participant_teams():
                 9: 0.0,
             },
         },
-        "Becca": {
-            "Position": {
-                0: "QB",
-                1: "RB_1",
-                2: "RB_2",
-                3: "WR_1",
-                4: "WR_2",
-                5: "TE",
-                6: "Flex (RB/WR/TE)",
-                7: "K",
-                8: "Defense (Team Name)",
-                9: "Bench (RB/WR/TE)",
+        'Becca': {
+            'Position': {
+                0: 'QB',
+                1: 'RB_1',
+                2: 'RB_2',
+                3: 'WR_1',
+                4: 'WR_2',
+                5: 'TE',
+                6: 'Flex (RB/WR/TE)',
+                7: 'K',
+                8: 'Defense (Team Name)',
+                9: 'Bench (RB/WR/TE)',
             },
-            "Player": {
-                0: "Dak Prescott",
-                1: "Adrian Peterson",
-                2: "Kerryon Johnson",
-                3: "Marvin Jones",
-                4: "John Brown",
-                5: "T.J. Hockenson",
-                6: "Alvin Kamara",
-                7: "Matt Prater",
-                8: "Detroit Lions",
-                9: "Michael Gallup",
+            'Player': {
+                0: 'Dak Prescott',
+                1: 'Adrian Peterson',
+                2: 'Kerryon Johnson',
+                3: 'Marvin Jones',
+                4: 'John Brown',
+                5: 'T.J. Hockenson',
+                6: 'Alvin Kamara',
+                7: 'Matt Prater',
+                8: 'Detroit Lions',
+                9: 'Michael Gallup',
             },
-            "Team": {
-                0: "DAL",
-                1: "DET",
-                2: "DET",
-                3: "DET",
-                4: "BUF",
-                5: "DET",
-                6: "NO",
-                7: "DET",
-                8: "DET",
-                9: "DAL",
+            'Team': {
+                0: 'DAL',
+                1: 'DET',
+                2: 'DET',
+                3: 'DET',
+                4: 'BUF',
+                5: 'DET',
+                6: 'NO',
+                7: 'DET',
+                8: 'DET',
+                9: 'DAL',
             },
-            "ACTUAL_pts": {
+            'ACTUAL_pts': {
                 0: 0.0,
                 1: 0.0,
                 2: 0.0,
@@ -424,7 +425,7 @@ def mock_participant_teams():
                 8: 0.0,
                 9: 0.0,
             },
-            "PROJ_pts": {
+            'PROJ_pts': {
                 0: 21.55,
                 1: 12.88,
                 2: 6.95,
@@ -436,7 +437,7 @@ def mock_participant_teams():
                 8: 6.74,
                 9: 14.37,
             },
-            "PROJ_Games_Played": {
+            'PROJ_Games_Played': {
                 0: 1,
                 1: 1,
                 2: 1,
@@ -448,7 +449,7 @@ def mock_participant_teams():
                 8: 1,
                 9: 1,
             },
-            "PROJ_Passing_Yards": {
+            'PROJ_Passing_Yards': {
                 0: 299.72,
                 1: 0.0,
                 2: 0.0,
@@ -460,7 +461,7 @@ def mock_participant_teams():
                 8: 0.0,
                 9: 0.0,
             },
-            "PROJ_Passing_Touchdowns": {
+            'PROJ_Passing_Touchdowns': {
                 0: 1.98,
                 1: 0.0,
                 2: 0.0,
@@ -472,7 +473,7 @@ def mock_participant_teams():
                 8: 0.0,
                 9: 0.0,
             },
-            "PROJ_Interceptions_Thrown": {
+            'PROJ_Interceptions_Thrown': {
                 0: 0.78,
                 1: 0.0,
                 2: 0.0,
@@ -484,7 +485,7 @@ def mock_participant_teams():
                 8: 0.0,
                 9: 0.0,
             },
-            "PROJ_Rushing_Yards": {
+            'PROJ_Rushing_Yards': {
                 0: 18.18,
                 1: 68.77,
                 2: 32.4,
@@ -496,7 +497,7 @@ def mock_participant_teams():
                 8: 0.0,
                 9: 0.05,
             },
-            "PROJ_Fumbles_Lost": {
+            'PROJ_Fumbles_Lost': {
                 0: 0.04,
                 1: 0.07,
                 2: 0.06,
@@ -508,7 +509,7 @@ def mock_participant_teams():
                 8: 0.0,
                 9: 0.0,
             },
-            "PROJ_2-Point_Conversions": {
+            'PROJ_2-Point_Conversions': {
                 0: 0.13,
                 1: 0.0,
                 2: 0.0,
@@ -520,7 +521,7 @@ def mock_participant_teams():
                 8: 0.0,
                 9: 0.0,
             },
-            "PROJ_Rushing_Touchdowns": {
+            'PROJ_Rushing_Touchdowns': {
                 0: 0.2,
                 1: 0.51,
                 2: 0.24,
@@ -532,7 +533,7 @@ def mock_participant_teams():
                 8: 0.0,
                 9: 0.0,
             },
-            "PROJ_Receptions": {
+            'PROJ_Receptions': {
                 0: 0.0,
                 1: 1.45,
                 2: 1.09,
@@ -544,7 +545,7 @@ def mock_participant_teams():
                 8: 0.0,
                 9: 4.14,
             },
-            "PROJ_Receiving_Yards": {
+            'PROJ_Receiving_Yards': {
                 0: 0.0,
                 1: 12.76,
                 2: 8.8,
@@ -556,7 +557,7 @@ def mock_participant_teams():
                 8: 0.0,
                 9: 72.89,
             },
-            "PROJ_Receiving_Touchdowns": {
+            'PROJ_Receiving_Touchdowns': {
                 0: 0.0,
                 1: 0.06,
                 2: 0.07,
@@ -568,7 +569,7 @@ def mock_participant_teams():
                 8: 0.0,
                 9: 0.49,
             },
-            "PROJ_PAT_Made": {
+            'PROJ_PAT_Made': {
                 0: 0.0,
                 1: 0.0,
                 2: 0.0,
@@ -580,7 +581,7 @@ def mock_participant_teams():
                 8: 0.0,
                 9: 0.0,
             },
-            "PROJ_FG_Made_0-19": {
+            'PROJ_FG_Made_0-19': {
                 0: 0.0,
                 1: 0.0,
                 2: 0.0,
@@ -592,7 +593,7 @@ def mock_participant_teams():
                 8: 0.0,
                 9: 0.0,
             },
-            "PROJ_FG_Made_20-29": {
+            'PROJ_FG_Made_20-29': {
                 0: 0.0,
                 1: 0.0,
                 2: 0.0,
@@ -604,7 +605,7 @@ def mock_participant_teams():
                 8: 0.0,
                 9: 0.0,
             },
-            "PROJ_FG_Made_30-39": {
+            'PROJ_FG_Made_30-39': {
                 0: 0.0,
                 1: 0.0,
                 2: 0.0,
@@ -616,7 +617,7 @@ def mock_participant_teams():
                 8: 0.0,
                 9: 0.0,
             },
-            "PROJ_FG_Made_40-49": {
+            'PROJ_FG_Made_40-49': {
                 0: 0.0,
                 1: 0.0,
                 2: 0.0,
@@ -628,7 +629,7 @@ def mock_participant_teams():
                 8: 0.0,
                 9: 0.0,
             },
-            "PROJ_FG_Missed_50+": {
+            'PROJ_FG_Missed_50+': {
                 0: 0.0,
                 1: 0.0,
                 2: 0.0,
@@ -640,7 +641,7 @@ def mock_participant_teams():
                 8: 0.0,
                 9: 0.0,
             },
-            "PROJ_Sacks": {
+            'PROJ_Sacks': {
                 0: 0.0,
                 1: 0.0,
                 2: 0.0,
@@ -652,7 +653,7 @@ def mock_participant_teams():
                 8: 2.66,
                 9: 0.0,
             },
-            "PROJ_Interceptions": {
+            'PROJ_Interceptions': {
                 0: 0.0,
                 1: 0.0,
                 2: 0.0,
@@ -664,7 +665,7 @@ def mock_participant_teams():
                 8: 0.83,
                 9: 0.0,
             },
-            "PROJ_Fumbles_Recovered": {
+            'PROJ_Fumbles_Recovered': {
                 0: 0.0,
                 1: 0.0,
                 2: 0.0,
@@ -676,7 +677,7 @@ def mock_participant_teams():
                 8: 0.65,
                 9: 0.0,
             },
-            "PROJ_Safeties": {
+            'PROJ_Safeties': {
                 0: 0.0,
                 1: 0.0,
                 2: 0.0,
@@ -688,7 +689,7 @@ def mock_participant_teams():
                 8: 0.05,
                 9: 0.0,
             },
-            "PROJ_Touchdowns": {
+            'PROJ_Touchdowns': {
                 0: 0.0,
                 1: 0.0,
                 2: 0.0,
@@ -700,7 +701,7 @@ def mock_participant_teams():
                 8: 0.14,
                 9: 0.0,
             },
-            "PROJ_Blocked_Kicks": {
+            'PROJ_Blocked_Kicks': {
                 0: 0.0,
                 1: 0.0,
                 2: 0.0,
@@ -712,7 +713,7 @@ def mock_participant_teams():
                 8: 0.07,
                 9: 0.0,
             },
-            "PROJ_Team_Kickoff_and_Punt_Return_Touchdowns": {
+            'PROJ_Team_Kickoff_and_Punt_Return_Touchdowns': {
                 0: 0.0,
                 1: 0.0,
                 2: 0.0,
@@ -724,7 +725,7 @@ def mock_participant_teams():
                 8: 0.03,
                 9: 0.0,
             },
-            "PROJ_Points_Allowed": {
+            'PROJ_Points_Allowed': {
                 0: 0.0,
                 1: 0.0,
                 2: 0.0,
@@ -736,7 +737,7 @@ def mock_participant_teams():
                 8: 22.96,
                 9: 0.0,
             },
-            "PROJ_Kickoff_and_Punt_Return_Touchdowns": {
+            'PROJ_Kickoff_and_Punt_Return_Touchdowns': {
                 0: 0.0,
                 1: 0.0,
                 2: 0.0,
@@ -749,44 +750,44 @@ def mock_participant_teams():
                 9: 0.0,
             },
         },
-        "Logan": {
-            "Position": {
-                0: "QB",
-                1: "RB_1",
-                2: "RB_2",
-                3: "WR_1",
-                4: "WR_2",
-                5: "TE",
-                6: "Flex (RB/WR/TE)",
-                7: "K",
-                8: "Defense (Team Name)",
-                9: "Bench (RB/WR/TE)",
+        'Logan': {
+            'Position': {
+                0: 'QB',
+                1: 'RB_1',
+                2: 'RB_2',
+                3: 'WR_1',
+                4: 'WR_2',
+                5: 'TE',
+                6: 'Flex (RB/WR/TE)',
+                7: 'K',
+                8: 'Defense (Team Name)',
+                9: 'Bench (RB/WR/TE)',
             },
-            "Player": {
-                0: "Matt Ryan",
+            'Player': {
+                0: 'Matt Ryan',
                 1: "D'Andre Swift",
-                2: "Devin Singletary",
-                3: "Russell Gage",
-                4: "Amari Cooper",
-                5: "Jimmy Graham",
-                6: "Michael Thomas",
-                7: "Tyler Bass",
-                8: "Dallas Cowboys",
-                9: "Randall Cobb",
+                2: 'Devin Singletary',
+                3: 'Russell Gage',
+                4: 'Amari Cooper',
+                5: 'Jimmy Graham',
+                6: 'Michael Thomas',
+                7: 'Tyler Bass',
+                8: 'Dallas Cowboys',
+                9: 'Randall Cobb',
             },
-            "Team": {
-                0: "ATL",
-                1: "DET",
-                2: "BUF",
-                3: "ATL",
-                4: "DAL",
-                5: "CHI",
-                6: "NO",
-                7: "BUF",
-                8: "DAL",
-                9: "DAL",
+            'Team': {
+                0: 'ATL',
+                1: 'DET',
+                2: 'BUF',
+                3: 'ATL',
+                4: 'DAL',
+                5: 'CHI',
+                6: 'NO',
+                7: 'BUF',
+                8: 'DAL',
+                9: 'DAL',
             },
-            "ACTUAL_pts": {
+            'ACTUAL_pts': {
                 0: 0.0,
                 1: 0.0,
                 2: 0.0,
@@ -798,7 +799,7 @@ def mock_participant_teams():
                 8: 0.0,
                 9: 0.0,
             },
-            "PROJ_pts": {
+            'PROJ_pts': {
                 0: 20.01,
                 1: 7.15,
                 2: 13.38,
@@ -810,7 +811,7 @@ def mock_participant_teams():
                 8: 7.4,
                 9: 0.0,
             },
-            "PROJ_Games_Played": {
+            'PROJ_Games_Played': {
                 0: 1.0,
                 1: 1.0,
                 2: 1.0,
@@ -822,7 +823,7 @@ def mock_participant_teams():
                 8: 1.0,
                 9: 0.0,
             },
-            "PROJ_Passing_Yards": {
+            'PROJ_Passing_Yards': {
                 0: 296.77,
                 1: 0.0,
                 2: 0.0,
@@ -834,7 +835,7 @@ def mock_participant_teams():
                 8: 0.0,
                 9: 0.0,
             },
-            "PROJ_Passing_Touchdowns": {
+            'PROJ_Passing_Touchdowns': {
                 0: 1.94,
                 1: 0.0,
                 2: 0.0,
@@ -846,7 +847,7 @@ def mock_participant_teams():
                 8: 0.0,
                 9: 0.0,
             },
-            "PROJ_Interceptions_Thrown": {
+            'PROJ_Interceptions_Thrown': {
                 0: 0.74,
                 1: 0.0,
                 2: 0.0,
@@ -858,7 +859,7 @@ def mock_participant_teams():
                 8: 0.0,
                 9: 0.0,
             },
-            "PROJ_Rushing_Yards": {
+            'PROJ_Rushing_Yards': {
                 0: 9.99,
                 1: 15.62,
                 2: 56.29,
@@ -870,7 +871,7 @@ def mock_participant_teams():
                 8: 0.0,
                 9: 0.0,
             },
-            "PROJ_Fumbles_Lost": {
+            'PROJ_Fumbles_Lost': {
                 0: 0.09,
                 1: 0.02,
                 2: 0.06,
@@ -882,7 +883,7 @@ def mock_participant_teams():
                 8: 0.0,
                 9: 0.0,
             },
-            "PROJ_2-Point_Conversions": {
+            'PROJ_2-Point_Conversions': {
                 0: 0.19,
                 1: 0.0,
                 2: 0.01,
@@ -894,7 +895,7 @@ def mock_participant_teams():
                 8: 0.0,
                 9: 0.0,
             },
-            "PROJ_Rushing_Touchdowns": {
+            'PROJ_Rushing_Touchdowns': {
                 0: 0.11,
                 1: 0.12,
                 2: 0.35,
@@ -906,7 +907,7 @@ def mock_participant_teams():
                 8: 0.0,
                 9: 0.0,
             },
-            "PROJ_Receptions": {
+            'PROJ_Receptions': {
                 0: 0.0,
                 1: 2.19,
                 2: 2.49,
@@ -918,7 +919,7 @@ def mock_participant_teams():
                 8: 0.0,
                 9: 0.0,
             },
-            "PROJ_Receiving_Yards": {
+            'PROJ_Receiving_Yards': {
                 0: 0.0,
                 1: 19.41,
                 2: 25.41,
@@ -930,7 +931,7 @@ def mock_participant_teams():
                 8: 0.0,
                 9: 0.0,
             },
-            "PROJ_Receiving_Touchdowns": {
+            'PROJ_Receiving_Touchdowns': {
                 0: 0.0,
                 1: 0.13,
                 2: 0.12,
@@ -942,7 +943,7 @@ def mock_participant_teams():
                 8: 0.0,
                 9: 0.0,
             },
-            "PROJ_PAT_Made": {
+            'PROJ_PAT_Made': {
                 0: 0.0,
                 1: 0.0,
                 2: 0.0,
@@ -954,7 +955,7 @@ def mock_participant_teams():
                 8: 0.0,
                 9: 0.0,
             },
-            "PROJ_FG_Made_0-19": {
+            'PROJ_FG_Made_0-19': {
                 0: 0.0,
                 1: 0.0,
                 2: 0.0,
@@ -966,7 +967,7 @@ def mock_participant_teams():
                 8: 0.0,
                 9: 0.0,
             },
-            "PROJ_FG_Made_20-29": {
+            'PROJ_FG_Made_20-29': {
                 0: 0.0,
                 1: 0.0,
                 2: 0.0,
@@ -978,7 +979,7 @@ def mock_participant_teams():
                 8: 0.0,
                 9: 0.0,
             },
-            "PROJ_FG_Made_30-39": {
+            'PROJ_FG_Made_30-39': {
                 0: 0.0,
                 1: 0.0,
                 2: 0.0,
@@ -990,7 +991,7 @@ def mock_participant_teams():
                 8: 0.0,
                 9: 0.0,
             },
-            "PROJ_FG_Made_40-49": {
+            'PROJ_FG_Made_40-49': {
                 0: 0.0,
                 1: 0.0,
                 2: 0.0,
@@ -1002,7 +1003,7 @@ def mock_participant_teams():
                 8: 0.0,
                 9: 0.0,
             },
-            "PROJ_FG_Missed_50+": {
+            'PROJ_FG_Missed_50+': {
                 0: 0.0,
                 1: 0.0,
                 2: 0.0,
@@ -1014,7 +1015,7 @@ def mock_participant_teams():
                 8: 0.0,
                 9: 0.0,
             },
-            "PROJ_Sacks": {
+            'PROJ_Sacks': {
                 0: 0.0,
                 1: 0.0,
                 2: 0.0,
@@ -1026,7 +1027,7 @@ def mock_participant_teams():
                 8: 3.04,
                 9: 0.0,
             },
-            "PROJ_Interceptions": {
+            'PROJ_Interceptions': {
                 0: 0.0,
                 1: 0.0,
                 2: 0.0,
@@ -1038,7 +1039,7 @@ def mock_participant_teams():
                 8: 0.89,
                 9: 0.0,
             },
-            "PROJ_Fumbles_Recovered": {
+            'PROJ_Fumbles_Recovered': {
                 0: 0.0,
                 1: 0.0,
                 2: 0.0,
@@ -1050,7 +1051,7 @@ def mock_participant_teams():
                 8: 0.66,
                 9: 0.0,
             },
-            "PROJ_Safeties": {
+            'PROJ_Safeties': {
                 0: 0.0,
                 1: 0.0,
                 2: 0.0,
@@ -1062,7 +1063,7 @@ def mock_participant_teams():
                 8: 0.06,
                 9: 0.0,
             },
-            "PROJ_Touchdowns": {
+            'PROJ_Touchdowns': {
                 0: 0.0,
                 1: 0.0,
                 2: 0.0,
@@ -1074,7 +1075,7 @@ def mock_participant_teams():
                 8: 0.16,
                 9: 0.0,
             },
-            "PROJ_Blocked_Kicks": {
+            'PROJ_Blocked_Kicks': {
                 0: 0.0,
                 1: 0.0,
                 2: 0.0,
@@ -1086,7 +1087,7 @@ def mock_participant_teams():
                 8: 0.07,
                 9: 0.0,
             },
-            "PROJ_Team_Kickoff_and_Punt_Return_Touchdowns": {
+            'PROJ_Team_Kickoff_and_Punt_Return_Touchdowns': {
                 0: 0.0,
                 1: 0.0,
                 2: 0.0,
@@ -1098,7 +1099,7 @@ def mock_participant_teams():
                 8: 0.03,
                 9: 0.0,
             },
-            "PROJ_Points_Allowed": {
+            'PROJ_Points_Allowed': {
                 0: 0.0,
                 1: 0.0,
                 2: 0.0,
@@ -1128,10 +1129,10 @@ def test_LeaderBoard_instantiation(mock_participant_teams):
     # Verify
     assert board.year == 2020
     assert board.participant_teams == participant_teams
-    assert board.filter_cols == ["Position", "Player", "Team", "ACTUAL_pts", "PROJ_pts"]
+    assert board.filter_cols == ['Position', 'Player', 'Team', 'ACTUAL_pts', 'PROJ_pts']
 
-    assert board.__repr__() == "LeaderBoard(2020, participant_teams={})"
-    assert board.__str__() == "Turkey Bowl Leader Board: 2020"
+    assert board.__repr__() == 'LeaderBoard(2020, participant_teams={})'
+    assert board.__str__() == 'Turkey Bowl Leader Board: 2020'
 
     # Cleanup - none necessary
 
@@ -1141,9 +1142,9 @@ def test_LeaderBoard_data_no_acutal_pts(mock_participant_teams):
     year = 2020
     participant_teams = mock_participant_teams
     expected_data = {
-        "PTS": {"Dodd": 0.0, "Becca": 0.0, "Logan": 0.0},
-        "margin": {"Dodd": 0.0, "Becca": 0.0, "Logan": None},
-        "pts_back": {"Dodd": 0.0, "Becca": 0.0, "Logan": 0.0},
+        'PTS': {'Dodd': 0.0, 'Becca': 0.0, 'Logan': 0.0},
+        'margin': {'Dodd': 0.0, 'Becca': 0.0, 'Logan': None},
+        'pts_back': {'Dodd': 0.0, 'Becca': 0.0, 'Logan': 0.0},
     }
 
     expected_board_data_df = pd.DataFrame(expected_data)
@@ -1161,7 +1162,7 @@ def test_LeaderBoard_data_with_acutal_pts(mock_participant_teams):
     # Setup
     year = 2020
     participant_teams = mock_participant_teams
-    participant_teams["Dodd"]["ACTUAL_pts"] = [
+    participant_teams['Dodd']['ACTUAL_pts'] = [
         1.0,
         2.0,
         3.0,
@@ -1173,7 +1174,7 @@ def test_LeaderBoard_data_with_acutal_pts(mock_participant_teams):
         9.0,
         10.0,
     ]
-    participant_teams["Becca"]["ACTUAL_pts"] = [
+    participant_teams['Becca']['ACTUAL_pts'] = [
         1.0,
         2.0,
         3.0,
@@ -1185,7 +1186,7 @@ def test_LeaderBoard_data_with_acutal_pts(mock_participant_teams):
         10.0,
         11.0,
     ]
-    participant_teams["Logan"]["ACTUAL_pts"] = [
+    participant_teams['Logan']['ACTUAL_pts'] = [
         10.0,
         11.0,
         12.0,
@@ -1200,9 +1201,9 @@ def test_LeaderBoard_data_with_acutal_pts(mock_participant_teams):
 
     # Bench (last value) doesn't count
     expected_data = {
-        "PTS": {"Logan": 126.0, "Becca": 46.0, "Dodd": 45.0},
-        "margin": {"Logan": 80.0, "Becca": 1.0, "Dodd": None},
-        "pts_back": {"Logan": 0.0, "Becca": 80.0, "Dodd": 81.0},
+        'PTS': {'Logan': 126.0, 'Becca': 46.0, 'Dodd': 45.0},
+        'margin': {'Logan': 80.0, 'Becca': 1.0, 'Dodd': None},
+        'pts_back': {'Logan': 0.0, 'Becca': 80.0, 'Dodd': 81.0},
     }
 
     expected_board_data_df = pd.DataFrame(expected_data)
@@ -1266,7 +1267,7 @@ def test_LeaderBoard_display_no_actual_pts(mock_participant_teams, caplog):
         9     Bench (RB/WR/TE)      Randall Cobb  DAL         0.0      0.00
         """
 
-    expected_out_winning_top = "Dodd winning with 0.0 pts"
+    expected_out_winning_top = 'Dodd winning with 0.0 pts'
     expected_out_winning_stats = """
                PTS  margin  pts_back
         Dodd   0.0     0.0       0.0
@@ -1293,7 +1294,7 @@ def test_LeaderBoard_display_with_actual_pts(mock_participant_teams, caplog):
     # Setup
     caplog.set_level(logging.INFO)
     participant_teams = mock_participant_teams
-    participant_teams["Dodd"]["ACTUAL_pts"] = [
+    participant_teams['Dodd']['ACTUAL_pts'] = [
         1.0,
         2.0,
         3.0,
@@ -1305,7 +1306,7 @@ def test_LeaderBoard_display_with_actual_pts(mock_participant_teams, caplog):
         9.0,
         10.0,
     ]
-    participant_teams["Becca"]["ACTUAL_pts"] = [
+    participant_teams['Becca']['ACTUAL_pts'] = [
         1.0,
         2.0,
         3.0,
@@ -1317,7 +1318,7 @@ def test_LeaderBoard_display_with_actual_pts(mock_participant_teams, caplog):
         10.0,
         11.0,
     ]
-    participant_teams["Logan"]["ACTUAL_pts"] = [
+    participant_teams['Logan']['ACTUAL_pts'] = [
         10.0,
         11.0,
         12.0,
@@ -1374,7 +1375,7 @@ def test_LeaderBoard_display_with_actual_pts(mock_participant_teams, caplog):
         9     Bench (RB/WR/TE)      Randall Cobb  DAL        19.0      0.00
         """
 
-    expected_out_winning_top = "Logan winning with 126.0 pts"
+    expected_out_winning_top = 'Logan winning with 126.0 pts'
     expected_out_winning_stats = """
                  PTS  margin  pts_back
         Logan  126.0    80.0       0.0
@@ -1402,7 +1403,7 @@ def test_LeaderBoard_save(mock_participant_teams, tmp_path, caplog):
     caplog.set_level(logging.INFO)
     year = 2020
     participant_teams = mock_participant_teams
-    participant_teams["Dodd"]["ACTUAL_pts"] = [
+    participant_teams['Dodd']['ACTUAL_pts'] = [
         1.0,
         2.0,
         3.0,
@@ -1414,7 +1415,7 @@ def test_LeaderBoard_save(mock_participant_teams, tmp_path, caplog):
         9.0,
         10.0,
     ]
-    participant_teams["Becca"]["ACTUAL_pts"] = [
+    participant_teams['Becca']['ACTUAL_pts'] = [
         1.0,
         2.0,
         3.0,
@@ -1426,7 +1427,7 @@ def test_LeaderBoard_save(mock_participant_teams, tmp_path, caplog):
         10.0,
         11.0,
     ]
-    participant_teams["Logan"]["ACTUAL_pts"] = [
+    participant_teams['Logan']['ACTUAL_pts'] = [
         10.0,
         11.0,
         12.0,
@@ -1439,24 +1440,24 @@ def test_LeaderBoard_save(mock_participant_teams, tmp_path, caplog):
         19.0,
     ]
 
-    tmp_archive_dir = tmp_path.joinpath("archive")
+    tmp_archive_dir = tmp_path.joinpath('archive')
     tmp_archive_dir.mkdir()
 
     tmp_year_dir = tmp_archive_dir.joinpath(str(year))
     tmp_year_dir.mkdir()
 
-    tmp_leader_board_path = tmp_path.joinpath(f"{year}_leader_board.xlsx")
+    tmp_leader_board_path = tmp_path.joinpath(f'{year}_leader_board.xlsx')
 
     # Bench (last value) doesn't count
     expected_data = {
-        "PTS": {"Logan": 126.0, "Becca": 46.0, "Dodd": 45.0},
-        "margin": {"Logan": 80.0, "Becca": 1.0, "Dodd": None},
-        "pts_back": {"Logan": 0.0, "Becca": 80.0, "Dodd": 81.0},
+        'PTS': {'Logan': 126.0, 'Becca': 46.0, 'Dodd': 45.0},
+        'margin': {'Logan': 80.0, 'Becca': 1.0, 'Dodd': None},
+        'pts_back': {'Logan': 0.0, 'Becca': 80.0, 'Dodd': 81.0},
     }
 
     expected_board_data_df = pd.DataFrame(expected_data)
 
-    expected_out = f"Saving LeaderBoard to {tmp_leader_board_path}..."
+    expected_out = f'Saving LeaderBoard to {tmp_leader_board_path}...'
     # Exercise
     assert tmp_leader_board_path.exists() is False
     board = LeaderBoard(year, participant_teams)
@@ -1465,28 +1466,28 @@ def test_LeaderBoard_save(mock_participant_teams, tmp_path, caplog):
     # Verify
     assert tmp_leader_board_path.exists()
 
-    participant_dtypes = {"ACTUAL_pts": "float64", "PROJ_pts": "float64"}
+    participant_dtypes = {'ACTUAL_pts': 'float64', 'PROJ_pts': 'float64'}
 
     written_board = pd.read_excel(
         tmp_leader_board_path,
-        sheet_name="Leader Board",
+        sheet_name='Leader Board',
         index_col=0,
-        engine="openpyxl",
+        engine='openpyxl',
     )
-    written_board = written_board.astype("float64")
+    written_board = written_board.astype('float64')
 
-    written_dodd = pd.read_excel(tmp_leader_board_path, sheet_name="Dodd", engine="openpyxl")
+    written_dodd = pd.read_excel(tmp_leader_board_path, sheet_name='Dodd', engine='openpyxl')
     written_dodd = written_dodd.astype(participant_dtypes)
 
-    written_becca = pd.read_excel(tmp_leader_board_path, sheet_name="Becca", engine="openpyxl")
+    written_becca = pd.read_excel(tmp_leader_board_path, sheet_name='Becca', engine='openpyxl')
     written_becca = written_becca.astype(participant_dtypes)
 
-    written_logan = pd.read_excel(tmp_leader_board_path, sheet_name="Logan", engine="openpyxl")
+    written_logan = pd.read_excel(tmp_leader_board_path, sheet_name='Logan', engine='openpyxl')
     written_logan = written_logan.astype(participant_dtypes)
 
     assert written_board.equals(expected_board_data_df)
     assert written_dodd.equals(
-        participant_teams["Dodd"][["Position", "Player", "Team", "ACTUAL_pts", "PROJ_pts"]]
+        participant_teams['Dodd'][['Position', 'Player', 'Team', 'ACTUAL_pts', 'PROJ_pts']]
     )
 
     assert expected_out in caplog.text
