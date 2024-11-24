@@ -19,7 +19,6 @@ Notes:
 import calendar
 import logging
 from datetime import datetime
-from pathlib import Path
 from typing import Any, Dict, Optional
 from urllib.parse import urlencode
 
@@ -39,10 +38,10 @@ class Scraper:
         self.week_delta = self.thanksgiving_calendar_week_start - self.nfl_calendar_week_start
 
     def __repr__(self):
-        return f"Scraper({self.year})"
+        return f'Scraper({self.year})'
 
     def __str__(self):
-        return f"Turkey Bowl Scraper (Year: {self.year} NFL Week: {self.nfl_thanksgiving_calendar_week})"
+        return f'Turkey Bowl Scraper (Year: {self.year} NFL Week: {self.nfl_thanksgiving_calendar_week})'
 
     @property
     def nfl_calendar_week_start(self) -> int:
@@ -139,7 +138,7 @@ class Scraper:
         to Thanksgiving to ensure everything is working correctly).
         """
         logger.info(
-            f"Updating NFL Thanksgiving Calendar week from {self.nfl_thanksgiving_calendar_week} to {week}..."
+            f'Updating NFL Thanksgiving Calendar week from {self.nfl_thanksgiving_calendar_week} to {week}...'
         )
         self.week_delta = week - 1
 
@@ -147,10 +146,10 @@ class Scraper:
         """
         Helper function to encode year (season) and week as url params.
         """
-        params = {"season": self.year, "week": self.nfl_thanksgiving_calendar_week}
+        params = {'season': self.year, 'week': self.nfl_thanksgiving_calendar_week}
         params_encoded = urlencode(params)
 
-        url_encoded = f"{url}{params_encoded}"
+        url_encoded = f'{url}{params_encoded}'
 
         return url_encoded
 
@@ -164,7 +163,7 @@ class Scraper:
         stats type (projected) in order to scrape the correct player
         fantasy points.
         """
-        url = "https://api.fantasy.nfl.com/v2/players/weekprojectedstats?"
+        url = 'https://api.fantasy.nfl.com/v2/players/weekprojectedstats?'
         projected_pts_url = self._encode_url_params(url)
         return projected_pts_url
 
@@ -177,7 +176,7 @@ class Scraper:
         will create a query url for the desired year, week, and
         stats type in order to scrape the correct player fantasy points.
         """
-        url = "https://api.fantasy.nfl.com/v2/players/weekstats?"
+        url = 'https://api.fantasy.nfl.com/v2/players/weekstats?'
         actual_pts_url = self._encode_url_params(url)
         return actual_pts_url
 
@@ -191,9 +190,9 @@ class Scraper:
 
         if verbose:
             if response.status_code == requests.codes.ok:
-                logger.info(f"Successful API response obtained for: {query_url}")
+                logger.info(f'Successful API response obtained for: {query_url}')
             else:
-                logger.info(f"WARNING: API response unsuccessful for: {query_url}")
+                logger.info(f'WARNING: API response unsuccessful for: {query_url}')
 
         return response.json()
 
@@ -205,10 +204,10 @@ class Scraper:
         json is parsed to only get relevant player points.
         """
         # This is a unique identifier NOT truly a GAME identifier
-        logger.info("Collecting projected player points...")
+        logger.info('Collecting projected player points...')
         response_json = self.scrape_url(self.projected_pts_url)
-        system_config = response_json["systemConfig"].get("currentGameId")
-        projected_player_pts = response_json["games"][system_config].get("players")
+        system_config = response_json['systemConfig'].get('currentGameId')
+        projected_player_pts = response_json['games'][system_config].get('players')
 
         return projected_player_pts
 
@@ -220,10 +219,10 @@ class Scraper:
         json is parsed to only get relevant player points.
         """
         # This is a unique identifier NOT truly a GAME identifier
-        logger.info("Collecting actual player points...")
+        logger.info('Collecting actual player points...')
         response_json = self.scrape_url(self.actual_pts_url)
-        system_config = response_json["systemConfig"].get("currentGameId")
-        actual_player_pts = response_json["games"][system_config].get("players")
+        system_config = response_json['systemConfig'].get('currentGameId')
+        actual_player_pts = response_json['games'][system_config].get('players')
 
         return actual_player_pts
 
@@ -236,7 +235,7 @@ class Scraper:
         if self.dir_config.player_ids_json_path.exists():
             player_ids_loaded = utils.load_from_json(self.dir_config.player_ids_json_path)
 
-            if player_ids_loaded.get("year") == self.year:
+            if player_ids_loaded.get('year') == self.year:
                 return False
         return True
 
@@ -244,12 +243,14 @@ class Scraper:
         """
         Helper function to scrape NFL.com for individual player data.
         """
-        url = f"https://api.fantasy.nfl.com/v2/player/ngs-content?playerId={player_id}"
+        url = f'https://api.fantasy.nfl.com/v2/player/ngs-content?playerId={player_id}'
         response_json = self.scrape_url(url, verbose=False)
-
-        # This is a unique identifier not truly a GAME identifier
-        game_id = list(response_json["games"].keys())[0]
-        metadata = response_json["games"][game_id]["players"].get(player_id)
+        if 'errors' in response_json:
+            metadata = response_json['errors'][0]['message']
+        else:
+            # This is a unique identifier not truly a GAME identifier
+            game_id = list(response_json['games'].keys())[0]
+            metadata = response_json['games'][game_id]['players'].get(player_id)
 
         return metadata
 
@@ -258,10 +259,10 @@ class Scraper:
     ) -> None:
         player_metadata = self._get_player_metadata(pid)
         pulled_player_id_data[pid] = {}
-        pulled_player_id_data[pid]["name"] = player_metadata.get("name")
-        pulled_player_id_data[pid]["position"] = player_metadata.get("position")
-        pulled_player_id_data[pid]["team"] = player_metadata.get("nflTeamAbbr")
-        pulled_player_id_data[pid]["injury"] = player_metadata.get("injuryGameStatus")
+        pulled_player_id_data[pid]['name'] = player_metadata.get('name')
+        pulled_player_id_data[pid]['position'] = player_metadata.get('position')
+        pulled_player_id_data[pid]['team'] = player_metadata.get('nflTeamAbbr')
+        pulled_player_id_data[pid]['injury'] = player_metadata.get('injuryGameStatus')
 
     def update_player_ids(self, projected_player_pts: Dict[str, Any]) -> None:
         """
@@ -274,11 +275,11 @@ class Scraper:
             pulled_player_ids.sort(key=int)
 
             # Add a year reference (for checking)
-            pulled_player_ids.insert(0, "year")
+            pulled_player_ids.insert(0, 'year')
             pulled_player_id_data: Dict[str, Dict[str, Optional[str]]] = {}
 
-            for pid in tqdm(pulled_player_ids, desc="\tUpdating player ids", ncols=75):
-                if pid == "year":
+            for pid in tqdm(pulled_player_ids, desc='\tUpdating player ids', ncols=75):
+                if pid == 'year':
                     pulled_player_id_data[pid] = self.year  # type: ignore[assignment]
                 else:
                     self._update_single_player_id(pid, pulled_player_id_data)
@@ -289,4 +290,4 @@ class Scraper:
             )
 
         else:
-            logger.info(f"Player ids are up to date at {self.dir_config.player_ids_json_path}")
+            logger.info(f'Player ids are up to date at {self.dir_config.player_ids_json_path}')
