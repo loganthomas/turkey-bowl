@@ -99,7 +99,6 @@ def create_player_pts_df(
 
     # Get definition of each point attribute
     stat_ids_json_path = dir_config.stat_ids_json_path
-    print(f'{stat_ids_json_path=}')
     stat_ids_dict = utils.load_from_json(stat_ids_json_path)
     stat_defns = {k: v['name'].replace(' ', '_') for k, v in stat_ids_dict.items()}
     player_pts_df = player_pts_df.rename(columns=stat_defns)
@@ -110,7 +109,7 @@ def create_player_pts_df(
     # Get definition of each player team and name based on player id
     player_ids_json_path = dir_config.player_ids_json_path
     player_ids = utils.load_from_json(player_ids_json_path)
-    print(f'{player_ids_json_path=}')
+
     # It is possible that there are new players when scraping actual points
     # that don't exist in player_ids.json nor projected points; if so, report and re-pull player ids
     undocumented_players = set(player_pts_df['Player']).difference(set(player_ids))
@@ -118,9 +117,14 @@ def create_player_pts_df(
         scraper = Scraper(year)
 
         for pid in undocumented_players:
-            player_metadata = scraper._get_player_metadata(pid)
-            logger.info(f"Undocumented player {pid}: {player_metadata['name']}")
-            scraper._update_single_player_id(pid, player_ids)
+            try:
+                player_metadata = scraper._get_player_metadata(pid)
+                logger.info(f"Undocumented player {pid}: {player_metadata['name']}")
+                scraper._update_single_player_id(pid, player_ids)
+            except Exception:
+                logger.info(f'Error occured for undocumented player {pid}: {player_metadata}')
+                logger.info(f'Removing {pid}...')
+                player_pts_df = player_pts_df[player_pts_df['Player'] != pid]
 
         utils.write_to_json(json_dict=player_ids, filename=scraper.dir_config.player_ids_json_path)
 
@@ -141,7 +145,7 @@ def create_player_pts_df(
     pts_col = player_pts_df.filter(regex=f'{prefix}pts')
     pts_col_name = f'{prefix}pts'
     player_pts_df = player_pts_df.drop(pts_col_name, axis=1)
-    player_pts_df.insert(3, pts_col_name, pts_col.to_numpy())
+    player_pts_df.insert(3, pts_col_name, pts_col)
 
     # Convert all col types to non-string as strings come from scrape
     col_types = {}
