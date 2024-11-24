@@ -37,4 +37,3 @@ Infrastructure Improvements
 * New GitHub actions created for auto-release and running test suite. (#86)
 
 * Update CLI reporting to use logging (stream and file support). (#92)
-

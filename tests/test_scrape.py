@@ -1,6 +1,7 @@
 """
 Unit tests for scrape.py
 """
+
 import calendar
 import json
 import logging
@@ -25,10 +26,10 @@ def test_Scraper_instantiation():
 
     # Verify
     assert scraper.year == 2020
-    assert scraper.dir_config.player_ids_json_path == here.joinpath("assets/player_ids.json")
+    assert scraper.dir_config.player_ids_json_path == here.joinpath('assets/player_ids.json')
 
-    assert scraper.__repr__() == "Scraper(2020)"
-    assert scraper.__str__() == "Turkey Bowl Scraper (Year: 2020 NFL Week: 12)"
+    assert scraper.__repr__() == 'Scraper(2020)'
+    assert scraper.__str__() == 'Turkey Bowl Scraper (Year: 2020 NFL Week: 12)'
 
     # Cleanup - none necessary
 
@@ -45,7 +46,7 @@ def _get_date_of_first_thur_in_year(year: int) -> datetime:
 
 
 @pytest.mark.parametrize(
-    "year, expected_nfl_start_DATE",
+    'year, expected_nfl_start_DATE',
     [
         (2010, datetime(2010, 9, 9)),
         (2011, datetime(2011, 9, 8)),
@@ -98,7 +99,7 @@ def test_Scraper_nfl_calendar_week_start(year, expected_nfl_start_DATE):
 
 
 @pytest.mark.parametrize(
-    "year, expected_thanksgiving_day_DATE",
+    'year, expected_thanksgiving_day_DATE',
     [
         (2010, datetime(2010, 11, 25)),
         (2011, datetime(2011, 11, 24)),
@@ -148,7 +149,7 @@ def test_Scraper_thanksgiving_calendar_week_start(year, expected_thanksgiving_da
 
 
 @pytest.mark.parametrize(
-    "year, expected_nfl_thanksgiving_calendar_WEEK",
+    'year, expected_nfl_thanksgiving_calendar_WEEK',
     [
         (2015, 12),
         (2016, 12),
@@ -176,7 +177,7 @@ def test_Scraper_nfl_thanksgiving_calendar_week(year, expected_nfl_thanksgiving_
 
 
 @pytest.mark.parametrize(
-    "year, expected_nfl_thanksgiving_calendar_WEEK",
+    'year, expected_nfl_thanksgiving_calendar_WEEK',
     [
         (2015, 12),
         (2016, 12),
@@ -209,7 +210,7 @@ def test_Scraper_nfl_thanksgiving_calendar_week_setter(
 
 
 @pytest.mark.parametrize(
-    "year, week",
+    'year, week',
     [
         (2015, 12),
         (2016, 12),
@@ -221,8 +222,8 @@ def test_Scraper_nfl_thanksgiving_calendar_week_setter(
 )
 def test_Scraper_encode_url_params(year, week):
     # Setup
-    url = "https://test.com/v2/players/test?"
-    expected = f"https://test.com/v2/players/test?season={year}&week={week}"
+    url = 'https://test.com/v2/players/test?'
+    expected = f'https://test.com/v2/players/test?season={year}&week={week}'
 
     # Exercise
     scraper = Scraper(year)
@@ -235,7 +236,7 @@ def test_Scraper_encode_url_params(year, week):
 
 
 @pytest.mark.parametrize(
-    "year, week",
+    'year, week',
     [
         (2015, 12),
         (2016, 12),
@@ -248,7 +249,7 @@ def test_Scraper_encode_url_params(year, week):
 def test_Scraper_projected_pts_url(year, week):
     # Setup
     expected = (
-        f"https://api.fantasy.nfl.com/v2/players/weekprojectedstats?season={year}&week={week}"
+        f'https://api.fantasy.nfl.com/v2/players/weekprojectedstats?season={year}&week={week}'
     )
 
     # Exercise
@@ -261,7 +262,7 @@ def test_Scraper_projected_pts_url(year, week):
 
 
 @pytest.mark.parametrize(
-    "year, week",
+    'year, week',
     [
         (2015, 12),
         (2016, 12),
@@ -273,7 +274,7 @@ def test_Scraper_projected_pts_url(year, week):
 )
 def test_Scraper_actual_pts_url(year, week):
     # Setup
-    expected = f"https://api.fantasy.nfl.com/v2/players/weekstats?season={year}&week={week}"
+    expected = f'https://api.fantasy.nfl.com/v2/players/weekstats?season={year}&week={week}'
 
     # Exercise
     scraper = Scraper(year)
@@ -288,13 +289,13 @@ def test_Scraper_actual_pts_url(year, week):
 def test_Scraper_scrape_url_bad_status_code(caplog):
     # Setup
     caplog.set_level(logging.INFO)
-    url = "https://test.com"
+    url = 'https://test.com'
     expected_json = {
-        "errors": [
+        'errors': [
             {
-                "id": "leaguePlayer",
-                "message": "PLAYER_INVALID",
-                "messageStringId": "PLAYER_INVALID",
+                'id': 'leaguePlayer',
+                'message': 'PLAYER_INVALID',
+                'messageStringId': 'PLAYER_INVALID',
             }
         ]
     }
@@ -306,7 +307,7 @@ def test_Scraper_scrape_url_bad_status_code(caplog):
 
     # Verify
     assert result == expected_json
-    assert "WARNING: API response unsuccessful for: https://test.com" in caplog.text
+    assert 'WARNING: API response unsuccessful for: https://test.com' in caplog.text
 
     # Cleanup - none necessary
 
@@ -315,8 +316,8 @@ def test_Scraper_scrape_url_bad_status_code(caplog):
 def test_Scraper_scrape_url_good_status_code(caplog):
     # Setup
     caplog.set_level(logging.INFO)
-    url = "https://test.com"
-    expected_json = {"data": "good"}
+    url = 'https://test.com'
+    expected_json = {'data': 'good'}
     responses.add(method=responses.GET, url=url, json=expected_json, status=200)
 
     # Exercise
@@ -325,7 +326,7 @@ def test_Scraper_scrape_url_good_status_code(caplog):
 
     # Verify
     assert result == expected_json
-    assert "Successful API response obtained for: https://test.com" in caplog.text
+    assert 'Successful API response obtained for: https://test.com' in caplog.text
 
     # Cleanup - none necessary
 
@@ -335,37 +336,37 @@ def test_Scraper_get_projected_player_pts(caplog):
     # Setup
     caplog.set_level(logging.INFO)
     request_json = {
-        "systemConfig": {"currentGameId": "102020"},
-        "games": {
-            "102020": {
-                "players": {
-                    "2504211": {
-                        "projectedStats": {
-                            "week": {
-                                "2020": {
-                                    "12": {
-                                        "1": "1",
-                                        "14": "0.05",
-                                        "20": "1.1",
-                                        "21": "13.11",
-                                        "22": "0.09",
-                                        "pts": "2.96",
+        'systemConfig': {'currentGameId': '102020'},
+        'games': {
+            '102020': {
+                'players': {
+                    '2504211': {
+                        'projectedStats': {
+                            'week': {
+                                '2020': {
+                                    '12': {
+                                        '1': '1',
+                                        '14': '0.05',
+                                        '20': '1.1',
+                                        '21': '13.11',
+                                        '22': '0.09',
+                                        'pts': '2.96',
                                     }
                                 }
                             }
                         }
                     },
-                    "310": {
-                        "projectedStats": {
-                            "week": {
-                                "2020": {
-                                    "12": {
-                                        "1": "1",
-                                        "14": "5.5",
-                                        "20": "3.3",
-                                        "21": "17.11",
-                                        "22": "0.07",
-                                        "pts": "9.96",
+                    '310': {
+                        'projectedStats': {
+                            'week': {
+                                '2020': {
+                                    '12': {
+                                        '1': '1',
+                                        '14': '5.5',
+                                        '20': '3.3',
+                                        '21': '17.11',
+                                        '22': '0.07',
+                                        'pts': '9.96',
                                     }
                                 }
                             }
@@ -385,33 +386,33 @@ def test_Scraper_get_projected_player_pts(caplog):
     )
 
     expected_player_pts = {
-        "2504211": {
-            "projectedStats": {
-                "week": {
-                    "2020": {
-                        "12": {
-                            "1": "1",
-                            "14": "0.05",
-                            "20": "1.1",
-                            "21": "13.11",
-                            "22": "0.09",
-                            "pts": "2.96",
+        '2504211': {
+            'projectedStats': {
+                'week': {
+                    '2020': {
+                        '12': {
+                            '1': '1',
+                            '14': '0.05',
+                            '20': '1.1',
+                            '21': '13.11',
+                            '22': '0.09',
+                            'pts': '2.96',
                         }
                     }
                 }
             }
         },
-        "310": {
-            "projectedStats": {
-                "week": {
-                    "2020": {
-                        "12": {
-                            "1": "1",
-                            "14": "5.5",
-                            "20": "3.3",
-                            "21": "17.11",
-                            "22": "0.07",
-                            "pts": "9.96",
+        '310': {
+            'projectedStats': {
+                'week': {
+                    '2020': {
+                        '12': {
+                            '1': '1',
+                            '14': '5.5',
+                            '20': '3.3',
+                            '21': '17.11',
+                            '22': '0.07',
+                            'pts': '9.96',
                         }
                     }
                 }
@@ -424,8 +425,8 @@ def test_Scraper_get_projected_player_pts(caplog):
 
     # Verify
     assert result == expected_player_pts
-    assert "Collecting projected player points..." in caplog.text
-    assert f"Successful API response obtained for: {scraper.projected_pts_url}" in caplog.text
+    assert 'Collecting projected player points...' in caplog.text
+    assert f'Successful API response obtained for: {scraper.projected_pts_url}' in caplog.text
     # Cleanup - none necessary
 
 
@@ -434,37 +435,37 @@ def test_Scraper_get_actual_player_pts(caplog):
     # Setup
     caplog.set_level(logging.INFO)
     request_json = {
-        "systemConfig": {"currentGameId": "102020"},
-        "games": {
-            "102020": {
-                "players": {
-                    "2649": {
-                        "stats": {
-                            "week": {
-                                "2020": {
-                                    "12": {
-                                        "1": "1",
-                                        "14": "0.05",
-                                        "20": "1.1",
-                                        "21": "13.11",
-                                        "22": "0.09",
-                                        "pts": "2.96",
+        'systemConfig': {'currentGameId': '102020'},
+        'games': {
+            '102020': {
+                'players': {
+                    '2649': {
+                        'stats': {
+                            'week': {
+                                '2020': {
+                                    '12': {
+                                        '1': '1',
+                                        '14': '0.05',
+                                        '20': '1.1',
+                                        '21': '13.11',
+                                        '22': '0.09',
+                                        'pts': '2.96',
                                     }
                                 }
                             }
                         }
                     },
-                    "382": {
-                        "stats": {
-                            "week": {
-                                "2020": {
-                                    "12": {
-                                        "1": "1",
-                                        "14": "5.5",
-                                        "20": "3.3",
-                                        "21": "17.11",
-                                        "22": "0.07",
-                                        "pts": "9.96",
+                    '382': {
+                        'stats': {
+                            'week': {
+                                '2020': {
+                                    '12': {
+                                        '1': '1',
+                                        '14': '5.5',
+                                        '20': '3.3',
+                                        '21': '17.11',
+                                        '22': '0.07',
+                                        'pts': '9.96',
                                     }
                                 }
                             }
@@ -479,33 +480,33 @@ def test_Scraper_get_actual_player_pts(caplog):
     responses.add(method=responses.GET, url=scraper.actual_pts_url, json=request_json, status=200)
 
     expected_player_pts = {
-        "2649": {
-            "stats": {
-                "week": {
-                    "2020": {
-                        "12": {
-                            "1": "1",
-                            "14": "0.05",
-                            "20": "1.1",
-                            "21": "13.11",
-                            "22": "0.09",
-                            "pts": "2.96",
+        '2649': {
+            'stats': {
+                'week': {
+                    '2020': {
+                        '12': {
+                            '1': '1',
+                            '14': '0.05',
+                            '20': '1.1',
+                            '21': '13.11',
+                            '22': '0.09',
+                            'pts': '2.96',
                         }
                     }
                 }
             }
         },
-        "382": {
-            "stats": {
-                "week": {
-                    "2020": {
-                        "12": {
-                            "1": "1",
-                            "14": "5.5",
-                            "20": "3.3",
-                            "21": "17.11",
-                            "22": "0.07",
-                            "pts": "9.96",
+        '382': {
+            'stats': {
+                'week': {
+                    '2020': {
+                        '12': {
+                            '1': '1',
+                            '14': '5.5',
+                            '20': '3.3',
+                            '21': '17.11',
+                            '22': '0.07',
+                            'pts': '9.96',
                         }
                     }
                 }
@@ -518,31 +519,31 @@ def test_Scraper_get_actual_player_pts(caplog):
 
     # Verify
     assert result == expected_player_pts
-    assert "Collecting actual player points..." in caplog.text
-    assert f"Successful API response obtained for: {scraper.actual_pts_url}" in caplog.text
+    assert 'Collecting actual player points...' in caplog.text
+    assert f'Successful API response obtained for: {scraper.actual_pts_url}' in caplog.text
 
     # Cleanup - none necessary
 
 
 def test_Scraper_player_ids_need_update_exists_same_year(tmp_path):
     # Setup
-    tmp_dir = tmp_path.joinpath("assets")
+    tmp_dir = tmp_path.joinpath('assets')
     tmp_dir.mkdir()
-    tmp_player_ids_json_path = tmp_dir.joinpath("player_ids.json")
+    tmp_player_ids_json_path = tmp_dir.joinpath('player_ids.json')
 
     player_ids = {
-        "year": 2020,
-        "252": {"name": "Chad Henne", "position": "QB", "team": "KC", "injury": None},
-        "310": {
-            "name": "Matt Ryan",
-            "position": "QB",
-            "team": "ATL",
-            "injury": "Questionable",
+        'year': 2020,
+        '252': {'name': 'Chad Henne', 'position': 'QB', 'team': 'KC', 'injury': None},
+        '310': {
+            'name': 'Matt Ryan',
+            'position': 'QB',
+            'team': 'ATL',
+            'injury': 'Questionable',
         },
-        "382": {"name": "Joe Flacco", "position": "QB", "team": "NYJ", "injury": None},
+        '382': {'name': 'Joe Flacco', 'position': 'QB', 'team': 'NYJ', 'injury': None},
     }
 
-    with open(tmp_player_ids_json_path, "w") as tmp_file:
+    with open(tmp_player_ids_json_path, 'w') as tmp_file:
         json.dump(player_ids, tmp_file)
 
     # Exercise
@@ -557,23 +558,23 @@ def test_Scraper_player_ids_need_update_exists_same_year(tmp_path):
 
 def test_Scraper_player_ids_need_update_exists_diff_year(tmp_path):
     # Setup
-    tmp_dir = tmp_path.joinpath("assets")
+    tmp_dir = tmp_path.joinpath('assets')
     tmp_dir.mkdir()
-    tmp_player_ids_json_path = tmp_dir.joinpath("player_ids.json")
+    tmp_player_ids_json_path = tmp_dir.joinpath('player_ids.json')
 
     player_ids = {
-        "year": 2019,
-        "252": {"name": "Chad Henne", "position": "QB", "team": "KC", "injury": None},
-        "310": {
-            "name": "Matt Ryan",
-            "position": "QB",
-            "team": "ATL",
-            "injury": "Questionable",
+        'year': 2019,
+        '252': {'name': 'Chad Henne', 'position': 'QB', 'team': 'KC', 'injury': None},
+        '310': {
+            'name': 'Matt Ryan',
+            'position': 'QB',
+            'team': 'ATL',
+            'injury': 'Questionable',
         },
-        "382": {"name": "Joe Flacco", "position": "QB", "team": "NYJ", "injury": None},
+        '382': {'name': 'Joe Flacco', 'position': 'QB', 'team': 'NYJ', 'injury': None},
     }
 
-    with open(tmp_player_ids_json_path, "w") as tmp_file:
+    with open(tmp_player_ids_json_path, 'w') as tmp_file:
         json.dump(player_ids, tmp_file)
 
     # Exercise
@@ -588,7 +589,7 @@ def test_Scraper_player_ids_need_update_exists_diff_year(tmp_path):
 
 def test_Scraper_player_ids_need_update_doesnt_exist(tmp_path):
     # Setup
-    tmp_dir = tmp_path.joinpath("assets")
+    tmp_dir = tmp_path.joinpath('assets')
     tmp_dir.mkdir()
 
     # Exercise
@@ -604,31 +605,31 @@ def test_Scraper_player_ids_need_update_doesnt_exist(tmp_path):
 @responses.activate
 def test_Scraper__get_player_metadata():
     # Setup
-    player_id = "2561671"
-    url = f"https://api.fantasy.nfl.com/v2/player/ngs-content?playerId={player_id}"
+    player_id = '2561671'
+    url = f'https://api.fantasy.nfl.com/v2/player/ngs-content?playerId={player_id}'
 
     request_json = {
-        "games": {
-            "102020": {
-                "players": {
-                    "2561671": {
-                        "playerId": "2561671",
-                        "nflGlobalEntityId": "32005455-5257-6945-9a73-9303e69596b7",
-                        "esbId": "TUR576945",
-                        "name": "Malik Turner",
-                        "firstName": "Malik",
-                        "lastName": "Turner",
-                        "position": "WR",
-                        "nflTeamAbbr": "DAL",
-                        "nflTeamId": "8",
-                        "injuryGameStatus": None,
-                        "imageUrl": "https://static.www.nfl.com/image/private/w_200,h_200,c_fill/league/oo74j3pazlr6xc0w4jum",
-                        "smallImageUrl": "https://static.www.nfl.com/image/private/w_65,h_90,c_fill/league/oo74j3pazlr6xc0w4jum",
-                        "largeImageUrl": "https://static.www.nfl.com/image/private/w_1400,h_1000,c_fill/league/oo74j3pazlr6xc0w4jum",
-                        "byeWeek": "10",
-                        "isUndroppable": False,
-                        "isReserveStatus": False,
-                        "lastVideoTimestamp": "1969-12-31T16:00:00-08:00",
+        'games': {
+            '102020': {
+                'players': {
+                    '2561671': {
+                        'playerId': '2561671',
+                        'nflGlobalEntityId': '32005455-5257-6945-9a73-9303e69596b7',
+                        'esbId': 'TUR576945',
+                        'name': 'Malik Turner',
+                        'firstName': 'Malik',
+                        'lastName': 'Turner',
+                        'position': 'WR',
+                        'nflTeamAbbr': 'DAL',
+                        'nflTeamId': '8',
+                        'injuryGameStatus': None,
+                        'imageUrl': 'https://static.www.nfl.com/image/private/w_200,h_200,c_fill/league/oo74j3pazlr6xc0w4jum',
+                        'smallImageUrl': 'https://static.www.nfl.com/image/private/w_65,h_90,c_fill/league/oo74j3pazlr6xc0w4jum',
+                        'largeImageUrl': 'https://static.www.nfl.com/image/private/w_1400,h_1000,c_fill/league/oo74j3pazlr6xc0w4jum',
+                        'byeWeek': '10',
+                        'isUndroppable': False,
+                        'isReserveStatus': False,
+                        'lastVideoTimestamp': '1969-12-31T16:00:00-08:00',
                     }
                 }
             }
@@ -636,7 +637,7 @@ def test_Scraper__get_player_metadata():
     }
 
     responses.add(method=responses.GET, url=url, json=request_json, status=200)
-    expected = request_json["games"]["102020"]["players"][player_id]
+    expected = request_json['games']['102020']['players'][player_id]
 
     # Exercise
     scraper = Scraper(2020)
@@ -644,10 +645,10 @@ def test_Scraper__get_player_metadata():
 
     # Verify
     assert result == expected
-    assert result.get("name") == "Malik Turner"
-    assert result.get("position") == "WR"
-    assert result.get("nflTeamAbbr") == "DAL"
-    assert result.get("injuryGameStatus") is None
+    assert result.get('name') == 'Malik Turner'
+    assert result.get('position') == 'WR'
+    assert result.get('nflTeamAbbr') == 'DAL'
+    assert result.get('injuryGameStatus') is None
 
     # Cleanup - none necessary
 
@@ -656,33 +657,33 @@ def test_Scraper__get_player_metadata():
 def test_Scraper__update_single_player_id():
     # Setup
     pulled_player_id_data = {}
-    player_id = "2504211"
-    url = f"https://api.fantasy.nfl.com/v2/player/ngs-content?playerId={player_id}"
+    player_id = '2504211'
+    url = f'https://api.fantasy.nfl.com/v2/player/ngs-content?playerId={player_id}'
 
     request_json = {
-        "games": {
-            "102022": {
-                "players": {
-                    "2504211": {
-                        "playerId": "2504211",
-                        "nflGlobalEntityId": "32004252-4137-1156-7ed0-8b9e44948f13",
-                        "esbId": "BRA371156",
-                        "name": "Tom Brady",
-                        "firstName": "Tom",
-                        "lastName": "Brady",
-                        "position": "QB",
-                        "nflTeamAbbr": "TB",
-                        "nflTeamId": "31",
-                        "injuryGameStatus": None,
-                        "imageUrl": "https://static.www.nfl.com/image/private/w_200,h_200,c_fill/league/q7dpdlxyu5rs05rgh1le",
-                        "smallImageUrl": "https://static.www.nfl.com/image/private/w_65,h_90,c_fill/league/q7dpdlxyu5rs05rgh1le",
-                        "largeImageUrl": "https://static.www.nfl.com/image/private/w_1400,h_1000,c_fill/league/q7dpdlxyu5rs05rgh1le",
-                        "byeWeek": "11",
-                        "cancelledWeeks": [],
-                        "archetypes": [],
-                        "isUndroppable": False,
-                        "isReserveStatus": False,
-                        "lastVideoTimestamp": "1969-12-31T16:00:00-08:00",
+        'games': {
+            '102022': {
+                'players': {
+                    '2504211': {
+                        'playerId': '2504211',
+                        'nflGlobalEntityId': '32004252-4137-1156-7ed0-8b9e44948f13',
+                        'esbId': 'BRA371156',
+                        'name': 'Tom Brady',
+                        'firstName': 'Tom',
+                        'lastName': 'Brady',
+                        'position': 'QB',
+                        'nflTeamAbbr': 'TB',
+                        'nflTeamId': '31',
+                        'injuryGameStatus': None,
+                        'imageUrl': 'https://static.www.nfl.com/image/private/w_200,h_200,c_fill/league/q7dpdlxyu5rs05rgh1le',
+                        'smallImageUrl': 'https://static.www.nfl.com/image/private/w_65,h_90,c_fill/league/q7dpdlxyu5rs05rgh1le',
+                        'largeImageUrl': 'https://static.www.nfl.com/image/private/w_1400,h_1000,c_fill/league/q7dpdlxyu5rs05rgh1le',
+                        'byeWeek': '11',
+                        'cancelledWeeks': [],
+                        'archetypes': [],
+                        'isUndroppable': False,
+                        'isReserveStatus': False,
+                        'lastVideoTimestamp': '1969-12-31T16:00:00-08:00',
                     }
                 }
             }
@@ -697,10 +698,10 @@ def test_Scraper__update_single_player_id():
     expected = pulled_player_id_data.get(player_id)
 
     # Verify
-    assert expected.get("name") == "Tom Brady"
-    assert expected.get("position") == "QB"
-    assert expected.get("team") == "TB"
-    assert expected.get("injury") is None
+    assert expected.get('name') == 'Tom Brady'
+    assert expected.get('position') == 'QB'
+    assert expected.get('team') == 'TB'
+    assert expected.get('injury') is None
 
     # Cleanup - none necessary
 
@@ -708,23 +709,23 @@ def test_Scraper__update_single_player_id():
 def test_Scraper_update_player_ids_exist(tmp_path, caplog):
     # Setup
     caplog.set_level(logging.INFO)
-    tmp_dir = tmp_path.joinpath("assets")
+    tmp_dir = tmp_path.joinpath('assets')
     tmp_dir.mkdir()
-    tmp_player_ids_json_path = tmp_dir.joinpath("player_ids.json")
+    tmp_player_ids_json_path = tmp_dir.joinpath('player_ids.json')
 
     player_ids = {
-        "year": 2020,
-        "252": {"name": "Chad Henne", "position": "QB", "team": "KC", "injury": None},
-        "310": {
-            "name": "Matt Ryan",
-            "position": "QB",
-            "team": "ATL",
-            "injury": "Questionable",
+        'year': 2020,
+        '252': {'name': 'Chad Henne', 'position': 'QB', 'team': 'KC', 'injury': None},
+        '310': {
+            'name': 'Matt Ryan',
+            'position': 'QB',
+            'team': 'ATL',
+            'injury': 'Questionable',
         },
-        "382": {"name": "Joe Flacco", "position": "QB", "team": "NYJ", "injury": None},
+        '382': {'name': 'Joe Flacco', 'position': 'QB', 'team': 'NYJ', 'injury': None},
     }
 
-    with open(tmp_player_ids_json_path, "w") as tmp_file:
+    with open(tmp_player_ids_json_path, 'w') as tmp_file:
         json.dump(player_ids, tmp_file)
 
     projected_player_pts = {}  # placeholder (not used)
@@ -734,93 +735,93 @@ def test_Scraper_update_player_ids_exist(tmp_path, caplog):
     scraper.update_player_ids(projected_player_pts)
 
     # Verify
-    assert f"Player ids are up to date at {tmp_player_ids_json_path}" in caplog.text
+    assert f'Player ids are up to date at {tmp_player_ids_json_path}' in caplog.text
 
 
 @responses.activate
 def test_Scraper_update_player_ids_dont_exist(tmp_path):
     # Setup
-    tmp_dir = tmp_path.joinpath("assets")
+    tmp_dir = tmp_path.joinpath('assets')
     tmp_dir.mkdir()
-    tmp_player_ids_json_path = tmp_dir.joinpath("player_ids.json")
+    tmp_player_ids_json_path = tmp_dir.joinpath('player_ids.json')
 
     request_jsons = {
-        "252": {
-            "games": {
-                "102020": {
-                    "players": {
-                        "252": {
-                            "playerId": "252",
-                            "nflGlobalEntityId": "32005455-5257-6945-9a73-9303e69596b7",
-                            "esbId": "TUR576945",
-                            "name": "Chad Henne",
-                            "firstName": "Chad",
-                            "lastName": "Henne",
-                            "position": "QB",
-                            "nflTeamAbbr": "KC",
-                            "nflTeamId": "8",
-                            "injuryGameStatus": None,
-                            "imageUrl": "https://static.www.nfl.com/image/private/w_200,h_200,c_fill/league/oo74j3pazlr6xc0w4jum",
-                            "smallImageUrl": "https://static.www.nfl.com/image/private/w_65,h_90,c_fill/league/oo74j3pazlr6xc0w4jum",
-                            "largeImageUrl": "https://static.www.nfl.com/image/private/w_1400,h_1000,c_fill/league/oo74j3pazlr6xc0w4jum",
-                            "byeWeek": "10",
-                            "isUndroppable": False,
-                            "isReserveStatus": False,
-                            "lastVideoTimestamp": "1969-12-31T16:00:00-08:00",
+        '252': {
+            'games': {
+                '102020': {
+                    'players': {
+                        '252': {
+                            'playerId': '252',
+                            'nflGlobalEntityId': '32005455-5257-6945-9a73-9303e69596b7',
+                            'esbId': 'TUR576945',
+                            'name': 'Chad Henne',
+                            'firstName': 'Chad',
+                            'lastName': 'Henne',
+                            'position': 'QB',
+                            'nflTeamAbbr': 'KC',
+                            'nflTeamId': '8',
+                            'injuryGameStatus': None,
+                            'imageUrl': 'https://static.www.nfl.com/image/private/w_200,h_200,c_fill/league/oo74j3pazlr6xc0w4jum',
+                            'smallImageUrl': 'https://static.www.nfl.com/image/private/w_65,h_90,c_fill/league/oo74j3pazlr6xc0w4jum',
+                            'largeImageUrl': 'https://static.www.nfl.com/image/private/w_1400,h_1000,c_fill/league/oo74j3pazlr6xc0w4jum',
+                            'byeWeek': '10',
+                            'isUndroppable': False,
+                            'isReserveStatus': False,
+                            'lastVideoTimestamp': '1969-12-31T16:00:00-08:00',
                         }
                     }
                 }
             }
         },
-        "310": {
-            "games": {
-                "102020": {
-                    "players": {
-                        "310": {
-                            "playerId": "310",
-                            "nflGlobalEntityId": "32005455-5257-6945-9a73-9303e69596b7",
-                            "esbId": "TUR576945",
-                            "name": "Matt Ryan",
-                            "firstName": "Matt",
-                            "lastName": "Ryan",
-                            "position": "QB",
-                            "nflTeamAbbr": "ATL",
-                            "nflTeamId": "8",
-                            "injuryGameStatus": "Questionable",
-                            "imageUrl": "https://static.www.nfl.com/image/private/w_200,h_200,c_fill/league/oo74j3pazlr6xc0w4jum",
-                            "smallImageUrl": "https://static.www.nfl.com/image/private/w_65,h_90,c_fill/league/oo74j3pazlr6xc0w4jum",
-                            "largeImageUrl": "https://static.www.nfl.com/image/private/w_1400,h_1000,c_fill/league/oo74j3pazlr6xc0w4jum",
-                            "byeWeek": "10",
-                            "isUndroppable": False,
-                            "isReserveStatus": False,
-                            "lastVideoTimestamp": "1969-12-31T16:00:00-08:00",
+        '310': {
+            'games': {
+                '102020': {
+                    'players': {
+                        '310': {
+                            'playerId': '310',
+                            'nflGlobalEntityId': '32005455-5257-6945-9a73-9303e69596b7',
+                            'esbId': 'TUR576945',
+                            'name': 'Matt Ryan',
+                            'firstName': 'Matt',
+                            'lastName': 'Ryan',
+                            'position': 'QB',
+                            'nflTeamAbbr': 'ATL',
+                            'nflTeamId': '8',
+                            'injuryGameStatus': 'Questionable',
+                            'imageUrl': 'https://static.www.nfl.com/image/private/w_200,h_200,c_fill/league/oo74j3pazlr6xc0w4jum',
+                            'smallImageUrl': 'https://static.www.nfl.com/image/private/w_65,h_90,c_fill/league/oo74j3pazlr6xc0w4jum',
+                            'largeImageUrl': 'https://static.www.nfl.com/image/private/w_1400,h_1000,c_fill/league/oo74j3pazlr6xc0w4jum',
+                            'byeWeek': '10',
+                            'isUndroppable': False,
+                            'isReserveStatus': False,
+                            'lastVideoTimestamp': '1969-12-31T16:00:00-08:00',
                         }
                     }
                 }
             }
         },
-        "382": {
-            "games": {
-                "102020": {
-                    "players": {
-                        "382": {
-                            "playerId": "382",
-                            "nflGlobalEntityId": "32005455-5257-6945-9a73-9303e69596b7",
-                            "esbId": "TUR576945",
-                            "name": "Joe Flacco",
-                            "firstName": "Joe",
-                            "lastName": "Flacco",
-                            "position": "QB",
-                            "nflTeamAbbr": "NYJ",
-                            "nflTeamId": "8",
-                            "injuryGameStatus": None,
-                            "imageUrl": "https://static.www.nfl.com/image/private/w_200,h_200,c_fill/league/oo74j3pazlr6xc0w4jum",
-                            "smallImageUrl": "https://static.www.nfl.com/image/private/w_65,h_90,c_fill/league/oo74j3pazlr6xc0w4jum",
-                            "largeImageUrl": "https://static.www.nfl.com/image/private/w_1400,h_1000,c_fill/league/oo74j3pazlr6xc0w4jum",
-                            "byeWeek": "10",
-                            "isUndroppable": False,
-                            "isReserveStatus": False,
-                            "lastVideoTimestamp": "1969-12-31T16:00:00-08:00",
+        '382': {
+            'games': {
+                '102020': {
+                    'players': {
+                        '382': {
+                            'playerId': '382',
+                            'nflGlobalEntityId': '32005455-5257-6945-9a73-9303e69596b7',
+                            'esbId': 'TUR576945',
+                            'name': 'Joe Flacco',
+                            'firstName': 'Joe',
+                            'lastName': 'Flacco',
+                            'position': 'QB',
+                            'nflTeamAbbr': 'NYJ',
+                            'nflTeamId': '8',
+                            'injuryGameStatus': None,
+                            'imageUrl': 'https://static.www.nfl.com/image/private/w_200,h_200,c_fill/league/oo74j3pazlr6xc0w4jum',
+                            'smallImageUrl': 'https://static.www.nfl.com/image/private/w_65,h_90,c_fill/league/oo74j3pazlr6xc0w4jum',
+                            'largeImageUrl': 'https://static.www.nfl.com/image/private/w_1400,h_1000,c_fill/league/oo74j3pazlr6xc0w4jum',
+                            'byeWeek': '10',
+                            'isUndroppable': False,
+                            'isReserveStatus': False,
+                            'lastVideoTimestamp': '1969-12-31T16:00:00-08:00',
                         }
                     }
                 }
@@ -829,50 +830,50 @@ def test_Scraper_update_player_ids_dont_exist(tmp_path):
     }
 
     projected_player_pts = {
-        "310": {
-            "projectedStats": {
-                "week": {
-                    "2020": {
-                        "12": {
-                            "1": "1",
-                            "14": "0.05",
-                            "20": "1.94",
-                            "21": "20.23",
-                            "22": "0.13",
-                            "pts": "4.75",
+        '310': {
+            'projectedStats': {
+                'week': {
+                    '2020': {
+                        '12': {
+                            '1': '1',
+                            '14': '0.05',
+                            '20': '1.94',
+                            '21': '20.23',
+                            '22': '0.13',
+                            'pts': '4.75',
                         }
                     }
                 }
             }
         },
-        "382": {
-            "projectedStats": {
-                "week": {
-                    "2020": {
-                        "12": {
-                            "1": "1",
-                            "14": "0.05",
-                            "20": "1.1",
-                            "21": "13.11",
-                            "22": "0.09",
-                            "pts": "2.96",
+        '382': {
+            'projectedStats': {
+                'week': {
+                    '2020': {
+                        '12': {
+                            '1': '1',
+                            '14': '0.05',
+                            '20': '1.1',
+                            '21': '13.11',
+                            '22': '0.09',
+                            'pts': '2.96',
                         }
                     }
                 }
             }
         },
         # Intentionally at bottom to test sort
-        "252": {
-            "projectedStats": {
-                "week": {
-                    "2020": {
-                        "12": {
-                            "1": "1",
-                            "14": "0.06",
-                            "20": "3.75",
-                            "21": "52.05",
-                            "22": "0.41",
-                            "pts": "11.42",
+        '252': {
+            'projectedStats': {
+                'week': {
+                    '2020': {
+                        '12': {
+                            '1': '1',
+                            '14': '0.06',
+                            '20': '3.75',
+                            '21': '52.05',
+                            '22': '0.41',
+                            'pts': '11.42',
                         }
                     }
                 }
@@ -885,10 +886,10 @@ def test_Scraper_update_player_ids_dont_exist(tmp_path):
 
     scraper = Scraper(2020, root=tmp_path)
 
-    for player_id in ("252", "310", "382"):
+    for player_id in ('252', '310', '382'):
         responses.add(
             method=responses.GET,
-            url=f"https://api.fantasy.nfl.com/v2/player/ngs-content?playerId={player_id}",
+            url=f'https://api.fantasy.nfl.com/v2/player/ngs-content?playerId={player_id}',
             json=request_jsons[player_id],
             status=200,
         )
@@ -898,26 +899,26 @@ def test_Scraper_update_player_ids_dont_exist(tmp_path):
     # Verify
     assert tmp_player_ids_json_path.exists() is True
 
-    with open(tmp_player_ids_json_path, "r") as written_file:
+    with open(tmp_player_ids_json_path, 'r') as written_file:
         result = json.load(written_file)
 
-    assert result["year"] == 2020
-    assert list(result.keys()) == ["year", "252", "310", "382"]
-    assert result["252"] == {
-        "name": "Chad Henne",
-        "position": "QB",
-        "team": "KC",
-        "injury": None,
+    assert result['year'] == 2020
+    assert list(result.keys()) == ['year', '252', '310', '382']
+    assert result['252'] == {
+        'name': 'Chad Henne',
+        'position': 'QB',
+        'team': 'KC',
+        'injury': None,
     }
-    assert result["310"] == {
-        "name": "Matt Ryan",
-        "position": "QB",
-        "team": "ATL",
-        "injury": "Questionable",
+    assert result['310'] == {
+        'name': 'Matt Ryan',
+        'position': 'QB',
+        'team': 'ATL',
+        'injury': 'Questionable',
     }
-    assert result["382"] == {
-        "name": "Joe Flacco",
-        "position": "QB",
-        "team": "NYJ",
-        "injury": None,
+    assert result['382'] == {
+        'name': 'Joe Flacco',
+        'position': 'QB',
+        'team': 'NYJ',
+        'injury': None,
     }
